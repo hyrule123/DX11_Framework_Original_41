@@ -366,5 +366,7 @@ FodyWeavers.xsd
 
 # SVN
 .svn/
-.exe
-.lib
+
+# Build Result
+*.exe
+*.lib
