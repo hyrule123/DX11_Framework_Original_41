@@ -11,6 +11,8 @@
 #include <functional>
 #include <algorithm>
 #include <stack>
+#include <d3d11.h>
+#include <d3dcompiler.h>
 
 #define	DECLARE_SINGLE(Type)	\
 private:\
@@ -35,6 +37,8 @@ private:\
 	~Type();
 
 #define	DEFINITION_SINGLE(Type)	Type* Type::m_Inst = nullptr;
+
+#define	SAFE_RELEASE(p)	if(p)	{ p->Release(); p = nullptr;}
 
 struct Resolution
 {

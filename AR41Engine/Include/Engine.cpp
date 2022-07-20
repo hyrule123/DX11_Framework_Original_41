@@ -1,4 +1,9 @@
 #include "Engine.h"
+#include "Device.h"
+
+#pragma comment(lib, "d3d11.lib")
+#pragma comment(lib, "d3dcompiler.lib")
+#pragma comment(lib, "dxguid.lib")
 
 DEFINITION_SINGLE(CEngine)
 
@@ -6,12 +11,16 @@ bool CEngine::m_Loop = true;
 
 CEngine::CEngine()	:
 	m_hInst(0),
-	m_hWnd(0)
+	m_hWnd(0),
+    m_WindowRS{}
 {
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+    //_CrtSetBreakAlloc(100);
 }
 
 CEngine::~CEngine()
 {
+    CDevice::DestroyInst();
 }
 
 bool CEngine::Init(HINSTANCE hInst, const TCHAR* Title,
@@ -26,6 +35,13 @@ bool CEngine::Init(HINSTANCE hInst, const TCHAR* Title,
 	Register(ClassName, IconID, SmallIconID);
 
 	Create(Title, ClassName);
+
+    // Device ÃÊ±âÈ­
+    if (!CDevice::GetInst()->Init(m_hWnd, DeviceWidth, DeviceHeight, WindowMode))
+        return false;
+
+
+
 
 	return true;
 }
