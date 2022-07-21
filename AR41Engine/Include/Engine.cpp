@@ -12,7 +12,8 @@ bool CEngine::m_Loop = true;
 CEngine::CEngine()	:
 	m_hInst(0),
 	m_hWnd(0),
-    m_WindowRS{}
+    m_WindowRS{},
+    m_ClearColor{}
 {
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     //_CrtSetBreakAlloc(100);
@@ -41,7 +42,10 @@ bool CEngine::Init(HINSTANCE hInst, const TCHAR* Title,
         return false;
 
 
-
+    m_ClearColor[0] = 0.f;
+    m_ClearColor[1] = 0.5f;
+    m_ClearColor[2] = 0.f;
+    m_ClearColor[3] = 1.f;
 
 	return true;
 }
@@ -90,6 +94,11 @@ int CEngine::Run()
 
 void CEngine::Logic()
 {
+    Input(0.f);
+    Update(0.f);
+    PostUpdate(0.f);
+    Collision(0.f);
+    Render(0.f);
 }
 
 void CEngine::Input(float DeltaTime)
@@ -112,6 +121,17 @@ void CEngine::Collision(float DeltaTime)
 
 void CEngine::Render(float DeltaTime)
 {
+    CDevice::GetInst()->ClearRenderTarget(m_ClearColor);
+    CDevice::GetInst()->ClearDepthStencil(1.f, 0);
+
+    CDevice::GetInst()->RenderStart();
+
+
+    // 모든 물체들을 출력한다. 이렇게 하면 백버퍼와 깊이버퍼가 채워진다.
+
+
+    // 그려진 백버퍼를 화면에 시연한다.
+    CDevice::GetInst()->Flip();
 }
 
 void CEngine::Register(const TCHAR* ClassName, int IconID, int SmallIconID)

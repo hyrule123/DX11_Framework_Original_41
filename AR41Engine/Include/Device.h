@@ -24,6 +24,10 @@ public:
 public:
 	bool Init(HWND hWnd, unsigned int DeviceWidth, unsigned int DeviceHeight,
 		bool WindowMode);
+	void ClearRenderTarget(float ClearColor[4]);
+	void ClearDepthStencil(float Depth, unsigned char Stencil);
+	void RenderStart();
+	void Flip();
 
 	DECLARE_SINGLE(CDevice)
 };
