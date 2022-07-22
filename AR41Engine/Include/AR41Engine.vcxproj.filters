@@ -22,6 +22,21 @@
     <Filter Include="01. Manager\02. Math">
       <UniqueIdentifier>{2a1ed63a-7f77-4303-aaa1-5c515d4b3082}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. Resource">
+      <UniqueIdentifier>{d271bf78-49a4-4fd2-8c21-ddd1cb974963}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Resource\01. Mesh">
+      <UniqueIdentifier>{f54279a8-b60d-41ac-b9b9-a0abbd510e47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\03. Ref">
+      <UniqueIdentifier>{ac813765-ae7e-4b62-a432-a9393889ea90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\04. Timer">
+      <UniqueIdentifier>{0c386375-77af-4e6d-960e-8e85462c30d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\05. SharedPtr">
+      <UniqueIdentifier>{2d47aa57-d761-43ee-b7c4-abab648f60ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -51,6 +66,27 @@
     <ClInclude Include="Matrix.h">
       <Filter>01. Manager\02. Math</Filter>
     </ClInclude>
+    <ClInclude Include="Resource\ResourceManager.h">
+      <Filter>02. Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Mesh\MeshManager.h">
+      <Filter>02. Resource\01. Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Ref.h">
+      <Filter>01. Manager\03. Ref</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>01. Manager\04. Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Mesh\Mesh.h">
+      <Filter>02. Resource\01. Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Mesh\SpriteMesh.h">
+      <Filter>02. Resource\01. Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="SharedPtr.h">
+      <Filter>01. Manager\05. SharedPtr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -70,6 +106,24 @@
     </ClCompile>
     <ClCompile Include="Matrix.cpp">
       <Filter>01. Manager\02. Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\ResourceManager.cpp">
+      <Filter>02. Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Mesh\MeshManager.cpp">
+      <Filter>02. Resource\01. Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Ref.cpp">
+      <Filter>01. Manager\03. Ref</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>01. Manager\04. Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Mesh\Mesh.cpp">
+      <Filter>02. Resource\01. Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Mesh\SpriteMesh.cpp">
+      <Filter>02. Resource\01. Mesh</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

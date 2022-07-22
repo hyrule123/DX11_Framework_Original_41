@@ -21,6 +21,21 @@ public:
 		return m_RS;
 	}
 
+	ID3D11Device* GetDevice()	const
+	{
+		return m_Device;
+	}
+
+	ID3D11DeviceContext* GetContext()	const
+	{
+		return m_Context;
+	}
+
+	IDXGISwapChain* GetSwapChain()	const
+	{
+		return m_SwapChain;
+	}
+
 public:
 	bool Init(HWND hWnd, unsigned int DeviceWidth, unsigned int DeviceHeight,
 		bool WindowMode);

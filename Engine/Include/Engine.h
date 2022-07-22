@@ -10,6 +10,7 @@ private:
 	Resolution	m_WindowRS;
 	float		m_ClearColor[4];
 	static bool	m_Loop;
+	class CTimer* m_Timer;
 
 public:
 	Resolution GetWindowResolution()	const

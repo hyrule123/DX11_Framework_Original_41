@@ -14,3 +14,17 @@ enum AXIS
 	AXIS_Z,
 	AXIS_MAX
 };
+
+enum class MeshType : unsigned char
+{
+	Sprite,
+	UI,
+	Static,
+	Animation
+};
+
+enum class BufferType : unsigned char
+{
+	Vertex,
+	Index
+};

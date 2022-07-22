@@ -25,6 +25,13 @@
     <ClInclude Include="EngineMath.h" />
     <ClInclude Include="Flag.h" />
     <ClInclude Include="Matrix.h" />
+    <ClInclude Include="Ref.h" />
+    <ClInclude Include="Resource\Mesh\Mesh.h" />
+    <ClInclude Include="Resource\Mesh\MeshManager.h" />
+    <ClInclude Include="Resource\Mesh\SpriteMesh.h" />
+    <ClInclude Include="Resource\ResourceManager.h" />
+    <ClInclude Include="SharedPtr.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="Vector4.h" />
@@ -33,6 +40,12 @@
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="Ref.cpp" />
+    <ClCompile Include="Resource\Mesh\Mesh.cpp" />
+    <ClCompile Include="Resource\Mesh\MeshManager.cpp" />
+    <ClCompile Include="Resource\Mesh\SpriteMesh.cpp" />
+    <ClCompile Include="Resource\ResourceManager.cpp" />
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="Vector4.cpp" />

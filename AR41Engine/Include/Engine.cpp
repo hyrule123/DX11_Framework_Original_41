@@ -1,5 +1,7 @@
 #include "Engine.h"
 #include "Device.h"
+#include "Resource\ResourceManager.h"
+#include "Timer.h"
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
@@ -21,6 +23,10 @@ CEngine::CEngine()	:
 
 CEngine::~CEngine()
 {
+    CResourceManager::DestroyInst();
+
+    SAFE_DELETE(m_Timer);
+
     CDevice::DestroyInst();
 }
 
@@ -42,7 +48,12 @@ bool CEngine::Init(HINSTANCE hInst, const TCHAR* Title,
         return false;
 
 
+    // Resource 관리자 초기화
+    if (!CResourceManager::GetInst()->Init())
+        return false;
 
+    m_Timer = new CTimer;
+    m_Timer->Init();
 
 
 
@@ -93,11 +104,17 @@ int CEngine::Run()
 
 void CEngine::Logic()
 {
-    Input(0.f);
-    Update(0.f);
-    PostUpdate(0.f);
-    Collision(0.f);
-    Render(0.f);
+    m_Timer->Update();
+
+    float DeltaTime = m_Timer->GetDeltaTime();
+
+    CResourceManager::GetInst()->Update();
+
+    Input(DeltaTime);
+    Update(DeltaTime);
+    PostUpdate(DeltaTime);
+    Collision(DeltaTime);
+    Render(DeltaTime);
 }
 
 void CEngine::Input(float DeltaTime)
