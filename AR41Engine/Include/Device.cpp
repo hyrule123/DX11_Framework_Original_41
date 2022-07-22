@@ -125,7 +125,6 @@ bool CDevice::Init(HWND hWnd, unsigned int DeviceWidth, unsigned int DeviceHeigh
 
 	if (FAILED(m_Device->CreateDepthStencilView(DepthBuffer, nullptr, &m_DepthView)))
 		return false;
-	
 
 	SAFE_RELEASE(DepthBuffer);
 

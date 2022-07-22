@@ -42,10 +42,9 @@ bool CEngine::Init(HINSTANCE hInst, const TCHAR* Title,
         return false;
 
 
-    m_ClearColor[0] = 0.f;
-    m_ClearColor[1] = 0.5f;
-    m_ClearColor[2] = 0.f;
-    m_ClearColor[3] = 1.f;
+
+
+
 
 	return true;
 }

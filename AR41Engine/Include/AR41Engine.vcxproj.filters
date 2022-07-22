@@ -19,16 +19,31 @@
     <Filter Include="01. Manager\01. Device">
       <UniqueIdentifier>{dcef6c9e-b6d2-4b72-8691-8ea21f3590a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Manager\02. Math">
+      <UniqueIdentifier>{2a1ed63a-7f77-4303-aaa1-5c515d4b3082}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EngineInfo.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Engine.h">
       <Filter>01. Manager</Filter>
     </ClInclude>
     <ClInclude Include="Device.h">
       <Filter>01. Manager\01. Device</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineMath.h">
+      <Filter>01. Manager\02. Math</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineInfo.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>01. Manager\02. Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3.h">
+      <Filter>01. Manager\02. Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector4.h">
+      <Filter>01. Manager\02. Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -37,6 +52,15 @@
     </ClCompile>
     <ClCompile Include="Device.cpp">
       <Filter>01. Manager\01. Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector2.cpp">
+      <Filter>01. Manager\02. Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector3.cpp">
+      <Filter>01. Manager\02. Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector4.cpp">
+      <Filter>01. Manager\02. Math</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
