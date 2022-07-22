@@ -1,5 +1,11 @@
 #include "Vector2.h"
 
+Vector2 Vector2::Axis[AXIS2D_MAX] =
+{
+    Vector2(1.f, 0.f),
+    Vector2(0.f, 1.f)
+};
+
 Vector2::Vector2()  :
     x(0.f),
     y(0.f)
@@ -78,7 +84,9 @@ bool Vector2::operator!=(const DirectX::XMVECTOR& v) const
 float& Vector2::operator[](int Index)
 {
     if (Index < 0 || Index > 1)
+    {
         assert(false);
+    }
 
     if (Index == 0)
         return x;

@@ -86,5 +86,7 @@ struct Vector2
 
 	DirectX::XMVECTOR Convert()	const;
 	void Convert(const DirectX::XMVECTOR& v);
+
+	static Vector2	Axis[AXIS2D_MAX];
 };
 

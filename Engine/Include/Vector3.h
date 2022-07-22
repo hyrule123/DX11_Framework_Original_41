@@ -1,10 +1,10 @@
 #pragma once
 
-#include "EngineMath.h"
+#include "Matrix.h"
 
 struct Vector3
 {
-	float	x, y;
+	float	x, y, z;
 
 	Vector3();
 	Vector3(float _x, float _y, float _z);
@@ -80,12 +80,22 @@ struct Vector3
 	void Normalize();
 	float Distance(const Vector3& v)	const;
 	float Dot(const Vector3& v)	const;
-	float Cross(const Vector3& v)	const;
+	Vector3 Cross(const Vector3& v)	const;
 	float Angle(const Vector3& v)	const;
+	Vector3 ConvertAngle()	const;
+
+	// Vector3와 4x4 행렬은 곱셈이 불가능하다.
+	// 그래서 w를 0으로 w를 1로 만들어서 곱하는 연산 2개를 만들어둔다.
+	// TransformNormal은 w를 0으로 만들어서 곱한다.
+	// TransformCoord는 w를 1로 만들어서 곱한다.
+	Vector3 TransformNormal(const Matrix& m)	const;
+	Vector3 TransformCoord(const Matrix& m)	const;
 
 
 
 	DirectX::XMVECTOR Convert()	const;
 	void Convert(const DirectX::XMVECTOR& v);
+
+	static Vector3	Axis[AXIS_MAX];
 };
 
