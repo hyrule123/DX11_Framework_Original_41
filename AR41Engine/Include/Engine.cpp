@@ -2,6 +2,7 @@
 #include "Device.h"
 #include "Resource\ResourceManager.h"
 #include "Timer.h"
+#include "PathManager.h"
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
@@ -23,6 +24,7 @@ CEngine::CEngine()	:
 
 CEngine::~CEngine()
 {
+    CPathManager::DestroyInst();
     CResourceManager::DestroyInst();
 
     SAFE_DELETE(m_Timer);
@@ -47,12 +49,17 @@ bool CEngine::Init(HINSTANCE hInst, const TCHAR* Title,
     if (!CDevice::GetInst()->Init(m_hWnd, DeviceWidth, DeviceHeight, WindowMode))
         return false;
 
+    // 경로관리자 초기화
+    if (!CPathManager::GetInst()->Init())
+        return false;
+
 
     // Resource 관리자 초기화
     if (!CResourceManager::GetInst()->Init())
         return false;
 
     m_Timer = new CTimer;
+
     m_Timer->Init();
 
 

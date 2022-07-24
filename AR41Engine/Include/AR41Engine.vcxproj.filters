@@ -37,6 +37,21 @@
     <Filter Include="01. Manager\05. SharedPtr">
       <UniqueIdentifier>{2d47aa57-d761-43ee-b7c4-abab648f60ae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. Resource\02. Shader">
+      <UniqueIdentifier>{97c19554-fcf3-4e9e-9d23-e7c72fc5462a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Resource\02. Shader\01. HLSL">
+      <UniqueIdentifier>{423f0fc5-8997-4cc7-9da9-9c582373e032}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Manager\06. Path">
+      <UniqueIdentifier>{462c3053-e3cc-4ec4-b9c1-a5ade5c181e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Resource\02. Shader\02. ShaderClass">
+      <UniqueIdentifier>{94aa7314-74a4-44d0-bacf-d0438cce96a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Resource\02. Shader\02. ShaderClass\01. Sprite">
+      <UniqueIdentifier>{7ecf037e-f195-48b1-a71b-a63e7c23d413}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -87,6 +102,24 @@
     <ClInclude Include="SharedPtr.h">
       <Filter>01. Manager\05. SharedPtr</Filter>
     </ClInclude>
+    <ClInclude Include="PathManager.h">
+      <Filter>01. Manager\06. Path</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\ComputeShader.h">
+      <Filter>02. Resource\02. Shader\02. ShaderClass</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\GraphicShader.h">
+      <Filter>02. Resource\02. Shader\02. ShaderClass</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\Shader.h">
+      <Filter>02. Resource\02. Shader\02. ShaderClass</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\SpriteColorShader.h">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\01. Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\ShaderManager.h">
+      <Filter>02. Resource\02. Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -125,5 +158,31 @@
     <ClCompile Include="Resource\Mesh\SpriteMesh.cpp">
       <Filter>02. Resource\01. Mesh</Filter>
     </ClCompile>
+    <ClCompile Include="PathManager.cpp">
+      <Filter>01. Manager\06. Path</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\ComputeShader.cpp">
+      <Filter>02. Resource\02. Shader\02. ShaderClass</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\GraphicShader.cpp">
+      <Filter>02. Resource\02. Shader\02. ShaderClass</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\Shader.cpp">
+      <Filter>02. Resource\02. Shader\02. ShaderClass</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\SpriteColorShader.cpp">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\01. Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\ShaderManager.cpp">
+      <Filter>02. Resource\02. Shader</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Bin\Shader\Share.fx">
+      <Filter>02. Resource\02. Shader\01. HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\Shader\Sprite.fx">
+      <Filter>02. Resource\02. Shader\01. HLSL</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

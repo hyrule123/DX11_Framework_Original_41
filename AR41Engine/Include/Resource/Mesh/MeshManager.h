@@ -25,3 +25,4 @@ public:
 	class CMesh* FindMesh(const std::string& Name);
 	void ReleaseMesh(const std::string& Name);
 };
+

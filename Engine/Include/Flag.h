@@ -28,3 +28,9 @@ enum class BufferType : unsigned char
 	Vertex,
 	Index
 };
+
+enum class ShaderType : unsigned char
+{
+	Graphic,
+	Compute
+};

@@ -20,6 +20,12 @@
 #include "Matrix.h"
 #include "SharedPtr.h"
 
+#define	ROOT_PATH		"Root"
+#define	SHADER_PATH		"Shader"
+#define	TEXTURE_PATH	"Texture"
+#define	SOUND_PATH		"Sound"
+#define	FONT_PATH		"Font"
+
 #define	DECLARE_SINGLE(Type)	\
 private:\
 	static Type*	m_Inst;\
