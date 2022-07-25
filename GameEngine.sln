@@ -13,10 +13,16 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03. Editor", "03. Editor", "{5F057200-B133-494C-8136-3F5F25D522E5}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client2D", "Client2D\Include\Client2D.vcxproj", "{97AA5E15-8023-4C0E-AA89-68766AF0F15B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{26BC9DA5-192F-4B8E-A96C-72AB3CCE74C3} = {26BC9DA5-192F-4B8E-A96C-72AB3CCE74C3}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AR41Engine", "AR41Engine\Include\AR41Engine.vcxproj", "{26BC9DA5-192F-4B8E-A96C-72AB3CCE74C3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AR41Editor", "AR41Editor\Include\AR41Editor.vcxproj", "{5E603626-8885-400C-9B28-A0AAD94BA626}"
+	ProjectSection(ProjectDependencies) = postProject
+		{26BC9DA5-192F-4B8E-A96C-72AB3CCE74C3} = {26BC9DA5-192F-4B8E-A96C-72AB3CCE74C3}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

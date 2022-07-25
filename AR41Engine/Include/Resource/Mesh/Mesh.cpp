@@ -53,20 +53,20 @@ bool CMesh::CreateMesh(void* VtxData, int Size, int Count,
 	if (IdxData != nullptr)
 	{
 		IndexBuffer	IB;
+		Container->vecIB.push_back(IB);
+		int Index = (int)Container->vecIB.size() - 1;
 
-		IB.Size = IdxSize;
-		IB.Count = IdxCount;
-		IB.Fmt = Fmt;
-		IB.Data = new char[IdxSize * IdxCount];
-		memcpy(IB.Data, IdxData, IdxSize * IdxCount);
+		Slot->IB = &Container->vecIB[Index];
+
+		Slot->IB->Size = IdxSize;
+		Slot->IB->Count = IdxCount;
+		Slot->IB->Fmt = Fmt;
+		Slot->IB->Data = new char[IdxSize * IdxCount];
+		memcpy(Slot->IB->Data, IdxData, IdxSize * IdxCount);
 
 		if (!CreateBuffer(BufferType::Index, IdxData, IdxSize, IdxCount,
-			IdxUsage, &IB.Buffer))
+			IdxUsage, &Slot->IB->Buffer))
 			return false;
-
-		Container->vecIB.push_back(IB);
-
-		Slot->IB = &Container->vecIB[Container->vecIB.size() - 1];
 	}
 
 	return true;

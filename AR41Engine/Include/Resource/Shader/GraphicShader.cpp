@@ -43,6 +43,8 @@ void CGraphicShader::SetShader()
 	CDevice::GetInst()->GetContext()->HSSetShader(m_HS, nullptr, 0);
 	CDevice::GetInst()->GetContext()->DSSetShader(m_DS, nullptr, 0);
 	CDevice::GetInst()->GetContext()->GSSetShader(m_GS, nullptr, 0);
+
+	CDevice::GetInst()->GetContext()->IASetInputLayout(m_InputLayout);
 }
 
 void CGraphicShader::AddInputDesc(const char* SemanticName, 

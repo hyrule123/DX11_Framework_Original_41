@@ -1,11 +1,13 @@
 #pragma once
 
 #include "../EngineInfo.h"
+#include "Shader/ShaderManager.h"
 
 class CResourceManager
 {
 private:
 	class CMeshManager* m_MeshManager;
+	CShaderManager* m_ShaderManager;
 
 public:
 	bool Init();
@@ -22,6 +24,20 @@ public:	// ===================== Mesh =========================
 
 	class CMesh* FindMesh(const std::string& Name);
 	void ReleaseMesh(const std::string& Name);
+
+
+
+public:	// ===================== Shader =========================
+	template <typename T>
+	bool CreateShader(const std::string& Name)
+	{
+		return m_ShaderManager->CreateShader<T>(Name);
+	}
+
+	class CShader* FindShader(const std::string& Name);
+	void ReleaseShader(const std::string& Name);
+
+
 
 	DECLARE_SINGLE(CResourceManager)
 };

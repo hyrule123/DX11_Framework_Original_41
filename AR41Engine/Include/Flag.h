@@ -34,3 +34,14 @@ enum class ShaderType : unsigned char
 	Graphic,
 	Compute
 };
+
+enum class ComponentType : unsigned char
+{
+	Scene,
+	Object
+};
+
+enum class SceneComponentType : unsigned char
+{
+	Sprite
+};
