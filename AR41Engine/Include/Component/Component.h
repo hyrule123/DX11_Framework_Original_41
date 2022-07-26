@@ -14,19 +14,41 @@ protected:
 
 protected:
     ComponentType   m_ComponentType;
+    class CScene* m_Scene;
+    class CGameObject* m_Owner;
 
 public:
+    class CScene* GetScene()    const
+    {
+        return m_Scene;
+    }
+
+    class CGameObject* GetOwner()   const
+    {
+        return m_Owner;
+    }
+
+    void SetScene(class CScene* Scene)
+    {
+        m_Scene = Scene;
+    }
+
+    void SetOwner(class CGameObject* Owner)
+    {
+        m_Owner = Owner;
+    }
+
     ComponentType GetComponentType()    const
     {
         return m_ComponentType;
     }
 
 public:
-    void Start();
-    bool Init();
-    void Update(float DeltaTime);
-    void PostUpdate(float DeltaTime);
-    void Render();
-    CComponent* Clone()    const;
+    virtual void Start();
+    virtual bool Init();
+    virtual void Update(float DeltaTime);
+    virtual void PostUpdate(float DeltaTime);
+    virtual void Render();
+    virtual CComponent* Clone()    const;
 };
 

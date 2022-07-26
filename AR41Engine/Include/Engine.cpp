@@ -5,7 +5,6 @@
 #include "PathManager.h"
 #include "Scene/SceneManager.h"
 
-
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 #pragma comment(lib, "dxguid.lib")
@@ -21,7 +20,7 @@ CEngine::CEngine()	:
 	m_ClearColor{}
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(310);
+	//_CrtSetBreakAlloc(322);
 }
 
 CEngine::~CEngine()

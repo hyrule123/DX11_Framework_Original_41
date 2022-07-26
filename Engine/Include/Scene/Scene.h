@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SceneInfo.h"
+#include "SceneResource.h"
 
 class CScene
 {
@@ -14,6 +15,18 @@ private:
 	bool		m_Change;
 	bool		m_Start;
 	CSceneInfo* m_SceneInfo;
+	CSceneResource* m_Resource;
+
+public:
+	CSceneInfo* GetSceneInfo()	const
+	{
+		return m_SceneInfo;
+	}
+
+	CSceneResource* GetResource()	const
+	{
+		return m_Resource;
+	}
 
 
 public:
@@ -29,6 +42,8 @@ public:
 		SAFE_DELETE(m_SceneInfo);
 
 		m_SceneInfo = new T;
+
+		m_SceneInfo->m_Owner = this;
 
 		if (!m_SceneInfo->Init())
 		{

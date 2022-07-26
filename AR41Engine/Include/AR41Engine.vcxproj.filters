@@ -73,6 +73,9 @@
     <Filter Include="05. Component\01. SceneComponent\01. Primitive">
       <UniqueIdentifier>{dbf625e5-d9d7-43b4-a0bf-a3f2eedb0ce7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. Scene\02. Resource">
+      <UniqueIdentifier>{617b6f6a-c5ec-41ed-b537-f44fd1459c19}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -171,8 +174,8 @@
     <ClInclude Include="Component\Transform.h">
       <Filter>05. Component\01. SceneComponent</Filter>
     </ClInclude>
-    <ClInclude Include="Component\Transform2D.h">
-      <Filter>05. Component\01. SceneComponent</Filter>
+    <ClInclude Include="Scene\SceneResource.h">
+      <Filter>03. Scene\02. Resource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -260,8 +263,8 @@
     <ClCompile Include="Component\Transform.cpp">
       <Filter>05. Component\01. SceneComponent</Filter>
     </ClCompile>
-    <ClCompile Include="Component\Transform2D.cpp">
-      <Filter>05. Component\01. SceneComponent</Filter>
+    <ClCompile Include="Scene\SceneResource.cpp">
+      <Filter>03. Scene\02. Resource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

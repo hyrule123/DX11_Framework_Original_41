@@ -7,11 +7,20 @@ CScene::CScene()	:
 {
 	m_SceneInfo = new CSceneInfo;
 
+	m_SceneInfo->m_Owner = this;
+
 	m_SceneInfo->Init();
+
+	m_Resource = new CSceneResource;
+
+	m_Resource->m_Owner = this;
+
+	m_Resource->Init();
 }
 
 CScene::~CScene()
 {
+	SAFE_DELETE(m_Resource);
 	SAFE_DELETE(m_SceneInfo);
 }
 
