@@ -5,9 +5,6 @@
 #include "PathManager.h"
 #include "Scene/SceneManager.h"
 
-//임시
-#include "Resource/Mesh/Mesh.h"
-#include "Resource/Shader/Shader.h"
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
@@ -172,11 +169,7 @@ void CEngine::Render(float DeltaTime)
 
 
 	// 모든 물체들을 출력한다. 이렇게 하면 백버퍼와 깊이버퍼가 채워진다.
-	CMesh* Mesh = CResourceManager::GetInst()->FindMesh("CenterColorRect");
-	CShader* Shader = CResourceManager::GetInst()->FindShader("SpriteColorShader");
 
-	Shader->SetShader();
-	Mesh->Render();
 
 	// 그려진 백버퍼를 화면에 시연한다.
 	CDevice::GetInst()->Flip();
