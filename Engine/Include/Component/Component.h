@@ -28,12 +28,12 @@ public:
         return m_Owner;
     }
 
-    void SetScene(class CScene* Scene)
+    virtual void SetScene(class CScene* Scene)
     {
         m_Scene = Scene;
     }
 
-    void SetOwner(class CGameObject* Owner)
+    virtual void SetOwner(class CGameObject* Owner)
     {
         m_Owner = Owner;
     }
@@ -44,6 +44,7 @@ public:
     }
 
 public:
+    virtual void Destroy();
     virtual void Start();
     virtual bool Init();
     virtual void Update(float DeltaTime);

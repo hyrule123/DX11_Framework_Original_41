@@ -47,11 +47,20 @@ public:
         m_LifeTime = LifeTime;
     }
 
-    void SetRootComponent(CSceneComponent* Component);
+    void SetRootComponent(CSceneComponent* Component)
+    {
+        m_RootComponent = Component;
+    }
 
-    CSceneComponent* GetRootComponent() const;
+    CSceneComponent* GetRootComponent() const
+    {
+        return m_RootComponent;
+    }
 
-    const std::list<CSceneComponent*>& GetSceneComponents() const;
+    const std::list<CSceneComponent*>& GetSceneComponents() const
+    {
+        return m_SceneComponentList;
+    }
 
     CComponent* FindComponent(const std::string& Name);
 

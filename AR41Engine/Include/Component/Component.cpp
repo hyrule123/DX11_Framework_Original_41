@@ -13,6 +13,11 @@ CComponent::~CComponent()
 {
 }
 
+void CComponent::Destroy()
+{
+	CRef::Destroy();
+}
+
 void CComponent::Start()
 {
 }

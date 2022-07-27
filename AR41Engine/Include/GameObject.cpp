@@ -20,23 +20,6 @@ void CGameObject::Destroy()
 {
 }
 
-void CGameObject::SetRootComponent(CSceneComponent* Component)
-{
-
-	m_RootComponent = Component;
-
-}
-
-CSceneComponent* CGameObject::GetRootComponent() const
-{
-	return m_RootComponent;
-}
-
-const std::list<CSceneComponent*>& CGameObject::GetSceneComponents() const
-{
-	return m_SceneComponentList;
-}
-
 CComponent* CGameObject::FindComponent(const std::string& Name)
 {
 	auto    iter = m_SceneComponentList.begin();

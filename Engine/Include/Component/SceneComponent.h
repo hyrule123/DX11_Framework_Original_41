@@ -19,6 +19,11 @@ protected:
     std::vector<CSharedPtr<CSceneComponent>>    m_vecChild;
 
 public:
+    virtual void SetScene(class CScene* Scene);
+    virtual void SetOwner(class CGameObject* Owner);
+
+public:
+    virtual void Destroy();
     virtual void Start();
     virtual bool Init();
     virtual void Update(float DeltaTime);
