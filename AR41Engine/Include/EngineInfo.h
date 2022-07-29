@@ -144,3 +144,14 @@ struct MeshSlot
 	{
 	}
 };
+
+struct TransformCBuffer
+{
+	Matrix  matWorld;
+	Matrix  matView;
+	Matrix  matProj;
+	Matrix  matWVP;
+	Vector3 Pivot;
+	Vector3 MeshSize;
+	Vector2 TransformEmpty;
+};

@@ -61,3 +61,14 @@ void CResourceManager::ReleaseShader(const std::string& Name)
 {
 	m_ShaderManager->ReleaseShader(Name);
 }
+
+bool CResourceManager::CreateConstantBuffer(const std::string& Name, int Size,
+	int Register, int ShaderBufferType)
+{
+	return m_ShaderManager->CreateConstantBuffer(Name, Size, Register, ShaderBufferType);
+}
+
+CConstantBuffer* CResourceManager::FindConstantBuffer(const std::string& Name)
+{
+	return m_ShaderManager->FindConstantBuffer(Name);
+}

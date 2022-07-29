@@ -20,6 +20,7 @@ private:
 	bool		m_Is2D;
 	CTransform* m_Parent;
 	std::vector<CTransform*>    m_vecChild;
+	class CTransformConstantBuffer* m_CBuffer;
 
 private:
 	bool	m_InheritScale;

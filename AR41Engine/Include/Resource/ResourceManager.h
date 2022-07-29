@@ -37,6 +37,10 @@ public:	// ===================== Shader =========================
 	class CShader* FindShader(const std::string& Name);
 	void ReleaseShader(const std::string& Name);
 
+	bool CreateConstantBuffer(const std::string& Name, int Size, int Register,
+		int ShaderBufferType = (int)EShaderBufferType::All);
+	class CConstantBuffer* FindConstantBuffer(const std::string& Name);
+
 
 
 	DECLARE_SINGLE(CResourceManager)

@@ -26,6 +26,11 @@ bool CPlayer2D::Init()
 	CGameObject::Init();
 
 	m_Sprite = CreateComponent<CSpriteComponent>("sprite");
+	m_SpriteChild = CreateComponent<CSpriteComponent>("spriteChild");
+
+	m_Sprite->AddChild(m_SpriteChild);
+
+	//m_SpriteChild->SetRelativePosition()
 
 	return true;
 }

@@ -34,15 +34,19 @@
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="PathManager.h" />
     <ClInclude Include="Ref.h" />
+    <ClInclude Include="Render\RenderManager.h" />
     <ClInclude Include="Resource\Mesh\Mesh.h" />
     <ClInclude Include="Resource\Mesh\MeshManager.h" />
     <ClInclude Include="Resource\Mesh\SpriteMesh.h" />
     <ClInclude Include="Resource\ResourceManager.h" />
     <ClInclude Include="Resource\Shader\ComputeShader.h" />
+    <ClInclude Include="Resource\Shader\ConstantBuffer.h" />
+    <ClInclude Include="Resource\Shader\ConstantBufferData.h" />
     <ClInclude Include="Resource\Shader\GraphicShader.h" />
     <ClInclude Include="Resource\Shader\Shader.h" />
     <ClInclude Include="Resource\Shader\ShaderManager.h" />
     <ClInclude Include="Resource\Shader\SpriteColorShader.h" />
+    <ClInclude Include="Resource\Shader\TransformConstantBuffer.h" />
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="Scene\SceneInfo.h" />
     <ClInclude Include="Scene\SceneManager.h" />
@@ -66,15 +70,19 @@
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="PathManager.cpp" />
     <ClCompile Include="Ref.cpp" />
+    <ClCompile Include="Render\RenderManager.cpp" />
     <ClCompile Include="Resource\Mesh\Mesh.cpp" />
     <ClCompile Include="Resource\Mesh\MeshManager.cpp" />
     <ClCompile Include="Resource\Mesh\SpriteMesh.cpp" />
     <ClCompile Include="Resource\ResourceManager.cpp" />
     <ClCompile Include="Resource\Shader\ComputeShader.cpp" />
+    <ClCompile Include="Resource\Shader\ConstantBuffer.cpp" />
+    <ClCompile Include="Resource\Shader\ConstantBufferData.cpp" />
     <ClCompile Include="Resource\Shader\GraphicShader.cpp" />
     <ClCompile Include="Resource\Shader\Shader.cpp" />
     <ClCompile Include="Resource\Shader\ShaderManager.cpp" />
     <ClCompile Include="Resource\Shader\SpriteColorShader.cpp" />
+    <ClCompile Include="Resource\Shader\TransformConstantBuffer.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="Scene\SceneInfo.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
@@ -117,26 +125,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>

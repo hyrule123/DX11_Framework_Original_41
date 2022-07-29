@@ -4,6 +4,7 @@
 #include "Timer.h"
 #include "PathManager.h"
 #include "Scene/SceneManager.h"
+#include "Render/RenderManager.h"
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
@@ -20,12 +21,14 @@ CEngine::CEngine()	:
 	m_ClearColor{}
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(100);
+	//_CrtSetBreakAlloc(284);
 }
 
 CEngine::~CEngine()
 {
 	CSceneManager::DestroyInst();
+
+	CRenderManager::DestroyInst();
 
 	CPathManager::DestroyInst();
 	CResourceManager::DestroyInst();
@@ -59,6 +62,11 @@ bool CEngine::Init(HINSTANCE hInst, const TCHAR* Title,
 
 	// Resource 관리자 초기화
 	if (!CResourceManager::GetInst()->Init())
+		return false;
+
+	
+	// 렌더링 관리자 초기화
+	if (!CRenderManager::GetInst()->Init())
 		return false;
 
 
@@ -168,6 +176,7 @@ void CEngine::Render(float DeltaTime)
 
 
 	// 모든 물체들을 출력한다. 이렇게 하면 백버퍼와 깊이버퍼가 채워진다.
+	CRenderManager::GetInst()->Render(DeltaTime);
 
 
 	// 그려진 백버퍼를 화면에 시연한다.

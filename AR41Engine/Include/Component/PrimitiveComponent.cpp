@@ -2,6 +2,7 @@
 #include "PrimitiveComponent.h"
 #include "../Scene/Scene.h"
 #include "../Scene/SceneResource.h"
+#include "../Render/RenderManager.h"
 
 CPrimitiveComponent::CPrimitiveComponent()
 {
@@ -35,6 +36,9 @@ void CPrimitiveComponent::SetShader(const std::string& Name)
 void CPrimitiveComponent::Start()
 {
 	CSceneComponent::Start();
+
+	// Scene에 배치가 되고 Start가 호출되면 출력 목록으로 지정한다.
+	CRenderManager::GetInst()->AddRenderList(this);
 }
 
 bool CPrimitiveComponent::Init()
@@ -58,6 +62,10 @@ void CPrimitiveComponent::PostUpdate(float DeltaTime)
 void CPrimitiveComponent::Render()
 {
 	CSceneComponent::Render();
+
+	m_Shader->SetShader();
+
+	m_Mesh->Render();
 }
 
 CPrimitiveComponent* CPrimitiveComponent::Clone() const

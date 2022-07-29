@@ -21,7 +21,7 @@ CScene::CScene()	:
 
 CScene::~CScene()
 {
-	SAFE_DELETE(m_Resource)
+	SAFE_DELETE(m_Resource);
 	SAFE_DELETE(m_SceneInfo);
 }
 
@@ -101,16 +101,5 @@ void CScene::PostUpdate(float DeltaTime)
 
 CGameObject* CScene::FindObject(const std::string& Name)
 {
-	auto iter = m_ObjList.begin();
-	auto iterEnd = m_ObjList.end();
-
-	while (iter != iterEnd)
-	{
-		if ((*iter)->GetName() == Name)
-			return (*iter);
-
-		++iter;
-	}
-
 	return nullptr;
 }

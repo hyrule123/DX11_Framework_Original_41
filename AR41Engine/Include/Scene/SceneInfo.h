@@ -16,7 +16,6 @@ protected:
 
 public:
 	void SetPlayerObject(class CGameObject* Player);
-	class CGameObject* GetPlayerObject();
 
 public:
 	virtual bool Init();

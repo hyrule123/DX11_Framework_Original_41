@@ -17,12 +17,24 @@ protected:
 	CTransform* m_Transform;
     CSceneComponent* m_Parent;
     std::vector<CSharedPtr<CSceneComponent>>    m_vecChild;
+	std::string     m_LayerName;
 
 public:
     CTransform* GetTransform()    const
     {
         return m_Transform;
     }
+
+public:
+	const std::string& GetRenderLayerName() const
+	{
+		return m_LayerName;
+	}
+
+	void SetRenderLayerName(const std::string& Name)
+	{
+		m_LayerName = Name;
+	}
 
 public:
     virtual void SetScene(class CScene* Scene);

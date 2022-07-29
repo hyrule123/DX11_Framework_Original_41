@@ -14,6 +14,7 @@ protected:
 
 private:
 	CSharedPtr<class CSpriteComponent>	m_Sprite;
+	CSharedPtr<class CSpriteComponent>	m_SpriteChild;
 
 public:
 	virtual void Start();

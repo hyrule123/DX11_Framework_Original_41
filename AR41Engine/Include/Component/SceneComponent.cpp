@@ -3,7 +3,8 @@
 #include "../GameObject.h"
 
 CSceneComponent::CSceneComponent()	:
-	m_Parent(nullptr)
+	m_Parent(nullptr),
+	m_LayerName("Default")
 {
 	SetTypeID<CSceneComponent>();
 
@@ -232,6 +233,8 @@ void CSceneComponent::PostUpdate(float DeltaTime)
 void CSceneComponent::Render()
 {
 	CComponent::Render();
+
+	m_Transform->SetTransform();
 }
 
 CSceneComponent* CSceneComponent::Clone() const

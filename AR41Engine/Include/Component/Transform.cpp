@@ -1,5 +1,6 @@
 
 #include "Transform.h"
+#include "../Resource/Shader/TransformConstantBuffer.h"
 
 CTransform::CTransform()	:
 	m_Is2D(true),
@@ -19,22 +20,30 @@ CTransform::CTransform()	:
 	m_Parent(nullptr),
 	m_Scene(nullptr),
 	m_Object(nullptr),
-	m_Owner(nullptr)
+	m_Owner(nullptr),
+	m_MeshSize(1.f, 1.f, 1.f)
 {
 	for (int i = 0; i < AXIS_MAX; ++i)
 	{
 		m_RelativeAxis[i] = Vector3::Axis[i];
 		m_WorldAxis[i] = Vector3::Axis[i];
 	}
+
+	m_CBuffer = new CTransformConstantBuffer;
+
+	m_CBuffer->Init();
 }
 
 CTransform::CTransform(const CTransform& transform)
 {
 	*this = transform;
+
+	m_CBuffer = transform.m_CBuffer->Clone();
 }
 
 CTransform::~CTransform()
 {
+	SAFE_DELETE(m_CBuffer);
 }
 
 void CTransform::InheritScale()
@@ -855,8 +864,22 @@ CTransform* CTransform::Clone() const
 
 void CTransform::SetTransform()
 {
+	m_CBuffer->SetWorldMatrix(m_matWorld);
+
+	Matrix	matProj;
+
+	matProj = DirectX::XMMatrixOrthographicOffCenterLH(0.f, 1280.f, 0.f, 720.f,
+		0.f, 1000.f);
+
+	m_CBuffer->SetProjMatrix(matProj);
+
+	m_CBuffer->SetPivot(m_Pivot);
+	m_CBuffer->SetMeshSize(m_MeshSize);
+
+	m_CBuffer->UpdateBuffer();
 }
 
 void CTransform::ComputeWorld()
 {
+	m_matWorld = m_matScale * m_matRot * m_matPos;
 }

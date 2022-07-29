@@ -5,3 +5,15 @@ struct PS_OUTPUT_SINGLE
 {
     float4 Color : SV_TARGET;
 };
+
+// 상수버퍼는 16바이트 단위로 맞춰야 한다.
+cbuffer Transform : register(b0)
+{
+    matrix  g_matWorld;
+    matrix  g_matView;
+    matrix  g_matProj;
+    matrix  g_matWVP;
+    float3  g_Pivot;
+    float3  g_MeshSize;
+    float2  g_TransformEmpty;
+};
