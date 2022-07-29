@@ -3,6 +3,7 @@
 
 CSpriteComponent::CSpriteComponent()
 {
+	SetTypeID<CSpriteComponent>();
 }
 
 CSpriteComponent::CSpriteComponent(const CSpriteComponent& component)	:
@@ -23,6 +24,9 @@ bool CSpriteComponent::Init()
 {
 	if (!CPrimitiveComponent::Init())
 		return false;
+
+	SetMesh("CenterColorRect");
+	SetShader("SpriteColorShader");
 
 	return true;
 }

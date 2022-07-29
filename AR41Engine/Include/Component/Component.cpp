@@ -3,6 +3,7 @@
 
 CComponent::CComponent()
 {
+	SetTypeID<CComponent>();
 }
 
 CComponent::CComponent(const CComponent& Obj)
@@ -24,7 +25,7 @@ void CComponent::Start()
 
 bool CComponent::Init()
 {
-	return false;
+	return true;
 }
 
 void CComponent::Update(float DeltaTime)

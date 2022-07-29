@@ -1,8 +1,7 @@
 
 #include "SceneResource.h"
 
-CSceneResource::CSceneResource():
-	m_Owner(nullptr)
+CSceneResource::CSceneResource()
 {
 }
 

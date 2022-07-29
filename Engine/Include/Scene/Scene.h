@@ -16,6 +16,7 @@ private:
 	bool		m_Start;
 	CSceneInfo* m_SceneInfo;
 	CSceneResource* m_Resource;
+	std::list<CSharedPtr<class CGameObject>>	m_ObjList;
 
 public:
 	CSceneInfo* GetSceneInfo()	const
@@ -36,6 +37,9 @@ public:
 	void PostUpdate(float DeltaTime);
 
 public:
+	class CGameObject* FindObject(const std::string& Name);
+
+public:
 	template <typename T>
 	bool CreateSceneInfo()
 	{
@@ -52,6 +56,28 @@ public:
 		}
 
 		return true;
+	}
+
+	template <typename T>
+	T* CreateObject(const std::string& Name)
+	{
+		T* Obj = new T;
+
+		Obj->SetName(Name);
+		Obj->SetScene(this);
+
+		if (!Obj->Init())
+		{
+			SAFE_RELEASE(Obj);
+			return nullptr;
+		}
+
+		m_ObjList.push_back(Obj);
+
+		if (m_Start)
+			Obj->Start();
+
+		return Obj;
 	}
 };
 

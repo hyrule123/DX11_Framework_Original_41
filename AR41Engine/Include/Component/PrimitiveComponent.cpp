@@ -5,6 +5,7 @@
 
 CPrimitiveComponent::CPrimitiveComponent()
 {
+	SetTypeID<CPrimitiveComponent>();
 }
 
 CPrimitiveComponent::CPrimitiveComponent(const CPrimitiveComponent& component)	:

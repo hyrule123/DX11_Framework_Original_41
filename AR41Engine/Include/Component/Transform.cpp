@@ -85,7 +85,7 @@ void CTransform::InheritRotation(bool Current)
 	DirectX::XMVECTOR	Qut = DirectX::XMQuaternionRotationRollPitchYaw(ConvertRot.x,
 		ConvertRot.y, ConvertRot.z);
 
-	// 회전행렬을 구한다.
+	// 행렬을 구한다.
 	Matrix	matRot;
 	matRot.RotationQuaternion(Qut);
 
@@ -830,6 +830,22 @@ void CTransform::Update(float DeltaTime)
 
 void CTransform::PostUpdate(float DeltaTime)
 {
+	if (m_UpdateScale)
+		m_matScale.Scaling(m_WorldScale);
+
+	// x, y, z 축으로 회전을 하거나 아니면 임의의 축을 이용해서 회전을 하거나 둘중 하나의 경우만
+	// 사용을 한다.
+	if (m_UpdateRot && !m_UpdateRotAxis)
+		m_matRot.Rotation(m_WorldRot);
+
+	if (m_UpdatePos)
+		m_matPos.Translation(m_WorldPos);
+
+	// 월드 행렬은 위치, 크기, 회전중 하나라도 변화가 있어야 갱신한다.
+	// 변화가 없을 경우 계산을 안한다.
+	// 월드행렬 = 크기 * 자전 * 이동 * 공전 * 부모
+	if (m_UpdateScale || m_UpdateRot || m_UpdateRotAxis || m_UpdatePos)
+		m_matWorld = m_matScale * m_matRot * m_matPos;
 }
 
 CTransform* CTransform::Clone() const
