@@ -26,11 +26,21 @@ bool CPlayer2D::Init()
 	CGameObject::Init();
 
 	m_Sprite = CreateComponent<CSpriteComponent>("sprite");
+	m_RightChild = CreateComponent<CSceneComponent>("RightChild");
 	m_SpriteChild = CreateComponent<CSpriteComponent>("spriteChild");
 
-	m_Sprite->AddChild(m_SpriteChild);
+	m_Sprite->AddChild(m_RightChild);
+	m_RightChild->AddChild(m_SpriteChild);
 
-	//m_SpriteChild->SetRelativePosition()
+	m_Sprite->SetRelativeScale(100.f, 100.f);
+	m_Sprite->SetWorldPosition(500.f, 500.f);
+
+	m_RightChild->SetRelativePosition(150.f, 0.f);
+	m_RightChild->SetInheritRotZ(true);
+
+	m_SpriteChild->SetRelativeScale(50.f, 50.f);
+	m_SpriteChild->SetRelativePosition(100.f, 0.f);
+	m_SpriteChild->SetInheritRotZ(true);
 
 	return true;
 }
@@ -38,6 +48,10 @@ bool CPlayer2D::Init()
 void CPlayer2D::Update(float DeltaTime)
 {
 	CGameObject::Update(DeltaTime);
+
+	m_Sprite->AddRelativeRotationZ(180.f * DeltaTime);
+
+	m_RightChild->AddRelativeRotationZ(360.f * DeltaTime);
 }
 
 void CPlayer2D::PostUpdate(float DeltaTime)

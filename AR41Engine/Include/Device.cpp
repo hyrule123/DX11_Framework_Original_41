@@ -130,9 +130,6 @@ bool CDevice::Init(HWND hWnd, unsigned int DeviceWidth, unsigned int DeviceHeigh
 
 	D3D11_VIEWPORT	VP = {};
 
-	//VP.TopLeftX = 100.f;
-	//VP.TopLeftY = 300.f;
-
 	VP.Width = (float)DeviceWidth;
 	VP.Height = (float)DeviceHeight;
 	VP.MaxDepth = 1.f;

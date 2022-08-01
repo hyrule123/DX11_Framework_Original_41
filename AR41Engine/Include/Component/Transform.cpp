@@ -168,6 +168,7 @@ void CTransform::InheritParentRotationPos()
 			// 부모의 위치를 행렬의 41, 42, 43 에 지정한다.
 			Vector3	ParentPos = m_Parent->GetWorldPos();
 
+			
 			memcpy(&matRot._41, &ParentPos, sizeof(Vector3));
 
 			m_WorldPos = m_RelativePos.TransformCoord(matRot);
@@ -473,12 +474,12 @@ void CTransform::AddRelativeScale(const Vector3& Scale)
 
 void CTransform::AddRelativeScale(const Vector2& Scale)
 {
-	AddRelativeScale(Vector3(Scale.x, Scale.y, m_RelativeScale.z));
+	AddRelativeScale(Vector3(Scale.x, Scale.y, 0.f));
 }
 
 void CTransform::AddRelativeScale(float x, float y)
 {
-	AddRelativeScale(Vector3(x, y, m_RelativeScale.z));
+	AddRelativeScale(Vector3(x, y, 0.f));
 }
 
 void CTransform::AddRelativeScale(float x, float y, float z)
@@ -488,17 +489,17 @@ void CTransform::AddRelativeScale(float x, float y, float z)
 
 void CTransform::AddRelativeScaleX(float x)
 {
-	AddRelativeScale(Vector3(x, m_RelativeScale.y, m_RelativeScale.z));
+	AddRelativeScale(Vector3(x, 0.f, 0.f));
 }
 
 void CTransform::AddRelativeScaleY(float y)
 {
-	AddRelativeScale(Vector3(m_RelativeScale.x, y, m_RelativeScale.z));
+	AddRelativeScale(Vector3(0.f, y, 0.f));
 }
 
 void CTransform::AddRelativeScaleZ(float z)
 {
-	AddRelativeScale(Vector3(m_RelativeScale.x, m_RelativeScale.y, z));
+	AddRelativeScale(Vector3(0.f, 0.f, z));
 }
 
 void CTransform::AddRelativeRotation(const Vector3& Rot)
@@ -513,12 +514,12 @@ void CTransform::AddRelativeRotation(const Vector3& Rot)
 
 void CTransform::AddRelativeRotation(const Vector2& Rot)
 {
-	AddRelativeRotation(Vector3(Rot.x, Rot.y, m_RelativeRot.z));
+	AddRelativeRotation(Vector3(Rot.x, Rot.y, 0.f));
 }
 
 void CTransform::AddRelativeRotation(float x, float y)
 {
-	AddRelativeRotation(Vector3(x, y, m_RelativeRot.z));
+	AddRelativeRotation(Vector3(x, y, 0.f));
 }
 
 void CTransform::AddRelativeRotation(float x, float y, float z)
@@ -528,17 +529,17 @@ void CTransform::AddRelativeRotation(float x, float y, float z)
 
 void CTransform::AddRelativeRotationX(float x)
 {
-	AddRelativeRotation(Vector3(x, m_RelativeRot.y, m_RelativeRot.z));
+	AddRelativeRotation(Vector3(x, 0.f, 0.f));
 }
 
 void CTransform::AddRelativeRotationY(float y)
 {
-	AddRelativeRotation(Vector3(m_RelativeRot.x, y, m_RelativeRot.z));
+	AddRelativeRotation(Vector3(0.f, y, 0.f));
 }
 
 void CTransform::AddRelativeRotationZ(float z)
 {
-	AddRelativeRotation(Vector3(m_RelativeRot.x, m_RelativeRot.y, z));
+	AddRelativeRotation(Vector3(0.f, 0.f, z));
 }
 
 void CTransform::AddRelativePosition(const Vector3& Pos)
@@ -553,12 +554,12 @@ void CTransform::AddRelativePosition(const Vector3& Pos)
 
 void CTransform::AddRelativePosition(const Vector2& Pos)
 {
-	AddRelativePosition(Vector3(Pos.x, Pos.y, m_RelativePos.z));
+	AddRelativePosition(Vector3(Pos.x, Pos.y, 0.f));
 }
 
 void CTransform::AddRelativePosition(float x, float y)
 {
-	AddRelativePosition(Vector3(x, y, m_RelativePos.z));
+	AddRelativePosition(Vector3(x, y, 0.f));
 }
 
 void CTransform::AddRelativePosition(float x, float y, float z)
@@ -568,17 +569,17 @@ void CTransform::AddRelativePosition(float x, float y, float z)
 
 void CTransform::AddRelativePositionX(float x)
 {
-	AddRelativePosition(Vector3(x, m_RelativePos.y, m_RelativePos.z));
+	AddRelativePosition(Vector3(x, 0.f, 0.f));
 }
 
 void CTransform::AddRelativePositionY(float y)
 {
-	AddRelativePosition(Vector3(m_RelativePos.x, y, m_RelativePos.z));
+	AddRelativePosition(Vector3(0.f, y, 0.f));
 }
 
 void CTransform::AddRelativePositionZ(float z)
 {
-	AddRelativePosition(Vector3(m_RelativePos.x, m_RelativePos.y, z));
+	AddRelativePosition(Vector3(0.f, 0.f, z));
 }
 
 void CTransform::SetWorldScale(const Vector3& Scale)
@@ -666,7 +667,7 @@ void CTransform::SetWorldPosition(const Vector3& Pos)
 	m_WorldPos = Pos;
 
 	// 부모가 없을 경우라면 상대적인 위치를 월드공간에서의 위치와 동일한 위치로 적용을 한다.
-	m_RelativeRot = m_WorldPos;
+	m_RelativePos = m_WorldPos;
 
 	InheritWorldParentRotationPos();
 }
@@ -713,12 +714,12 @@ void CTransform::AddWorldScale(const Vector3& Scale)
 
 void CTransform::AddWorldScale(const Vector2& Scale)
 {
-	AddWorldScale(Vector3(Scale.x, Scale.y, m_WorldScale.z));
+	AddWorldScale(Vector3(Scale.x, Scale.y, 0.f));
 }
 
 void CTransform::AddWorldScale(float x, float y)
 {
-	AddWorldScale(Vector3(x, y, m_WorldScale.z));
+	AddWorldScale(Vector3(x, y, 0.f));
 }
 
 void CTransform::AddWorldScale(float x, float y, float z)
@@ -728,17 +729,17 @@ void CTransform::AddWorldScale(float x, float y, float z)
 
 void CTransform::AddWorldScaleX(float x)
 {
-	AddWorldScale(Vector3(x, m_WorldScale.y, m_WorldScale.z));
+	AddWorldScale(Vector3(x, 0.f, 0.f));
 }
 
 void CTransform::AddWorldScaleY(float y)
 {
-	AddWorldScale(Vector3(m_WorldScale.x, y, m_WorldScale.z));
+	AddWorldScale(Vector3(0.f, y, 0.f));
 }
 
 void CTransform::AddWorldScaleZ(float z)
 {
-	AddWorldScale(Vector3(m_WorldScale.x, m_WorldScale.y, z));
+	AddWorldScale(Vector3(0.f, 0.f, z));
 }
 
 void CTransform::AddWorldRotation(const Vector3& Rot)
@@ -753,12 +754,12 @@ void CTransform::AddWorldRotation(const Vector3& Rot)
 
 void CTransform::AddWorldRotation(const Vector2& Rot)
 {
-	AddWorldRotation(Vector3(Rot.x, Rot.y, m_WorldRot.z));
+	AddWorldRotation(Vector3(Rot.x, Rot.y, 0.f));
 }
 
 void CTransform::AddWorldRotation(float x, float y)
 {
-	AddWorldRotation(Vector3(x, y, m_WorldRot.z));
+	AddWorldRotation(Vector3(x, y, 0.f));
 }
 
 void CTransform::AddWorldRotation(float x, float y, float z)
@@ -768,17 +769,17 @@ void CTransform::AddWorldRotation(float x, float y, float z)
 
 void CTransform::AddWorldRotationX(float x)
 {
-	AddWorldRotation(Vector3(x, m_WorldRot.y, m_WorldRot.z));
+	AddWorldRotation(Vector3(x, 0.f, 0.f));
 }
 
 void CTransform::AddWorldRotationY(float y)
 {
-	AddWorldRotation(Vector3(m_WorldRot.x, y, m_WorldRot.z));
+	AddWorldRotation(Vector3(0.f, y, 0.f));
 }
 
 void CTransform::AddWorldRotationZ(float z)
 {
-	AddWorldRotation(Vector3(m_WorldRot.x, m_WorldRot.y, z));
+	AddWorldRotation(Vector3(0.f, 0.f, z));
 }
 
 void CTransform::AddWorldPosition(const Vector3& Pos)
@@ -786,19 +787,19 @@ void CTransform::AddWorldPosition(const Vector3& Pos)
 	m_WorldPos += Pos;
 
 	// 부모가 없을 경우라면 상대적인 위치를 월드공간에서의 위치와 동일한 위치로 적용을 한다.
-	m_RelativeRot = m_WorldPos;
+	m_RelativePos = m_WorldPos;
 
 	InheritWorldParentRotationPos();
 }
 
 void CTransform::AddWorldPosition(const Vector2& Pos)
 {
-	AddWorldPosition(Vector3(Pos.x, Pos.y, m_WorldPos.z));
+	AddWorldPosition(Vector3(Pos.x, Pos.y, 0.f));
 }
 
 void CTransform::AddWorldPosition(float x, float y)
 {
-	AddWorldPosition(Vector3(x, y, m_WorldPos.z));
+	AddWorldPosition(Vector3(x, y, 0.f));
 }
 
 void CTransform::AddWorldPosition(float x, float y, float z)
@@ -808,17 +809,17 @@ void CTransform::AddWorldPosition(float x, float y, float z)
 
 void CTransform::AddWorldPositionX(float x)
 {
-	AddWorldPosition(Vector3(x, m_WorldPos.y, m_WorldPos.z));
+	AddWorldPosition(Vector3(x, 0.f, 0.f));
 }
 
 void CTransform::AddWorldPositionY(float y)
 {
-	AddWorldPosition(Vector3(m_WorldPos.x, y, m_WorldPos.z));
+	AddWorldPosition(Vector3(0.f, y, 0.f));
 }
 
 void CTransform::AddWorldPositionZ(float z)
 {
-	AddWorldPosition(Vector3(m_WorldPos.x, m_WorldPos.y, z));
+	AddWorldPosition(Vector3(0.f, 0.f, z));
 }
 
 void CTransform::Start()
@@ -855,6 +856,11 @@ void CTransform::PostUpdate(float DeltaTime)
 	// 월드행렬 = 크기 * 자전 * 이동 * 공전 * 부모
 	if (m_UpdateScale || m_UpdateRot || m_UpdateRotAxis || m_UpdatePos)
 		m_matWorld = m_matScale * m_matRot * m_matPos;
+
+	m_UpdateScale = false;
+	m_UpdateRot = false;
+	m_UpdateRotAxis = false;
+	m_UpdatePos = false;
 }
 
 CTransform* CTransform::Clone() const

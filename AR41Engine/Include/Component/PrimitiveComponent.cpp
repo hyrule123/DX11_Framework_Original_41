@@ -21,11 +21,17 @@ CPrimitiveComponent::~CPrimitiveComponent()
 void CPrimitiveComponent::SetMesh(const std::string& Name)
 {
 	m_Mesh = m_Scene->GetResource()->FindMesh(Name);
+
+	if (m_Mesh)
+		SetMeshSize(m_Mesh->GetMeshSize());
 }
 
 void CPrimitiveComponent::SetMesh(CMesh* Mesh)
 {
 	m_Mesh = Mesh;
+
+	if (m_Mesh)
+		SetMeshSize(m_Mesh->GetMeshSize());
 }
 
 void CPrimitiveComponent::SetShader(const std::string& Name)
