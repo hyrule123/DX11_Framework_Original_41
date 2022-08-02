@@ -1,6 +1,7 @@
 #include "ClientManager.h"
 #include "Scene/SceneManager.h"
 #include "Scene/MainSceneInfo.h"
+#include "Input.h"
 
 CClientManager::CClientManager()
 {
@@ -18,6 +19,13 @@ bool CClientManager::Init(HINSTANCE hInst)
     {
         return false;
     }
+
+    // 키 등록
+    CInput::GetInst()->AddBindKey("Rotation", 'D');
+    CInput::GetInst()->AddBindKey("RotationInv", 'A');
+
+    CInput::GetInst()->AddBindKey("MoveUp", 'W');
+    CInput::GetInst()->AddBindKey("MoveDown", 'S');
 
     // SceneInfo 생성
     CSceneManager::GetInst()->CreateSceneInfo<CMainSceneInfo>();

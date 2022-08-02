@@ -1,6 +1,7 @@
 
 #include "Scene.h"
 #include "../GameObject.h"
+#include "../Input.h"
 
 CScene::CScene()	:
 	m_Change(false),
@@ -17,10 +18,19 @@ CScene::CScene()	:
 	m_Resource->m_Owner = this;
 
 	m_Resource->Init();
+
+	m_CameraManager = new CCameraManager;
+
+	m_CameraManager->m_Owner = this;
+
+	m_CameraManager->Init();
 }
 
 CScene::~CScene()
 {
+	CInput::GetInst()->ClearCallback(this);
+
+	SAFE_DELETE(m_CameraManager);
 	SAFE_DELETE(m_Resource);
 	SAFE_DELETE(m_SceneInfo);
 }
@@ -36,6 +46,8 @@ void CScene::Start()
 	{
 		(*iter)->Start();
 	}
+
+	m_CameraManager->Start();
 }
 
 bool CScene::Init()
@@ -69,6 +81,8 @@ void CScene::Update(float DeltaTime)
 		(*iter)->Update(DeltaTime);
 		++iter;
 	}
+
+	m_CameraManager->Update(DeltaTime);
 }
 
 void CScene::PostUpdate(float DeltaTime)
@@ -97,9 +111,20 @@ void CScene::PostUpdate(float DeltaTime)
 		(*iter)->PostUpdate(DeltaTime);
 		++iter;
 	}
+
+	m_CameraManager->PostUpdate(DeltaTime);
 }
 
 CGameObject* CScene::FindObject(const std::string& Name)
 {
+	auto	iter = m_ObjList.begin();
+	auto	iterEnd = m_ObjList.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		if ((*iter)->GetName() == Name)
+			return *iter;
+	}
+
 	return nullptr;
 }

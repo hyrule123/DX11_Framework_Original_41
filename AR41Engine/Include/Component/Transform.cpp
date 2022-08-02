@@ -168,7 +168,6 @@ void CTransform::InheritParentRotationPos()
 			// 부모의 위치를 행렬의 41, 42, 43 에 지정한다.
 			Vector3	ParentPos = m_Parent->GetWorldPos();
 
-			
 			memcpy(&matRot._41, &ParentPos, sizeof(Vector3));
 
 			m_WorldPos = m_RelativePos.TransformCoord(matRot);

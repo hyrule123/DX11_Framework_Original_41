@@ -23,5 +23,11 @@ public:
 	virtual void Update(float DeltaTime);
 	virtual void PostUpdate(float DeltaTime);
 	virtual CPlayer2D* Clone()    const;
+
+public:
+	void MoveUp();
+	void MoveDown();
+	void Rotation();
+	void RotationInv();
 };
 

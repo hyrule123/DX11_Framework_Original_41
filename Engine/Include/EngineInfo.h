@@ -1,6 +1,8 @@
 
 #pragma once
 
+#define	DIRECTINPUT_VERSION	0x0800
+
 #include <Windows.h>
 #include <vector>
 #include <list>
@@ -13,12 +15,15 @@
 #include <stack>
 #include <d3d11.h>
 #include <d3dcompiler.h>
+#include <dinput.h>
 
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
 #include "Matrix.h"
 #include "SharedPtr.h"
+
+extern float g_DeltaTime;
 
 #define	ROOT_PATH		"Root"
 #define	SHADER_PATH		"Shader"

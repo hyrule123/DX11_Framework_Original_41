@@ -5,10 +5,13 @@
 #include "PathManager.h"
 #include "Scene/SceneManager.h"
 #include "Render/RenderManager.h"
+#include "Input.h"
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 #pragma comment(lib, "dxguid.lib")
+
+float	g_DeltaTime;
 
 DEFINITION_SINGLE(CEngine)
 
@@ -29,6 +32,8 @@ CEngine::~CEngine()
 	CSceneManager::DestroyInst();
 
 	CRenderManager::DestroyInst();
+
+	CInput::DestroyInst();
 
 	CPathManager::DestroyInst();
 	CResourceManager::DestroyInst();
@@ -62,6 +67,11 @@ bool CEngine::Init(HINSTANCE hInst, const TCHAR* Title,
 
 	// Resource 관리자 초기화
 	if (!CResourceManager::GetInst()->Init())
+		return false;
+
+	
+	// 입력 관리자 초기화
+	if (!CInput::GetInst()->Init(m_hInst, m_hWnd))
 		return false;
 
 	
@@ -130,6 +140,10 @@ void CEngine::Logic()
 	m_Timer->Update();
 
 	float DeltaTime = m_Timer->GetDeltaTime();
+
+	g_DeltaTime = DeltaTime;
+
+	CInput::GetInst()->Update(DeltaTime);
 
 	CResourceManager::GetInst()->Update();
 

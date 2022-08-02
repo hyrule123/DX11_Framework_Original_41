@@ -85,6 +85,15 @@
     <Filter Include="02. Resource\02. Shader\03. ConstantBuffer\01. Transform">
       <UniqueIdentifier>{162003dd-5f09-4b5c-b960-72e584baa9de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Manager\07. Input">
+      <UniqueIdentifier>{95a9ff23-8203-459b-a73f-de08f788b527}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Component\01. SceneComponent\02. Camera">
+      <UniqueIdentifier>{c618be8d-5f89-40c4-a46a-3178113624da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Scene\03. Camera">
+      <UniqueIdentifier>{6da82b8f-7c1c-4b58-90f5-1fbc7ff44c47}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -198,6 +207,15 @@
     <ClInclude Include="Resource\Shader\TransformConstantBuffer.h">
       <Filter>02. Resource\02. Shader\03. ConstantBuffer\01. Transform</Filter>
     </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>01. Manager\07. Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\CameraComponent.h">
+      <Filter>05. Component\01. SceneComponent\02. Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\CameraManager.h">
+      <Filter>03. Scene\03. Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -298,6 +316,15 @@
     </ClCompile>
     <ClCompile Include="Resource\Shader\TransformConstantBuffer.cpp">
       <Filter>02. Resource\02. Shader\03. ConstantBuffer\01. Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>01. Manager\07. Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\CameraComponent.cpp">
+      <Filter>05. Component\01. SceneComponent\02. Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\CameraManager.cpp">
+      <Filter>03. Scene\03. Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

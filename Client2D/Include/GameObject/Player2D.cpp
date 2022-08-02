@@ -1,6 +1,7 @@
 
 #include "Player2D.h"
 #include "Component/SpriteComponent.h"
+#include "Input.h"
 
 CPlayer2D::CPlayer2D()
 {
@@ -42,6 +43,16 @@ bool CPlayer2D::Init()
 	m_SpriteChild->SetRelativePosition(100.f, 0.f);
 	m_SpriteChild->SetInheritRotZ(true);
 
+	CInput::GetInst()->AddBindFunction<CPlayer2D>("Rotation", Input_Type::Push,
+		this, &CPlayer2D::RotationInv, m_Scene);
+	CInput::GetInst()->AddBindFunction<CPlayer2D>("RotationInv", Input_Type::Push,
+		this, &CPlayer2D::Rotation, m_Scene);
+
+	CInput::GetInst()->AddBindFunction<CPlayer2D>("MoveUp", Input_Type::Push,
+		this, &CPlayer2D::MoveUp, m_Scene);
+	CInput::GetInst()->AddBindFunction<CPlayer2D>("MoveDown", Input_Type::Push,
+		this, &CPlayer2D::MoveDown, m_Scene);
+
 	return true;
 }
 
@@ -49,9 +60,9 @@ void CPlayer2D::Update(float DeltaTime)
 {
 	CGameObject::Update(DeltaTime);
 
-	m_Sprite->AddRelativeRotationZ(180.f * DeltaTime);
+	//m_Sprite->AddRelativeRotationZ(180.f * DeltaTime);
 
-	m_RightChild->AddRelativeRotationZ(360.f * DeltaTime);
+	//m_RightChild->AddRelativeRotationZ(360.f * DeltaTime);
 }
 
 void CPlayer2D::PostUpdate(float DeltaTime)
@@ -62,4 +73,24 @@ void CPlayer2D::PostUpdate(float DeltaTime)
 CPlayer2D* CPlayer2D::Clone() const
 {
 	return new CPlayer2D(*this);
+}
+
+void CPlayer2D::MoveUp()
+{
+	m_Sprite->AddWorldPosition(m_Sprite->GetWorldAxis(AXIS_Y) * 300.f * g_DeltaTime);
+}
+
+void CPlayer2D::MoveDown()
+{
+	m_Sprite->AddWorldPosition(m_Sprite->GetWorldAxis(AXIS_Y) * -300.f * g_DeltaTime);
+}
+
+void CPlayer2D::Rotation()
+{
+	m_Sprite->AddWorldRotationZ(360.f * g_DeltaTime);
+}
+
+void CPlayer2D::RotationInv()
+{
+	m_Sprite->AddWorldRotationZ(-360.f * g_DeltaTime);
 }

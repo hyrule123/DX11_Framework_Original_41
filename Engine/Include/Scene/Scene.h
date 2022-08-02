@@ -2,6 +2,7 @@
 
 #include "SceneInfo.h"
 #include "SceneResource.h"
+#include "CameraManager.h"
 
 class CScene
 {
@@ -16,6 +17,7 @@ private:
 	bool		m_Start;
 	CSceneInfo* m_SceneInfo;
 	CSceneResource* m_Resource;
+	CCameraManager* m_CameraManager;
 	std::list<CSharedPtr<class CGameObject>>	m_ObjList;
 
 public:
@@ -27,6 +29,11 @@ public:
 	CSceneResource* GetResource()	const
 	{
 		return m_Resource;
+	}
+
+	CCameraManager* GetCameraManager()	const
+	{
+		return m_CameraManager;
 	}
 
 

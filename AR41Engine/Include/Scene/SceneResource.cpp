@@ -11,7 +11,7 @@ CSceneResource::~CSceneResource()
 		auto	iter = m_mapMesh.begin();
 		auto	iterEnd = m_mapMesh.end();
 
-		for (; iter != iterEnd; ++iter)
+		for (; iter != iterEnd;)
 		{
 			std::string	Name = iter->first;
 
@@ -25,7 +25,7 @@ CSceneResource::~CSceneResource()
 		auto	iter = m_mapShader.begin();
 		auto	iterEnd = m_mapShader.end();
 
-		for (; iter != iterEnd; ++iter)
+		for (; iter != iterEnd;)
 		{
 			std::string	Name = iter->first;
 
