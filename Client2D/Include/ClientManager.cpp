@@ -27,6 +27,8 @@ bool CClientManager::Init(HINSTANCE hInst)
     CInput::GetInst()->AddBindKey("MoveUp", 'W');
     CInput::GetInst()->AddBindKey("MoveDown", 'S');
 
+    CInput::GetInst()->AddBindKey("Fire", VK_SPACE);
+
     // SceneInfo »ý¼º
     CSceneManager::GetInst()->CreateSceneInfo<CMainSceneInfo>();
 

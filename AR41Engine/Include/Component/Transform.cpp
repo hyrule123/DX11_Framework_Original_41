@@ -1,6 +1,9 @@
 
 #include "Transform.h"
 #include "../Resource/Shader/TransformConstantBuffer.h"
+#include "../Scene/Scene.h"
+#include "../Scene/CameraManager.h"
+#include "CameraComponent.h"
 
 CTransform::CTransform()	:
 	m_Is2D(true),
@@ -871,11 +874,10 @@ void CTransform::SetTransform()
 {
 	m_CBuffer->SetWorldMatrix(m_matWorld);
 
-	Matrix	matProj;
+	Matrix	matView = m_Scene->GetCameraManager()->GetCurrentCamera()->GetViewMatrix();
+	Matrix	matProj = m_Scene->GetCameraManager()->GetCurrentCamera()->GetProjMatrix();
 
-	matProj = DirectX::XMMatrixOrthographicOffCenterLH(0.f, 1280.f, 0.f, 720.f,
-		0.f, 1000.f);
-
+	m_CBuffer->SetViewMatrix(matView);
 	m_CBuffer->SetProjMatrix(matProj);
 
 	m_CBuffer->SetPivot(m_Pivot);

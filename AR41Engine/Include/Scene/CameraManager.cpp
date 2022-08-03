@@ -26,13 +26,33 @@ void CCameraManager::Start()
 
 bool CCameraManager::Init()
 {
+	m_CurrentCamera = new CCameraComponent;
+
+	m_CurrentCamera->Init();
+
+	m_CurrentCamera->SetCameraType(ECameraType::Camera2D);
+
+	m_UICamera = new CCameraComponent;
+
+	m_UICamera->Init();
+
+	m_UICamera->SetCameraType(ECameraType::CameraUI);
+
 	return true;
 }
 
 void CCameraManager::Update(float DeltaTime)
 {
+	if (!m_CurrentCamera->GetOwner())
+	{
+		m_CurrentCamera->Update(DeltaTime);
+	}
 }
 
 void CCameraManager::PostUpdate(float DeltaTime)
 {
+	if (!m_CurrentCamera->GetOwner())
+	{
+		m_CurrentCamera->PostUpdate(DeltaTime);
+	}
 }

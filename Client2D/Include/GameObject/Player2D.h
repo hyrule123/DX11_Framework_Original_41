@@ -16,6 +16,8 @@ private:
 	CSharedPtr<class CSpriteComponent>	m_Sprite;
 	CSharedPtr<class CSceneComponent>	m_RightChild;
 	CSharedPtr<class CSpriteComponent>	m_SpriteChild;
+	CSharedPtr<class CCameraComponent>	m_Camera;
+	CSharedPtr<class CTargetArm>	m_Arm;
 
 public:
 	virtual void Start();
@@ -29,5 +31,6 @@ public:
 	void MoveDown();
 	void Rotation();
 	void RotationInv();
+	void Fire();
 };
 

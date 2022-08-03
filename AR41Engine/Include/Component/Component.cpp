@@ -1,12 +1,15 @@
 
 #include "Component.h"
 
-CComponent::CComponent()
+CComponent::CComponent()	:
+	m_Scene(nullptr),
+	m_Owner(nullptr)
 {
 	SetTypeID<CComponent>();
 }
 
-CComponent::CComponent(const CComponent& Obj)
+CComponent::CComponent(const CComponent& Obj)	:
+	CRef(Obj)
 {
 }
 

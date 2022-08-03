@@ -158,6 +158,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ClientManager.cpp" />
+    <ClCompile Include="GameObject\Bullet.cpp" />
+    <ClCompile Include="GameObject\Monster.cpp" />
     <ClCompile Include="GameObject\Player2D.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Scene\MainSceneInfo.cpp" />
@@ -165,6 +167,8 @@
   <ItemGroup>
     <ClInclude Include="Client.h" />
     <ClInclude Include="ClientManager.h" />
+    <ClInclude Include="GameObject\Bullet.h" />
+    <ClInclude Include="GameObject\Monster.h" />
     <ClInclude Include="GameObject\Player2D.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene\MainSceneInfo.h" />

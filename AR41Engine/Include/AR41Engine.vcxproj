@@ -25,6 +25,7 @@
     <ClInclude Include="Component\PrimitiveComponent.h" />
     <ClInclude Include="Component\SceneComponent.h" />
     <ClInclude Include="Component\SpriteComponent.h" />
+    <ClInclude Include="Component\TargetArm.h" />
     <ClInclude Include="Component\Transform.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="Engine.h" />
@@ -67,6 +68,7 @@
     <ClCompile Include="Component\PrimitiveComponent.cpp" />
     <ClCompile Include="Component\SceneComponent.cpp" />
     <ClCompile Include="Component\SpriteComponent.cpp" />
+    <ClCompile Include="Component\TargetArm.cpp" />
     <ClCompile Include="Component\Transform.cpp" />
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="Engine.cpp" />

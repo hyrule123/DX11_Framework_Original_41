@@ -1,7 +1,13 @@
 
 #include "Player2D.h"
 #include "Component/SpriteComponent.h"
+#include "Component/CameraComponent.h"
+#include "Component/TargetArm.h"
 #include "Input.h"
+#include "Scene/Scene.h"
+#include "Scene/CameraManager.h"
+#include "Device.h"
+#include "Bullet.h"
 
 CPlayer2D::CPlayer2D()
 {
@@ -29,8 +35,23 @@ bool CPlayer2D::Init()
 	m_Sprite = CreateComponent<CSpriteComponent>("sprite");
 	m_RightChild = CreateComponent<CSceneComponent>("RightChild");
 	m_SpriteChild = CreateComponent<CSpriteComponent>("spriteChild");
+	m_Camera = CreateComponent<CCameraComponent>("Camera");
+	m_Arm = CreateComponent<CTargetArm>("Arm");
 
 	m_Sprite->AddChild(m_RightChild);
+
+	m_Sprite->AddChild(m_Arm);
+	m_Arm->AddChild(m_Camera);
+
+	Resolution RS = CDevice::GetInst()->GetResolution();
+
+	float Width = (float)RS.Width / 2.f;
+	float Height = (float)RS.Height / 2.f;
+
+	m_Arm->SetTargetOffset(Vector3(-Width, -Height, 0.f));
+
+	m_Scene->GetCameraManager()->SetCurrentCamera(m_Camera);
+
 	m_RightChild->AddChild(m_SpriteChild);
 
 	m_Sprite->SetRelativeScale(100.f, 100.f);
@@ -52,6 +73,9 @@ bool CPlayer2D::Init()
 		this, &CPlayer2D::MoveUp, m_Scene);
 	CInput::GetInst()->AddBindFunction<CPlayer2D>("MoveDown", Input_Type::Push,
 		this, &CPlayer2D::MoveDown, m_Scene);
+
+	CInput::GetInst()->AddBindFunction<CPlayer2D>("Fire", Input_Type::Down,
+		this, &CPlayer2D::Fire, m_Scene);
 
 	return true;
 }
@@ -93,4 +117,12 @@ void CPlayer2D::Rotation()
 void CPlayer2D::RotationInv()
 {
 	m_Sprite->AddWorldRotationZ(-360.f * g_DeltaTime);
+}
+
+void CPlayer2D::Fire()
+{
+	CBullet* Bullet = m_Scene->CreateObject<CBullet>("Bullet");
+
+	Bullet->SetWorldPosition(GetWorldPos());
+	Bullet->SetWorldRotation(GetWorldRot());
 }

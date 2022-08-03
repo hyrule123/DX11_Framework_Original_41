@@ -94,6 +94,9 @@
     <Filter Include="03. Scene\03. Camera">
       <UniqueIdentifier>{6da82b8f-7c1c-4b58-90f5-1fbc7ff44c47}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05. Component\01. SceneComponent\03. Arm">
+      <UniqueIdentifier>{3d6492d2-73d9-4bc5-95bd-73d33a13b435}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -216,6 +219,9 @@
     <ClInclude Include="Scene\CameraManager.h">
       <Filter>03. Scene\03. Camera</Filter>
     </ClInclude>
+    <ClInclude Include="Component\TargetArm.h">
+      <Filter>05. Component\01. SceneComponent\03. Arm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -325,6 +331,9 @@
     </ClCompile>
     <ClCompile Include="Scene\CameraManager.cpp">
       <Filter>03. Scene\03. Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\TargetArm.cpp">
+      <Filter>05. Component\01. SceneComponent\03. Arm</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

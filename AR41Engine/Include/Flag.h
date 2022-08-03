@@ -50,3 +50,10 @@ enum class EShaderBufferType : unsigned char
 	Graphic = Vertex | Pixel | Domain | Hull | Geometry,
 	All = Vertex | Pixel | Domain | Hull | Geometry | Compute
 };
+
+enum class ECameraType : unsigned char
+{
+	Camera2D,
+	Camera3D,
+	CameraUI
+};
