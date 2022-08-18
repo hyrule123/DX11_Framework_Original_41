@@ -21,6 +21,7 @@ CSceneResource::~CSceneResource()
 			CResourceManager::GetInst()->ReleaseMesh(Name);
 		}
 	}
+
 	{
 		auto	iter = m_mapShader.begin();
 		auto	iterEnd = m_mapShader.end();
@@ -33,6 +34,21 @@ CSceneResource::~CSceneResource()
 			iterEnd = m_mapShader.end();
 
 			CResourceManager::GetInst()->ReleaseShader(Name);
+		}
+	}
+
+	{
+		auto	iter = m_mapTexture.begin();
+		auto	iterEnd = m_mapTexture.end();
+
+		for (; iter != iterEnd;)
+		{
+			std::string	Name = iter->first;
+
+			iter = m_mapTexture.erase(iter);
+			iterEnd = m_mapTexture.end();
+
+			CResourceManager::GetInst()->ReleaseTexture(Name);
 		}
 	}
 }
@@ -92,6 +108,80 @@ CShader* CSceneResource::FindShader(const std::string& Name)
 		m_mapShader.insert(std::make_pair(Name, Shader));
 
 		return Shader;
+	}
+
+	return iter->second;
+}
+
+bool CSceneResource::LoadTexture(const std::string& Name, const TCHAR* FileName,
+	const std::string& PathName)
+{
+	if (FindTexture(Name))
+		return true;
+
+	if (!CResourceManager::GetInst()->LoadTexture(Name, FileName, PathName))
+		return false;
+
+	m_mapTexture.insert(std::make_pair(Name, CResourceManager::GetInst()->FindTexture(Name)));
+
+	return true;
+}
+
+bool CSceneResource::LoadTextureFullPath(const std::string& Name, const TCHAR* FullPath)
+{
+	if (FindTexture(Name))
+		return true;
+
+	if (!CResourceManager::GetInst()->LoadTextureFullPath(Name, FullPath))
+		return false;
+
+	m_mapTexture.insert(std::make_pair(Name, CResourceManager::GetInst()->FindTexture(Name)));
+
+	return true;
+}
+
+bool CSceneResource::LoadTexture(const std::string& Name, 
+	const std::vector<const TCHAR*>& vecFileName, const std::string& PathName)
+{
+	if (FindTexture(Name))
+		return true;
+
+	if (!CResourceManager::GetInst()->LoadTexture(Name, vecFileName, PathName))
+		return false;
+
+	m_mapTexture.insert(std::make_pair(Name, CResourceManager::GetInst()->FindTexture(Name)));
+
+	return true;
+}
+
+bool CSceneResource::LoadTextureFullPath(const std::string& Name,
+	const std::vector<const TCHAR*>& vecFullPath)
+{
+	if (FindTexture(Name))
+		return true;
+
+	if (!CResourceManager::GetInst()->LoadTextureFullPath(Name, vecFullPath))
+		return false;
+
+	m_mapTexture.insert(std::make_pair(Name, CResourceManager::GetInst()->FindTexture(Name)));
+
+	return true;
+}
+
+CTexture* CSceneResource::FindTexture(const std::string& Name)
+{
+	auto	iter = m_mapTexture.find(Name);
+
+	if (iter == m_mapTexture.end())
+	{
+		CTexture* Texture = CResourceManager::GetInst()->FindTexture(Name);
+
+		if (!Texture)
+			return nullptr;
+
+		m_mapTexture.insert(std::make_pair(Name, Texture));
+
+		return Texture;
 	}
 
 	return iter->second;

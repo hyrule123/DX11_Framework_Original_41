@@ -97,6 +97,9 @@
     <Filter Include="05. Component\01. SceneComponent\03. Arm">
       <UniqueIdentifier>{3d6492d2-73d9-4bc5-95bd-73d33a13b435}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. Resource\03. Texture">
+      <UniqueIdentifier>{3a139595-a86d-461c-9134-14e315d12004}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -222,6 +225,15 @@
     <ClInclude Include="Component\TargetArm.h">
       <Filter>05. Component\01. SceneComponent\03. Arm</Filter>
     </ClInclude>
+    <ClInclude Include="Resource\Texture\DirectXTex.h">
+      <Filter>02. Resource\03. Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Texture\Texture.h">
+      <Filter>02. Resource\03. Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Texture\TextureManager.h">
+      <Filter>02. Resource\03. Texture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -335,6 +347,12 @@
     <ClCompile Include="Component\TargetArm.cpp">
       <Filter>05. Component\01. SceneComponent\03. Arm</Filter>
     </ClCompile>
+    <ClCompile Include="Resource\Texture\Texture.cpp">
+      <Filter>02. Resource\03. Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Texture\TextureManager.cpp">
+      <Filter>02. Resource\03. Texture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\Shader\Share.fx">
@@ -343,5 +361,10 @@
     <FxCompile Include="..\Bin\Shader\Sprite.fx">
       <Filter>02. Resource\02. Shader\01. HLSL</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resource\Texture\DirectXTex.inl">
+      <Filter>02. Resource\03. Texture</Filter>
+    </None>
   </ItemGroup>
 </Project>

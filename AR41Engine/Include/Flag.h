@@ -57,3 +57,10 @@ enum class ECameraType : unsigned char
 	Camera3D,
 	CameraUI
 };
+
+enum class EImageType : unsigned char
+{
+	Atlas,
+	Frame,
+	Array
+};

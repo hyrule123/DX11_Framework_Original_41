@@ -8,6 +8,7 @@ class CResourceManager
 private:
 	class CMeshManager* m_MeshManager;
 	CShaderManager* m_ShaderManager;
+	class CTextureManager* m_TextureManager;
 
 public:
 	bool Init();
@@ -40,6 +41,18 @@ public:	// ===================== Shader =========================
 	bool CreateConstantBuffer(const std::string& Name, int Size, int Register,
 		int ShaderBufferType = (int)EShaderBufferType::All);
 	class CConstantBuffer* FindConstantBuffer(const std::string& Name);
+
+	
+
+public:	// ===================== Texture =========================
+	bool LoadTexture(const std::string& Name, const TCHAR* FileName,
+		const std::string& PathName = TEXTURE_PATH);
+	bool LoadTextureFullPath(const std::string& Name, const TCHAR* FullPath);
+	bool LoadTexture(const std::string& Name, const std::vector<const TCHAR*>& vecFileName,
+		const std::string& PathName = TEXTURE_PATH);
+	bool LoadTextureFullPath(const std::string& Name, const std::vector<const TCHAR*>& vecFullPath);
+	class CTexture* FindTexture(const std::string& Name);
+	void ReleaseTexture(const std::string& Name);
 
 
 

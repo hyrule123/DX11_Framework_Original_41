@@ -369,5 +369,14 @@ FodyWeavers.xsd
 
 # Build Result
 *.exe
-*.lib
 *.idb
+*.lib
+!DirectXTex.lib
+!DirectXTex_Debug.lib
+
+# Client2D, Editor Bin Folder
+Bin/
+!AR41Engine/Bin/
+
+# Except Engine Folder : Used to gather header files - automatically generated at build time
+Engine/

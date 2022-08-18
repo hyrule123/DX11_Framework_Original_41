@@ -22,6 +22,7 @@
 #include "Vector4.h"
 #include "Matrix.h"
 #include "SharedPtr.h"
+#include "Resource/Texture/DirectXTex.h"
 
 extern float g_DeltaTime;
 
