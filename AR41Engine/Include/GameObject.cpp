@@ -691,3 +691,4 @@ void CGameObject::AddWorldPositionZ(float z)
 	m_RootComponent->AddWorldPositionZ(z);
 }
 
+
