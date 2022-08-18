@@ -60,6 +60,10 @@ bool CPlayer2D::Init()
 	m_Sprite->SetRelativeScale(100.f, 100.f);
 	m_Sprite->SetWorldPosition(500.f, 500.f);
 
+	CMaterial* Material = m_Sprite->GetMaterial(0);
+
+	Material->SetOpacity(0.5f);
+
 	m_RightChild->SetRelativePosition(150.f, 0.f);
 	m_RightChild->SetInheritRotZ(true);
 

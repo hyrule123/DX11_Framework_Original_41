@@ -2,6 +2,7 @@
 
 #include "../../Ref.h"
 #include "../Texture/Texture.h"
+#include "../../Render/RenderState.h"
 
 struct MaterialTextureInfo
 {
@@ -49,6 +50,7 @@ protected:
     Vector4     m_EmissiveColor;    // 자체적으로 빛을 발산하는 물체일 경우
     float       m_Opacity;          // 불투명도.
     class CMaterialConstantBuffer* m_CBuffer;
+    CSharedPtr<CRenderState>    m_RenderState[3];
 
 public:
     void SetBaseColor(const Vector4& Color);
@@ -97,6 +99,9 @@ public:
         const std::string& Name, const std::vector<const TCHAR*>& vecFullPath);
 
     void SetTextureSamplerType(int Index, ESamplerType Type);
+
+public:
+    void SetRenderState(const std::string& Name);
 
 public:
     void SetShader(const std::string& Name);

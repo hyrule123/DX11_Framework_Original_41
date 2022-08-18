@@ -5,6 +5,7 @@
 #include "../../Scene/SceneResource.h"
 #include "../Shader/MaterialConstantBuffer.h"
 #include "../Shader/Shader.h"
+#include "../../Render/RenderManager.h"
 
 CMaterial::CMaterial()	:
 	m_BaseColor(Vector4::White),
@@ -443,6 +444,16 @@ void CMaterial::SetTextureSamplerType(int Index, ESamplerType Type)
 	Info->SamplerType = Type;
 }
 
+void CMaterial::SetRenderState(const std::string& Name)
+{
+	CRenderState* RenderState = CRenderManager::GetInst()->FindRenderState<CRenderState>(Name);
+
+	if (!RenderState)
+		return;
+
+	m_RenderState[(int)RenderState->GetType()] = RenderState;
+}
+
 void CMaterial::SetShader(const std::string& Name)
 {
 	if (m_Scene)
@@ -461,6 +472,12 @@ void CMaterial::SetMaterial()
 	if (m_Shader)
 		m_Shader->SetShader();
 
+	for (int i = 0; i < 3; ++i)
+	{
+		if (m_RenderState[i])
+			m_RenderState[i]->SetState();
+	}
+
 	m_CBuffer->UpdateBuffer();
 
 	size_t	Size = m_vecTextureInfo.size();
@@ -474,6 +491,12 @@ void CMaterial::SetMaterial()
 
 void CMaterial::ResetMaterial()
 {
+	for (int i = 0; i < 3; ++i)
+	{
+		if (m_RenderState[i])
+			m_RenderState[i]->ResetState();
+	}
+
 	size_t	Size = m_vecTextureInfo.size();
 
 	for (size_t i = 0; i < Size; ++i)

@@ -27,10 +27,7 @@ x86/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/
-# [Bb]in/
 [Oo]bj/
-BinObj/
-BinObjDebug/
 [Oo]ut/
 [Ll]og/
 [Ll]ogs/
@@ -371,11 +368,15 @@ FodyWeavers.xsd
 *.exe
 *.idb
 *.lib
+#Except DirectXTex Library
 !DirectXTex.lib
 !DirectXTex_Debug.lib
 
 # Client2D, Editor Bin Folder
-Bin/
+[Bb]in/
+BinObj/
+BinObjDebug/
+# Except Original Bin Folder
 !AR41Engine/Bin/
 
 # Except Engine Folder : Used to gather header files - automatically generated at build time
