@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "EditorInfo.h"
 
@@ -12,9 +12,10 @@ protected:
 
 protected:
 	std::string		m_Name;
+	std::string		m_NameUTF8;
 	class CEditorWindow* m_Owner;
 	ImVec2			m_Size;
-	ImColor			m_Color;
+	ImVec4			m_Color;
 
 public:
 	const std::string& GetName()	const
@@ -24,12 +25,40 @@ public:
 
 	void SetName(const std::string& Name)
 	{
+		TCHAR	wName[256] = {};
+
+		int Length = (int)MultiByteToWideChar(CP_ACP, 0, Name.c_str(), -1, nullptr, 0);
+
+		MultiByteToWideChar(CP_ACP, 0, Name.c_str(), -1, wName, Length);
+
+		char	NameUTF8[256] = {};
+
+		Length = WideCharToMultiByte(CP_UTF8, 0, wName, -1, nullptr, 0, nullptr, nullptr);
+
+		WideCharToMultiByte(CP_UTF8, 0, wName, -1, NameUTF8, Length, nullptr, nullptr);
+
+		m_NameUTF8 = NameUTF8;
+
 		m_Name = Name;
 	}
 
 	void SetHideName(const std::string& Name)
 	{
 		m_Name = "##" + Name;
+
+		TCHAR	wName[256] = {};
+
+		int Length = (int)MultiByteToWideChar(CP_ACP, 0, m_Name.c_str(), -1, nullptr, 0);
+
+		MultiByteToWideChar(CP_ACP, 0, m_Name.c_str(), -1, wName, Length);
+
+		char	NameUTF8[256] = {};
+
+		Length = WideCharToMultiByte(CP_UTF8, 0, wName, -1, nullptr, 0, nullptr, nullptr);
+
+		WideCharToMultiByte(CP_UTF8, 0, wName, -1, NameUTF8, Length, nullptr, nullptr);
+
+		m_NameUTF8 = NameUTF8;
 	}
 
 	void SetSize(const ImVec2& Size)
@@ -62,10 +91,10 @@ public:
 	void SetColor(unsigned char r, unsigned char g, unsigned char b,
 		unsigned char a)
 	{
-		m_Color.Value.x = r / 255.f;
-		m_Color.Value.y = g / 255.f;
-		m_Color.Value.z = b / 255.f;
-		m_Color.Value.w = a / 255.f;
+		m_Color.x = r / 255.f;
+		m_Color.y = g / 255.f;
+		m_Color.z = b / 255.f;
+		m_Color.w = a / 255.f;
 	}
 
 public:

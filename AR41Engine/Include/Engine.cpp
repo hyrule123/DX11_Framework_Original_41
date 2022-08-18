@@ -155,12 +155,12 @@ void CEngine::Logic()
 
 	CInput::GetInst()->Update(DeltaTime);
 
+	if (m_EditorMode)
+		CEditorGUIManager::GetInst()->Update(DeltaTime);
+
 	CResourceManager::GetInst()->Update();
 
 	Input(DeltaTime);
-
-	if (m_EditorMode)
-		CEditorGUIManager::GetInst()->Update(DeltaTime);
 
 
 	if (Update(DeltaTime))
@@ -206,11 +206,8 @@ void CEngine::Render(float DeltaTime)
 	// 모든 물체들을 출력한다. 이렇게 하면 백버퍼와 깊이버퍼가 채워진다.
 	CRenderManager::GetInst()->Render(DeltaTime);
 
-
-
 	if (m_EditorMode)
 		CEditorGUIManager::GetInst()->Render();
-
 
 	// 그려진 백버퍼를 화면에 시연한다.
 	CDevice::GetInst()->Flip();

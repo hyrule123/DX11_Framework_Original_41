@@ -1,4 +1,4 @@
-
+﻿
 #include "EditorButton.h"
 
 CEditorButton::CEditorButton()
@@ -16,7 +16,7 @@ bool CEditorButton::Init()
 
 void CEditorButton::Render()
 {
-	m_Click = ImGui::Button(m_Name.c_str(), m_Size);
+	m_Click = ImGui::Button(m_NameUTF8.c_str(), m_Size);
 
 	if (m_Click && m_ClickCallback)
 		m_ClickCallback();

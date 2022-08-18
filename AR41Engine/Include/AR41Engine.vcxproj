@@ -30,7 +30,10 @@
     <ClInclude Include="Device.h" />
     <ClInclude Include="Editor\EditorButton.h" />
     <ClInclude Include="Editor\EditorGUIManager.h" />
+    <ClInclude Include="Editor\EditorImage.h" />
     <ClInclude Include="Editor\EditorInfo.h" />
+    <ClInclude Include="Editor\EditorLabel.h" />
+    <ClInclude Include="Editor\EditorSameLine.h" />
     <ClInclude Include="Editor\EditorWidget.h" />
     <ClInclude Include="Editor\EditorWindow.h" />
     <ClInclude Include="Engine.h" />
@@ -97,6 +100,9 @@
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="Editor\EditorButton.cpp" />
     <ClCompile Include="Editor\EditorGUIManager.cpp" />
+    <ClCompile Include="Editor\EditorImage.cpp" />
+    <ClCompile Include="Editor\EditorLabel.cpp" />
+    <ClCompile Include="Editor\EditorSameLine.cpp" />
     <ClCompile Include="Editor\EditorWidget.cpp" />
     <ClCompile Include="Editor\EditorWindow.cpp" />
     <ClCompile Include="Engine.cpp" />

@@ -1,4 +1,4 @@
-
+﻿
 #include "EditorWindow.h"
 #include "EditorWidget.h"
 #include "EditorGUIManager.h"
@@ -87,6 +87,9 @@ bool CEditorWindow::Init()
 
 void CEditorWindow::Update(float DeltaTime)
 {
+	if (!m_Open)
+		return;
+
 	if (!ImGui::Begin(m_Name.c_str(), &m_Open, m_WindowFlag))
 		m_Open = false;
 

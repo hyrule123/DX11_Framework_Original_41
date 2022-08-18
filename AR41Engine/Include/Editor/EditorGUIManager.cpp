@@ -1,4 +1,4 @@
-
+ï»¿
 #include "EditorGUIManager.h"
 #include "../Device.h"
 #include "../PathManager.h"
@@ -28,10 +28,10 @@ CEditorGUIManager::~CEditorGUIManager()
 
 bool CEditorGUIManager::Init(HWND hWnd)
 {
-	// IMGUI Context¸¦ »ı¼ºÇÑ´Ù.
+	// IMGUI Contextë¥¼ ìƒì„±í•œë‹¤.
 	m_Context = ImGui::CreateContext();
 
-	// ÀÔÃâ·Â °´Ã¼¸¦ ¾ò¾î¿Â´Ù.
+	// ì…ì¶œë ¥ ê°ì²´ë¥¼ ì–»ì–´ì˜¨ë‹¤.
 	ImGuiIO& io = ImGui::GetIO();
 
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
@@ -42,6 +42,8 @@ bool CEditorGUIManager::Init(HWND hWnd)
 
 	ImGui_ImplWin32_Init(hWnd);
 	ImGui_ImplDX11_Init(CDevice::GetInst()->GetDevice(), CDevice::GetInst()->GetContext());
+
+	SetFont("DefaultFont", "NotoSansKR-Regular.otf", 20.f);
 
 	return true;
 }
@@ -56,7 +58,7 @@ void CEditorGUIManager::Update(float DeltaTime)
 
 	ImGui::NewFrame();
 
-	// ¿©±â¿¡¼­ IMGUI ·»´õ¸µ
+	// ì—¬ê¸°ì—ì„œ IMGUI ë Œë”ë§
 	auto	iter = m_mapWindow.begin();
 	auto	iterEnd = m_mapWindow.end();
 
@@ -66,8 +68,8 @@ void CEditorGUIManager::Update(float DeltaTime)
 	}
 
 
-	// À§¿¡¼­ ±×¸®°Ô µÇ¸é IMGUI ³»ºÎ ·»´õ¸µ ¹öÆÛ¿¡ ±×·ÁÁØ ³à¼®µéÀÌ µé¾î°¡ ÀÖ´Ù.
-	// ÃÖÁ¾ ·»´õ¸µÀ» ÇÏ±â À§ÇÑ ¹öÆÛ¸¦ ¸¸µé¾îÁØ´Ù.
+	// ìœ„ì—ì„œ ê·¸ë¦¬ê²Œ ë˜ë©´ IMGUI ë‚´ë¶€ ë Œë”ë§ ë²„í¼ì— ê·¸ë ¤ì¤€ ë…€ì„ë“¤ì´ ë“¤ì–´ê°€ ìˆë‹¤.
+	// ìµœì¢… ë Œë”ë§ì„ í•˜ê¸° ìœ„í•œ ë²„í¼ë¥¼ ë§Œë“¤ì–´ì¤€ë‹¤.
 	ImGui::Render();
 }
 
@@ -78,8 +80,6 @@ void CEditorGUIManager::Render()
 
 	// Rendering
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
-	ImGuiIO& io = ImGui::GetIO();
 
 	ImGui::UpdatePlatformWindows();
 	ImGui::RenderPlatformWindowsDefault();
@@ -110,10 +110,12 @@ void CEditorGUIManager::SetFont(const std::string& Name, const char* FileName,
 
 void CEditorGUIManager::EnableFont()
 {
-	ImGui::PushFont(m_Font);
+	if (m_Font)
+		ImGui::PushFont(m_Font);
 }
 
 void CEditorGUIManager::DisableFont()
 {
-	ImGui::PopFont();
+	if (m_Font)
+		ImGui::PopFont();
 }

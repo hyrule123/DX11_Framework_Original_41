@@ -318,6 +318,15 @@
     <ClInclude Include="Editor\EditorButton.h">
       <Filter>07. Editor\03. Widget</Filter>
     </ClInclude>
+    <ClInclude Include="Editor\EditorSameLine.h">
+      <Filter>07. Editor\03. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\EditorLabel.h">
+      <Filter>07. Editor\03. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\EditorImage.h">
+      <Filter>07. Editor\03. Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -492,6 +501,15 @@
       <Filter>07. Editor\03. Widget</Filter>
     </ClCompile>
     <ClCompile Include="Editor\EditorButton.cpp">
+      <Filter>07. Editor\03. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\EditorSameLine.cpp">
+      <Filter>07. Editor\03. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\EditorLabel.cpp">
+      <Filter>07. Editor\03. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\EditorImage.cpp">
       <Filter>07. Editor\03. Widget</Filter>
     </ClCompile>
   </ItemGroup>

@@ -26,12 +26,26 @@ CDevice::~CDevice()
 	SAFE_RELEASE(m_Device);
 }
 
+Vector2 CDevice::GetResolutionRatio() const
+{
+	RECT	WindowRC;
+
+	GetClientRect(m_hWnd, &WindowRC);
+
+	float Width = (float)(WindowRC.right - WindowRC.left);
+	float Height = (float)(WindowRC.bottom - WindowRC.top);
+
+	return Vector2(m_RS.Width / Width, m_RS.Height / Height);
+}
+
 bool CDevice::Init(HWND hWnd, unsigned int DeviceWidth, unsigned int DeviceHeight,
 	bool WindowMode)
 {
 	m_hWnd = hWnd;
 	m_RS.Width = DeviceWidth;
 	m_RS.Height = DeviceHeight;
+
+	GetResolutionRatio();
 
 	unsigned int	Flag = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 
