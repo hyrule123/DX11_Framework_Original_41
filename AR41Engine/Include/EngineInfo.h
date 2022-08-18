@@ -129,28 +129,6 @@ struct IndexBuffer
 	}
 };
 
-struct MeshContainer
-{
-	VertexBuffer	VB;
-	std::vector<IndexBuffer>	vecIB;
-
-	// 위상구조. 어떤 도형으로 그려낼지를 결정한다.
-	D3D11_PRIMITIVE_TOPOLOGY	Primitive;
-};
-
-struct MeshSlot
-{
-	VertexBuffer* VB;
-	IndexBuffer* IB;
-	D3D11_PRIMITIVE_TOPOLOGY	Primitive;
-
-	MeshSlot()	:
-		VB(nullptr),
-		IB(nullptr)
-	{
-	}
-};
-
 struct TransformCBuffer
 {
 	Matrix  matWorld;

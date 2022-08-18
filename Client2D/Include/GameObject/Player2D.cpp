@@ -8,6 +8,7 @@
 #include "Scene/CameraManager.h"
 #include "Device.h"
 #include "Bullet.h"
+#include "Resource/Material/Material.h"
 
 CPlayer2D::CPlayer2D()
 {
@@ -39,6 +40,8 @@ bool CPlayer2D::Init()
 	m_Arm = CreateComponent<CTargetArm>("Arm");
 
 	m_Sprite->AddChild(m_RightChild);
+
+	m_Sprite->GetMaterial(0)->SetBaseColorUnsignedChar(255, 255, 0, 255);
 
 	m_Sprite->AddChild(m_Arm);
 	m_Arm->AddChild(m_Camera);

@@ -2,6 +2,7 @@
 
 #include "../EngineInfo.h"
 #include "Shader/ShaderManager.h"
+#include "Material/MaterialManager.h"
 
 class CResourceManager
 {
@@ -9,6 +10,7 @@ private:
 	class CMeshManager* m_MeshManager;
 	CShaderManager* m_ShaderManager;
 	class CTextureManager* m_TextureManager;
+	class CMaterialManager* m_MaterialManager;
 
 public:
 	bool Init();
@@ -53,6 +55,19 @@ public:	// ===================== Texture =========================
 	bool LoadTextureFullPath(const std::string& Name, const std::vector<const TCHAR*>& vecFullPath);
 	class CTexture* FindTexture(const std::string& Name);
 	void ReleaseTexture(const std::string& Name);
+
+
+
+
+public:	// ===================== Material =========================
+	CMaterial* FindMaterial(const std::string& Name);
+	void ReleaseMaterial(const std::string& Name);
+
+	template <typename T>
+	T* CreateMaterial(const std::string& Name)
+	{
+		return m_MaterialManager->CreateMaterial<T>(Name);
+	}
 
 
 

@@ -93,6 +93,6 @@ private:
 
 public:
 	void SetShader(int Register, int ShaderBufferType, int Index);
-	void ResetShader(int Register, int ShaderBufferType, int Index);
+	void ResetShader(int Register, int ShaderBufferType);
 };
 

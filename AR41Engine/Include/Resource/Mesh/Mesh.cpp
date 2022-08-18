@@ -1,6 +1,10 @@
 
 #include "Mesh.h"
 #include "../../Device.h"
+#include "../Material/Material.h"
+#include "../ResourceManager.h"
+#include "../../Scene/Scene.h"
+#include "../../Scene/SceneResource.h"
 
 CMesh::CMesh()	:
 	m_Min(FLT_MAX, FLT_MAX, FLT_MAX),
@@ -24,7 +28,31 @@ CMesh::~CMesh()
 	}
 }
 
-bool CMesh::CreateMesh(void* VtxData, int Size, int Count, 
+void CMesh::SetMaterial(int Container, int Subset, const std::string& Name)
+{
+	CMaterial* Material = nullptr;
+
+	if (m_Scene)
+	{
+		Material = m_Scene->GetResource()->FindMaterial(Name);
+	}
+
+	else
+	{
+		Material = CResourceManager::GetInst()->FindMaterial(Name);
+	}
+
+	m_vecContainer[Container]->vecSubset[Subset].Material = Material;
+	m_vecContainer[Container]->vecSubset[Subset].Slot->Material = Material;
+}
+
+void CMesh::SetMaterial(int Container, int Subset, CMaterial* Material)
+{
+	m_vecContainer[Container]->vecSubset[Subset].Material = Material;
+	m_vecContainer[Container]->vecSubset[Subset].Slot->Material = Material;
+}
+
+bool CMesh::CreateMesh(void* VtxData, int Size, int Count,
 	D3D11_USAGE VtxUsage, D3D11_PRIMITIVE_TOPOLOGY Primitive, 
 	void* IdxData, int IdxSize, int IdxCount, D3D11_USAGE IdxUsage, 
 	DXGI_FORMAT Fmt)
@@ -52,11 +80,13 @@ bool CMesh::CreateMesh(void* VtxData, int Size, int Count,
 
 	if (IdxData != nullptr)
 	{
-		IndexBuffer	IB;
-		Container->vecIB.push_back(IB);
-		int Index = (int)Container->vecIB.size() - 1;
+		MeshSubset	Subset;
+		Container->vecSubset.push_back(Subset);
+		int Index = (int)Container->vecSubset.size() - 1;
 
-		Slot->IB = &Container->vecIB[Index];
+		Container->vecSubset[Index].Slot = Slot;
+
+		Slot->IB = &Container->vecSubset[Index].IB;
 
 		Slot->IB->Size = IdxSize;
 		Slot->IB->Count = IdxCount;
