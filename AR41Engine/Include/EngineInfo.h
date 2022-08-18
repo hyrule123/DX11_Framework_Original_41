@@ -136,8 +136,9 @@ struct TransformCBuffer
 	Matrix  matProj;
 	Matrix  matWVP;
 	Vector3 Pivot;
+	float	Empty1;
 	Vector3 MeshSize;
-	Vector2 TransformEmpty;
+	float	Empty2;
 };
 
 // 위치, 색상 정보를 가지고 있는 정점.

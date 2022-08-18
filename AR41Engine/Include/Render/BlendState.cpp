@@ -9,6 +9,7 @@ CBlendState::CBlendState()	:
 	m_PrevBlendFactor{}
 {
 	m_Type = ERenderStateType::Blend;
+	SetTypeID<CBlendState>();
 }
 
 CBlendState::~CBlendState()
