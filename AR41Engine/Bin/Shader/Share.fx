@@ -17,3 +17,19 @@ cbuffer Transform : register(b0)
     float3  g_MeshSize;
     float2  g_TransformEmpty;
 };
+
+cbuffer Material : register(b1)
+{
+    float4 g_MtrlBaseColor;
+    float4 g_MtrlAmbientColor;
+    float4 g_MtrlSpecularColor;
+    float4 g_MtrlEmissiveColor;
+    float g_MtrlOpacity;
+    float3 g_MtrlEmpty;
+};
+
+SamplerState g_PointSmp : register(s0);
+SamplerState g_LinearSmp : register(s1);
+SamplerState g_AnisotropicSmp : register(s2);
+
+Texture2D g_BaseTexture : register(t0);

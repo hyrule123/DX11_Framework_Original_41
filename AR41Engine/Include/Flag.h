@@ -64,3 +64,10 @@ enum class EImageType : unsigned char
 	Frame,
 	Array
 };
+
+enum class ESamplerType : unsigned char
+{
+	Point,
+	Linear,
+	Anisotropic
+};

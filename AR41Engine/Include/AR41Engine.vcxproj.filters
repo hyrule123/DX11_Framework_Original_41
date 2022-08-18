@@ -100,6 +100,12 @@
     <Filter Include="02. Resource\03. Texture">
       <UniqueIdentifier>{3a139595-a86d-461c-9134-14e315d12004}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. Resource\04. Material">
+      <UniqueIdentifier>{0aa2cb5a-1266-431d-8d3c-8e8db10d3e5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Resource\02. Shader\03. ConstantBuffer\02. Material">
+      <UniqueIdentifier>{e881d413-47c8-4c7e-902d-b1cac5efbf40}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -234,6 +240,18 @@
     <ClInclude Include="Resource\Texture\TextureManager.h">
       <Filter>02. Resource\03. Texture</Filter>
     </ClInclude>
+    <ClInclude Include="Resource\Shader\SpriteShader.h">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\01. Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Material\MaterialManager.h">
+      <Filter>02. Resource\04. Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Material\Material.h">
+      <Filter>02. Resource\04. Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\MaterialConstantBuffer.h">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\02. Material</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -352,6 +370,18 @@
     </ClCompile>
     <ClCompile Include="Resource\Texture\TextureManager.cpp">
       <Filter>02. Resource\03. Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\SpriteShader.cpp">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\01. Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Material\MaterialManager.cpp">
+      <Filter>02. Resource\04. Material</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Material\Material.cpp">
+      <Filter>02. Resource\04. Material</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\MaterialConstantBuffer.cpp">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\02. Material</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

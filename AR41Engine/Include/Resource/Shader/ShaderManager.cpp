@@ -1,6 +1,7 @@
 
 #include "ShaderManager.h"
 #include "SpriteColorShader.h"
+#include "SpriteShader.h"
 #include "ConstantBuffer.h"
 
 CShaderManager::CShaderManager()
@@ -16,8 +17,12 @@ bool CShaderManager::Init()
 	CreateShader<CSpriteColorShader>("SpriteColorShader");
 
 
+	CreateShader<CSpriteShader>("SpriteShader");
+
+
 
 	CreateConstantBuffer("Transform", sizeof(TransformCBuffer), 0);
+	CreateConstantBuffer("Material", sizeof(MaterialCBuffer), 1);
 
 	return true;
 }

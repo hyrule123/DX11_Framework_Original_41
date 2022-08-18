@@ -25,8 +25,8 @@ bool CSpriteComponent::Init()
 	if (!CPrimitiveComponent::Init())
 		return false;
 
-	SetMesh("CenterColorRect");
-	SetShader("SpriteColorShader");
+	SetMesh("CenterUVRect");
+	SetShader("SpriteShader");
 
 	return true;
 }

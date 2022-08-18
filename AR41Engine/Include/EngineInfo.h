@@ -161,3 +161,30 @@ struct TransformCBuffer
 	Vector3 MeshSize;
 	Vector2 TransformEmpty;
 };
+
+// 위치, 색상 정보를 가지고 있는 정점.
+struct VertexUV
+{
+	Vector3	Pos;
+	Vector2	UV;
+
+	VertexUV()
+	{
+	}
+
+	VertexUV(const Vector3& _Pos, const Vector2& _UV) :
+		Pos(_Pos),
+		UV(_UV)
+	{
+	}
+};
+
+struct MaterialCBuffer
+{
+	Vector4 BaseColor;
+	Vector4 AmbientColor;
+	Vector4 SpecularColor;
+	Vector4 EmissiveColor;
+	float Opacity;
+	Vector3 Empty;
+};
