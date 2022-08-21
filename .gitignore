@@ -361,8 +361,9 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-# SVN
+# SVN related files
 .svn/
+*.*.r*
 
 # Build Result
 *.exe
@@ -381,3 +382,8 @@ BinObjDebug/
 
 # Except Engine Folder : Used to gather header files - automatically generated at build time
 Engine/
+
+
+#imgui settings file
+imgui.ini
+
