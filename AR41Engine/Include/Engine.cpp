@@ -14,6 +14,8 @@
 
 float	g_DeltaTime;
 
+std::function<bool(HWND, UINT, WPARAM, LPARAM)> CEngine::m_WndProcFunc;
+
 DEFINITION_SINGLE(CEngine)
 
 bool CEngine::m_Loop = true;
@@ -26,7 +28,7 @@ CEngine::CEngine()	:
 	m_ClearColor{}
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(815);
+	//_CrtSetBreakAlloc(284);
 }
 
 CEngine::~CEngine()
@@ -50,13 +52,14 @@ CEngine::~CEngine()
 bool CEngine::Init(HINSTANCE hInst, const TCHAR* Title,
 	const TCHAR* ClassName, int IconID, int SmallIconID,
 	unsigned int WindowWidth, unsigned int WindowHeight,
-	unsigned int DeviceWidth, unsigned int DeviceHeight, bool WindowMode)
+	unsigned int DeviceWidth, unsigned int DeviceHeight, bool WindowMode,
+	int MenuID)
 {
 	m_hInst = hInst;
 	m_WindowRS.Width = WindowWidth;
 	m_WindowRS.Height = WindowHeight;
 
-	Register(ClassName, IconID, SmallIconID);
+	Register(ClassName, IconID, SmallIconID, MenuID);
 
 	Create(Title, ClassName);
 
@@ -213,7 +216,7 @@ void CEngine::Render(float DeltaTime)
 	CDevice::GetInst()->Flip();
 }
 
-void CEngine::Register(const TCHAR* ClassName, int IconID, int SmallIconID)
+void CEngine::Register(const TCHAR* ClassName, int IconID, int SmallIconID, int MenuID)
 {
 	// 레지스터에 등록할 윈도우 클래스 구조체를 만들어준다.
 	WNDCLASSEXW wcex;
@@ -239,7 +242,11 @@ void CEngine::Register(const TCHAR* ClassName, int IconID, int SmallIconID)
 	wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 
 	// 메뉴를 사용할지 말지를 결정한다.
-	wcex.lpszMenuName = nullptr;// MAKEINTRESOURCEW(IDC_MY220428);
+	if (MenuID != 0)
+		wcex.lpszMenuName = MAKEINTRESOURCEW(MenuID);
+
+	else
+		wcex.lpszMenuName = nullptr;
 
 	// 등록할 클래스의 이름을 유니코드 문자열로 만들어서 지정한다.
 	// TEXT 매크로는 프로젝트 설정이 유니코드로 되어있을 경우 유니코드 문자열로 만들어지고
@@ -317,6 +324,12 @@ LRESULT CEngine::WndProc(HWND hWnd, UINT message, WPARAM wParam,
 			return 1;
 	}
 
+	if (m_WndProcFunc)
+	{
+		if (m_WndProcFunc(hWnd, message, wParam, lParam))
+			return 1;
+	}
+
 	switch (message)
 	{
 	case WM_DESTROY:
@@ -329,4 +342,3 @@ LRESULT CEngine::WndProc(HWND hWnd, UINT message, WPARAM wParam,
 	}
 	return 0;
 }
-

@@ -85,7 +85,7 @@ bool CTestWindow::Init()
 	m_Combo->SetSelectPrevViewName(true);
 
 	m_Combo->SetHideName("ComboBox");
-	m_Combo->SetPrevViewName("기본 프리뷰 값");
+	m_Combo->SetPrevViewName("흑마법사");
 
 	m_Combo->AddItem("Combo1");
 	m_Combo->AddItem("Combo2");
@@ -99,14 +99,14 @@ bool CTestWindow::Init()
 
 	m_Tree->SetHideName("Tree");
 
-	m_Tree->SetSelectCallback<CTestWindow>(this, &CTestWindow::TreeCallback);
-
 	m_Tree->AddItem("Root");
 	m_Tree->AddItem("진짜 최상위 부모");
 	m_Tree->AddItem("자식1", "진짜 최상위 부모");
 	m_Tree->AddItem("자식2", "Root");
 	m_Tree->AddItem("자식3", "자식2");
-	m_Tree->AddItem("자식4", "진짜 최상위 부모");
+
+
+	m_Tree->SetSelectCallback<CTestWindow>(this, &CTestWindow::TreeCallback);
 
 	return true;
 }
@@ -159,16 +159,8 @@ void CTestWindow::ListCallback(int SelectIndex, const std::string& Item)
 void CTestWindow::TreeCallback(const std::string& Item)
 {
 	char	Text[256] = {};
-	char	NewLine[3] = "\n";
 
-	strcpy_s(Text, 256, Item.c_str());
-	strcat_s(Text, 256, NewLine);
+	sprintf_s(Text, "%s\n", Item.c_str());
 
 	OutputDebugStringA(Text);
-
-	if (Item == "자식2")
-	{
-		m_Tree->DeleteItem(Item);
-	}
 }
-

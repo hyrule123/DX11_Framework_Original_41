@@ -363,7 +363,7 @@ FodyWeavers.xsd
 
 # SVN related files
 .svn/
-*.*.r[0-9]*
+*.*.r*
 
 # Build Result
 *.exe

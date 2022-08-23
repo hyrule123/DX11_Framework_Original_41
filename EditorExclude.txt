@@ -1,0 +1,4 @@
+.idb
+.pdb
+EditorDefaultScene.cpp
+EditorDefaultScene.h

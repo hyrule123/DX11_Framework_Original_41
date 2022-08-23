@@ -32,6 +32,5 @@ private:
 	void InputCallback();
 	void ListCallback(int SelectIndex, const std::string& Item);
 	void TreeCallback(const std::string& Item);
-
 };
 

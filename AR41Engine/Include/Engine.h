@@ -12,6 +12,7 @@ private:
 	static bool	m_Loop;
 	class CTimer* m_Timer;
 	static bool		m_EditorMode;
+	static std::function<bool(HWND, UINT, WPARAM, LPARAM)>	m_WndProcFunc;
 
 public:
 	bool GetEditorMode()	const
@@ -45,7 +46,7 @@ public:
 		unsigned int WindowWidth,
 		unsigned int WindowHeight, 
 		unsigned int DeviceWidth, unsigned int DeviceHeight,
-		bool WindowMode = true);
+		bool WindowMode = true, int MenuID = 0);
 	int Run();
 
 private:
@@ -58,13 +59,20 @@ private:
 
 
 private:
-	void Register(const TCHAR* ClassName, int IconID, int SmallIconID);
+	void Register(const TCHAR* ClassName, int IconID, int SmallIconID, int MenuID);
 	bool Create(const TCHAR* Title, const TCHAR* ClassName);
 
 private:
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
+public:
+	template <typename T>
+	static void SetWndProcCallback(T* Obj, bool(T::* Func)(HWND, UINT, WPARAM, LPARAM))
+	{
+		m_WndProcFunc = std::bind(Func, Obj, std::placeholders::_1, std::placeholders::_2,
+			std::placeholders::_3, std::placeholders::_4);
+	}
+
 	DECLARE_SINGLE(CEngine)
 };
-
 

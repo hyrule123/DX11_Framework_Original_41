@@ -33,3 +33,4 @@ public:
 		m_SelectCallback = std::bind(Func, Obj, std::placeholders::_1, std::placeholders::_2);
 	}
 };
+

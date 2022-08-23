@@ -15,8 +15,6 @@ CEditorTreeItem::~CEditorTreeItem()
 	{
 		SAFE_DELETE(m_vecChild[i]);
 	}
-
-	m_vecChild.clear();
 }
 
 /*
@@ -76,7 +74,6 @@ void CEditorTreeItem::AddItem(CEditorTreeItem* Item)
 	m_vecChild.push_back(Item);
 }
 
-
 CEditorTreeItem* CEditorTreeItem::FindItem(const std::string& Item)
 {
 	if (m_Item == Item)
@@ -97,8 +94,9 @@ CEditorTreeItem* CEditorTreeItem::FindItem(const std::string& Item)
 
 void CEditorTreeItem::Clear()
 {
-	size_t size = m_vecChild.size();
-	for (int i = 0; i < size; ++i)
+	size_t	Size = m_vecChild.size();
+
+	for (size_t i = 0; i < Size; ++i)
 	{
 		m_vecChild[i]->Clear();
 		SAFE_DELETE(m_vecChild[i]);
