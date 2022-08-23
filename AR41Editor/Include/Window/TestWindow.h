@@ -20,6 +20,8 @@ private:
 
 	class CEditorInput* m_Input;
 	class CEditorListBox* m_List;
+	class CEditorComboBox* m_Combo;
+	class CEditorTree* m_Tree;
 
 public:
 	virtual bool Init();
@@ -29,5 +31,7 @@ private:
 	void TestButtonCallback();
 	void InputCallback();
 	void ListCallback(int SelectIndex, const std::string& Item);
+	void TreeCallback(const std::string& Item);
+
 };
 

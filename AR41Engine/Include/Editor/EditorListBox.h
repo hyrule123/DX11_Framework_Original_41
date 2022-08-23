@@ -64,14 +64,15 @@ public:
 	void DeleteItem(int Index);
 	void Sort(bool _Sort);
 
+public:
+	virtual bool Init();
+	virtual void Render();
+
+public:
 	template <typename T>
 	void SetSelectCallback(T* Obj, void(T::* Func)(int, const std::string&))
 	{
 		m_SelectCallback = std::bind(Func, Obj, std::placeholders::_1, std::placeholders::_2);
 	}
-
-public:
-	virtual bool Init();
-	virtual void Render();
 };
 

@@ -7,13 +7,14 @@
 #include "Editor/EditorText.h"
 #include "Editor/EditorInput.h"
 #include "Editor/EditorListBox.h"
+#include "Editor/EditorComboBox.h"
+#include "Editor/EditorTree.h"
 
 CTestWindow::CTestWindow()	:
 	m_AddText{},
 	m_AddIndex(0),
 	m_AddCount(0),
-	m_AddTime(0.f),
-	m_List()
+	m_AddTime(0.f)
 {
 }
 
@@ -67,7 +68,6 @@ bool CTestWindow::Init()
 
 	m_Input->SetInputCallback<CTestWindow>(this, &CTestWindow::InputCallback);
 
-
 	m_List = CreateWidget<CEditorListBox>("ListBox");
 
 	m_List->SetHideName("ListBox");
@@ -79,6 +79,34 @@ bool CTestWindow::Init()
 
 
 	m_List->SetSelectCallback<CTestWindow>(this, &CTestWindow::ListCallback);
+
+	m_Combo = CreateWidget<CEditorComboBox>("ComboBox");
+
+	m_Combo->SetSelectPrevViewName(true);
+
+	m_Combo->SetHideName("ComboBox");
+	m_Combo->SetPrevViewName("기본 프리뷰 값");
+
+	m_Combo->AddItem("Combo1");
+	m_Combo->AddItem("Combo2");
+	m_Combo->AddItem("Combo3");
+	m_Combo->AddItem("Combo4");
+
+
+	m_Combo->SetSelectCallback<CTestWindow>(this, &CTestWindow::ListCallback);
+
+	m_Tree = CreateWidget<CEditorTree>("Tree");
+
+	m_Tree->SetHideName("Tree");
+
+	m_Tree->SetSelectCallback<CTestWindow>(this, &CTestWindow::TreeCallback);
+
+	m_Tree->AddItem("Root");
+	m_Tree->AddItem("진짜 최상위 부모");
+	m_Tree->AddItem("자식1", "진짜 최상위 부모");
+	m_Tree->AddItem("자식2", "Root");
+	m_Tree->AddItem("자식3", "자식2");
+	m_Tree->AddItem("자식4", "진짜 최상위 부모");
 
 	return true;
 }
@@ -127,3 +155,20 @@ void CTestWindow::ListCallback(int SelectIndex, const std::string& Item)
 
 	OutputDebugStringA(Text);
 }
+
+void CTestWindow::TreeCallback(const std::string& Item)
+{
+	char	Text[256] = {};
+	char	NewLine[3] = "\n";
+
+	strcpy_s(Text, 256, Item.c_str());
+	strcat_s(Text, 256, NewLine);
+
+	OutputDebugStringA(Text);
+
+	if (Item == "자식2")
+	{
+		m_Tree->DeleteItem(Item);
+	}
+}
+

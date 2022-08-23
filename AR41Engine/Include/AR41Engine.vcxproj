@@ -29,6 +29,7 @@
     <ClInclude Include="Component\Transform.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="Editor\EditorButton.h" />
+    <ClInclude Include="Editor\EditorComboBox.h" />
     <ClInclude Include="Editor\EditorGUIManager.h" />
     <ClInclude Include="Editor\EditorImage.h" />
     <ClInclude Include="Editor\EditorInfo.h" />
@@ -37,6 +38,8 @@
     <ClInclude Include="Editor\EditorListBox.h" />
     <ClInclude Include="Editor\EditorSameLine.h" />
     <ClInclude Include="Editor\EditorText.h" />
+    <ClInclude Include="Editor\EditorTree.h" />
+    <ClInclude Include="Editor\EditorTreeItem.h" />
     <ClInclude Include="Editor\EditorWidget.h" />
     <ClInclude Include="Editor\EditorWindow.h" />
     <ClInclude Include="Engine.h" />
@@ -102,6 +105,7 @@
     <ClCompile Include="Component\Transform.cpp" />
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="Editor\EditorButton.cpp" />
+    <ClCompile Include="Editor\EditorComboBox.cpp" />
     <ClCompile Include="Editor\EditorGUIManager.cpp" />
     <ClCompile Include="Editor\EditorImage.cpp" />
     <ClCompile Include="Editor\EditorInput.cpp" />
@@ -109,6 +113,8 @@
     <ClCompile Include="Editor\EditorListBox.cpp" />
     <ClCompile Include="Editor\EditorSameLine.cpp" />
     <ClCompile Include="Editor\EditorText.cpp" />
+    <ClCompile Include="Editor\EditorTree.cpp" />
+    <ClCompile Include="Editor\EditorTreeItem.cpp" />
     <ClCompile Include="Editor\EditorWidget.cpp" />
     <ClCompile Include="Editor\EditorWindow.cpp" />
     <ClCompile Include="Engine.cpp" />
@@ -319,7 +325,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>

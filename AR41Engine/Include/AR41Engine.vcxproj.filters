@@ -336,6 +336,15 @@
     <ClInclude Include="Editor\EditorListBox.h">
       <Filter>07. Editor\03. Widget</Filter>
     </ClInclude>
+    <ClInclude Include="Editor\EditorComboBox.h">
+      <Filter>07. Editor\03. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\EditorTreeItem.h">
+      <Filter>07. Editor\03. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\EditorTree.h">
+      <Filter>07. Editor\03. Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -528,6 +537,15 @@
       <Filter>07. Editor\03. Widget</Filter>
     </ClCompile>
     <ClCompile Include="Editor\EditorListBox.cpp">
+      <Filter>07. Editor\03. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\EditorComboBox.cpp">
+      <Filter>07. Editor\03. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\EditorTree.cpp">
+      <Filter>07. Editor\03. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\EditorTreeItem.cpp">
       <Filter>07. Editor\03. Widget</Filter>
     </ClCompile>
   </ItemGroup>
