@@ -1,66 +1,163 @@
 #pragma once
 
-#include "Component.h"
-#include "Transform.h"
+#include "../Component/SceneComponent.h"
+#include "../Component/ObjectComponent.h"
 
-class CSceneComponent :
-    public CComponent
+class CGameObject :
+	public CRef
 {
-	friend class CGameObject;
+	friend class CScene;
 
 protected:
-	CSceneComponent();
-	CSceneComponent(const CSceneComponent& component);
-	virtual ~CSceneComponent();
+	CGameObject();
+	CGameObject(const CGameObject& Obj);
+	virtual ~CGameObject();
 
 protected:
-	CTransform* m_Transform;
-    CSceneComponent* m_Parent;
-    std::vector<CSharedPtr<CSceneComponent>>    m_vecChild;
-	std::string     m_LayerName;
+	class CScene* m_Scene;
+	std::string		m_ObjectTypeName;
 
 public:
-    CTransform* GetTransform()    const
-    {
-        return m_Transform;
-    }
-
-	CSceneComponent* GetParent()	const
+	class CScene* GetScene()    const
 	{
-		return m_Parent;
+		return m_Scene;
+	}
+
+	void SetScene(class CScene* Scene)
+	{
+		m_Scene = Scene;
+	}
+
+	const std::string& GetObjectTypeName()	const
+	{
+		return m_ObjectTypeName;
 	}
 
 public:
-	const std::string& GetRenderLayerName() const
+	// 여기에 재정의하는 이유는 이 오브젝트가 제거될때 가지고 있는 모든 컴포넌트들도 제거를 해주기
+	// 위해서이다.
+	virtual void Destroy();
+
+protected:
+	CSharedPtr<CSceneComponent> m_RootComponent;
+	std::list<CSceneComponent*> m_SceneComponentList;
+	std::vector<CSharedPtr<CObjectComponent>>   m_vecObjectComponent;
+
+	CGameObject* m_Parent;
+	std::vector<CSharedPtr<CGameObject>>    m_vecChildObject;
+	float       m_LifeTime;
+
+public:
+	void SetLifeTime(float LifeTime)
 	{
-		return m_LayerName;
+		m_LifeTime = LifeTime;
 	}
 
-	void SetRenderLayerName(const std::string& Name)
+	void SetRootComponent(CSceneComponent* Component)
 	{
-		m_LayerName = Name;
+		m_RootComponent = Component;
 	}
 
-public:
-    virtual void SetScene(class CScene* Scene);
-    virtual void SetOwner(class CGameObject* Owner);
+	void AddSceneComponent(CSceneComponent* Component)
+	{
+		m_SceneComponentList.push_back(Component);
+	}
+
+	void DeleteSceneComponent(CSceneComponent* Component)
+	{
+		auto	iter = m_SceneComponentList.begin();
+		auto	iterEnd = m_SceneComponentList.end();
+
+		for (; iter != iterEnd; ++iter)
+		{
+			if (*iter == Component)
+			{
+				m_SceneComponentList.erase(iter);
+				return;
+			}
+		}
+	}
+
+	void GetAllComponentHierarchyName(std::vector<HierarchyName>& vecName);
+
+	CSceneComponent* GetRootComponent() const
+	{
+		return m_RootComponent;
+	}
+
+	const std::list<CSceneComponent*>& GetSceneComponents() const
+	{
+		return m_SceneComponentList;
+	}
+
+	CComponent* FindComponent(const std::string& Name);
+
+	template <typename T>
+	T* FindComponentFromType()  const
+	{
+		auto    iter = m_SceneComponentList.begin();
+		auto    iterEnd = m_SceneComponentList.end();
+
+		for (; iter != iterEnd; ++iter)
+		{
+			if ((*iter)->CheckTypeID<T>())
+				return (T*)*iter;
+		}
+
+		auto    iter1 = m_vecObjectComponent.begin();
+		auto    iter1End = m_vecObjectComponent.end();
+
+		for (; iter1 != iter1End; ++iter1)
+		{
+			if ((*iter1)->CheckTypeID<T>())
+				return (T*)(*iter1).Get();
+		}
+
+		return nullptr;
+	}
+
 
 public:
-	// SocketName은 나중에 3D에서 사용 예정.
-	virtual void AddChild(CSceneComponent* Child, const std::string& SocketName = "");
-	virtual void AddChild(class CGameObject* Child, const std::string& SocketName = "");
-	bool DeleteChild(CSceneComponent* Child);
-	bool DeleteChild(const std::string& Name);
-	CSceneComponent* FindComponent(const std::string& Name);
+	virtual void Start();
+	virtual bool Init();
+	virtual void Update(float DeltaTime);
+	virtual void PostUpdate(float DeltaTime);
+	virtual CGameObject* Clone()    const;
+
 
 public:
-    virtual void Destroy();
-    virtual void Start();
-    virtual bool Init();
-    virtual void Update(float DeltaTime);
-    virtual void PostUpdate(float DeltaTime);
-    virtual void Render();
-    virtual CSceneComponent* Clone()    const;
+	template <typename T>
+	T* CreateComponent(const std::string& Name)
+	{
+		T* Component = new T;
+
+		Component->SetName(Name);
+		Component->SetScene(m_Scene);
+		Component->SetOwner(this);
+
+		if(!Component->Init())
+		{
+			SAFE_RELEASE(Component);
+			return nullptr;
+		}
+
+		if (Component->GetComponentType() == ComponentType::Object)
+		{
+			m_vecObjectComponent.push_back((CObjectComponent*)Component);
+		}
+
+		else
+		{
+			if (!m_RootComponent)
+			{
+				m_RootComponent = Component;
+			}
+
+			m_SceneComponentList.push_back((CSceneComponent*)Component);
+		}
+
+		return Component;
+	}
 
 public:
 	void SetInheritScale(bool Inherit);

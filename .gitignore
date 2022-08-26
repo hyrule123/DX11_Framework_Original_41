@@ -384,6 +384,6 @@ BinObjDebug/
 Engine/
 
 
-#imgui settings file
-imgui.ini
+# imgui settings file
+# imgui.ini
 
