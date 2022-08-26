@@ -16,6 +16,7 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <dinput.h>
+#include <filesystem>
 
 #include "Vector2.h"
 #include "Vector3.h"
@@ -166,4 +167,14 @@ struct MaterialCBuffer
 	Vector4 EmissiveColor;
 	float Opacity;
 	Vector3 Empty;
+};
+
+struct HierarchyName
+{
+	std::string	Name;
+	std::string	ParentName;
+	std::string	ClassName;
+	std::string	ParentClassName;
+	class CComponent* Component;
+	class CComponent* Parent;
 };

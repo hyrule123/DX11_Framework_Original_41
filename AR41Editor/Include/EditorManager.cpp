@@ -10,7 +10,8 @@
 #include "Window\TestWindow.h"
 #include "Window\ObjectWindow.h"
 #include "Window\ClassWindow.h"
-#include "Editor/EditorGUIManager.h"
+    #include "Window\ComponentWindow.h"
+    #include "Editor/EditorGUIManager.h"
 
 CEditorManager::CEditorManager()
 {
@@ -36,6 +37,7 @@ bool CEditorManager::Init(HINSTANCE hInst)
     //CEditorGUIManager::GetInst()->CreateEditorWindow<CTestWindow>("TestWindow");
     CEditorGUIManager::GetInst()->CreateEditorWindow<CObjectWindow>("ObjectWindow");
     CEditorGUIManager::GetInst()->CreateEditorWindow<CClassWindow>("ClassWindow");
+    CEditorGUIManager::GetInst()->CreateEditorWindow<CComponentWindow>("ComponentWindow");
 
     // Å° µî·Ï
     /*CInput::GetInst()->AddBindKey("Rotation", 'D');
@@ -85,16 +87,32 @@ bool CEditorManager::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
             //if (Window)
             //    Window->Open();
-        }
             return true;
+        }
         case ID_WINDOW_OBJECT:
         {
             CEditorWindow* Window = CEditorGUIManager::GetInst()->FindEditorWindow<CEditorWindow>("ObjectWindow");
 
             if (Window)
                 Window->Open();
-        }
             return true;
+        }
+        case ID_WINDOW_COMPONENT:
+        {
+            CEditorWindow* Window = CEditorGUIManager::GetInst()->FindEditorWindow<CEditorWindow>("ComponentWindow");
+
+            if (Window)
+                Window->Open();
+            return true;
+        }
+        case ID_WINDOW_CLASS:
+        {
+            CEditorWindow* Window = CEditorGUIManager::GetInst()->FindEditorWindow<CEditorWindow>("ClassWindow");
+
+            if (Window)
+                Window->Open();
+            return true;
+        }
         }
         break;
     }
@@ -120,10 +138,39 @@ void CEditorManager::CreateEmptyObject()
 
     if (Window)
     {
-        Window->AddItem("GameObjectEmpty");
+        Window->AddItem(EmptyObj, "GameObjectEmpty");
     }
 }
 
 void CEditorManager::CreateObject()
 {
+    CScene* Scene = CSceneManager::GetInst()->GetScene();
+
+    CGameObject* Obj = nullptr;
+
+    CClassWindow* ClassWindow = CEditorGUIManager::GetInst()->FindEditorWindow<CClassWindow>("ClassWindow");
+
+    std::string SelectObjectItem = ClassWindow->GetSelectObjectItem();
+
+    if (SelectObjectItem == "")
+        return;
+
+    CObjectWindow* Window = CEditorGUIManager::GetInst()->FindEditorWindow<CObjectWindow>("ObjectWindow");
+
+    if (SelectObjectItem == "GameObject")
+        Obj = Scene->CreateObject<CGameObject>(SelectObjectItem);
+
+    else if (SelectObjectItem == "Player2D")
+        Obj = Scene->CreateObject<CPlayer2D>(SelectObjectItem);
+
+    else if (SelectObjectItem == "Bullet")
+        Obj = Scene->CreateObject<CBullet>(SelectObjectItem);
+
+    else if (SelectObjectItem == "Monster")
+        Obj = Scene->CreateObject<CMonster>(SelectObjectItem);
+
+    if (Window)
+    {
+        Window->AddItem(Obj, SelectObjectItem);
+    }
 }
