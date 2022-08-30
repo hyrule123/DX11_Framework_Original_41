@@ -25,7 +25,7 @@ private:
 	std::function<void(CEditorTreeItem<T>*, const std::string&)>	m_SelectCallback;
 
 public:
-	void AddItem(T CustomData, const std::string& Item, const std::string& ParentItem = "")
+	bool AddItem(T CustomData, const std::string& Item, const std::string& ParentItem = "")
 	{
 		if (!m_Root)
 		{
@@ -49,6 +49,8 @@ public:
 			m_Root->m_ItemUTF8 = TextUTF8;
 
 			m_Root->SetSelectCallback<CEditorTree<T>>(this, &CEditorTree<T>::NodeSelect);
+
+			return true;
 		}
 
 		else
@@ -79,6 +81,8 @@ public:
 				NewItem->AddItem(m_Root);
 
 				m_Root = NewItem;
+
+				return true;
 			}
 
 			else
@@ -87,9 +91,15 @@ public:
 				CEditorTreeItem<T>* Parent = m_Root->FindItem(ParentItem);
 
 				if (Parent)
+				{
 					Parent->AddItem(Item, CustomData);
+
+					return true;
+				}
 			}
 		}
+
+		return false;
 	}
 
 	void DeleteItem(const std::string& Item)

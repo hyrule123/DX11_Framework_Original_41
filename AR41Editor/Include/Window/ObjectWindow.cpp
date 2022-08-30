@@ -9,6 +9,7 @@
 #include "Editor/EditorListBox.h"
 #include "Editor/EditorComboBox.h"
 #include "ComponentWindow.h"
+#include "TransformWindow.h"
 #include "Editor/EditorGUIManager.h"
 
 CObjectWindow::CObjectWindow()
@@ -19,9 +20,9 @@ CObjectWindow::~CObjectWindow()
 {
 }
 
-void CObjectWindow::AddItem(CGameObject* Object, const std::string& Name, const std::string& ParentName)
+bool CObjectWindow::AddItem(CGameObject* Object, const std::string& Name, const std::string& ParentName)
 {
-	m_Tree->AddItem(Object, Name, ParentName);
+	return m_Tree->AddItem(Object, Name, ParentName);
 }
 
 bool CObjectWindow::Init()
@@ -42,6 +43,12 @@ bool CObjectWindow::Init()
 void CObjectWindow::Update(float DeltaTime)
 {
 	CEditorWindow::Update(DeltaTime);
+
+	if (m_SelectObject)
+	{
+		if (!m_SelectObject->GetActive())
+			m_SelectObject = nullptr;
+	}
 }
 
 void CObjectWindow::TreeCallback(CEditorTreeItem<CGameObject*>* Node, const std::string& Item)
@@ -52,18 +59,33 @@ void CObjectWindow::TreeCallback(CEditorTreeItem<CGameObject*>* Node, const std:
 
 	OutputDebugStringA(Text);
 
+	CComponentWindow* ComponentWindow = CEditorGUIManager::GetInst()->FindEditorWindow<CComponentWindow>("ComponentWindow");
+
+	ComponentWindow->Clear();
+	ComponentWindow->ClearSelect();
+
 	// 해당 게임오브젝트가 가지고 있는 모든 컴포넌트의 이름을 얻어온다.
 	CGameObject* Obj = Node->GetCustomData();
 
+	m_SelectObject = Obj;
+
 	if (Obj)
 	{
+		CTransformWindow* TransformWindow = CEditorGUIManager::GetInst()->FindEditorWindow<CTransformWindow>("TransformWindow");
+
+		CSceneComponent* Root = Obj->GetRootComponent();
+
+		if (Root)
+		{
+			TransformWindow->SetSelectComponent(Root);
+			TransformWindow->SetPos(Root->GetWorldPos());
+			TransformWindow->SetScale(Root->GetWorldScale());
+			TransformWindow->SetRotation(Root->GetWorldRot());
+		}
+
 		std::vector<HierarchyName>	vecName;
 
 		Obj->GetAllComponentHierarchyName(vecName);
-
-		CComponentWindow* ComponentWindow = CEditorGUIManager::GetInst()->FindEditorWindow<CComponentWindow>("ComponentWindow");
-
-		ComponentWindow->Clear();
 
 		std::string	Name = Obj->GetName() + "(" + Obj->GetObjectTypeName() + ")";
 
@@ -79,13 +101,27 @@ void CObjectWindow::TreeCallback(CEditorTreeItem<CGameObject*>* Node, const std:
 
 			size_t	Size = vecName.size();
 
+			std::vector<HierarchyName>	vecName1;
+
 			for (size_t i = 1; i < Size; ++i)
-			{ 
+			{
 				ParentName = vecName[i].ParentName + "(" + vecName[i].ParentClassName + ")";
 
 				Name = vecName[i].Name + "(" + vecName[i].ClassName + ")";
 
-				ComponentWindow->AddItem(vecName[i].Component, Name, ParentName);
+				if (!ComponentWindow->AddItem(vecName[i].Component, Name, ParentName))
+					vecName1.push_back(vecName[i]);
+			}
+
+			Size = vecName1.size();
+
+			for (size_t i = 0; i < Size; ++i)
+			{
+				ParentName = vecName1[i].ParentName + "(" + vecName1[i].ParentClassName + ")";
+
+				Name = vecName1[i].Name + "(" + vecName1[i].ClassName + ")";
+
+				ComponentWindow->AddItem(vecName1[i].Component, Name, ParentName);
 			}
 		}
 	}

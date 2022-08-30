@@ -10,8 +10,9 @@
 #include "Window\TestWindow.h"
 #include "Window\ObjectWindow.h"
 #include "Window\ClassWindow.h"
-    #include "Window\ComponentWindow.h"
-    #include "Editor/EditorGUIManager.h"
+#include "Window\ComponentWindow.h"
+#include "Window\TransformWindow.h"
+#include "Editor/EditorGUIManager.h"
 
 CEditorManager::CEditorManager()
 {
@@ -38,6 +39,7 @@ bool CEditorManager::Init(HINSTANCE hInst)
     CEditorGUIManager::GetInst()->CreateEditorWindow<CObjectWindow>("ObjectWindow");
     CEditorGUIManager::GetInst()->CreateEditorWindow<CClassWindow>("ClassWindow");
     CEditorGUIManager::GetInst()->CreateEditorWindow<CComponentWindow>("ComponentWindow");
+    CEditorGUIManager::GetInst()->CreateEditorWindow<CTransformWindow>("TransformWindow");
 
     // Å° µî·Ï
     /*CInput::GetInst()->AddBindKey("Rotation", 'D');
@@ -87,32 +89,16 @@ bool CEditorManager::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
             //if (Window)
             //    Window->Open();
-            return true;
         }
+            return true;
         case ID_WINDOW_OBJECT:
         {
             CEditorWindow* Window = CEditorGUIManager::GetInst()->FindEditorWindow<CEditorWindow>("ObjectWindow");
 
             if (Window)
                 Window->Open();
-            return true;
         }
-        case ID_WINDOW_COMPONENT:
-        {
-            CEditorWindow* Window = CEditorGUIManager::GetInst()->FindEditorWindow<CEditorWindow>("ComponentWindow");
-
-            if (Window)
-                Window->Open();
             return true;
-        }
-        case ID_WINDOW_CLASS:
-        {
-            CEditorWindow* Window = CEditorGUIManager::GetInst()->FindEditorWindow<CEditorWindow>("ClassWindow");
-
-            if (Window)
-                Window->Open();
-            return true;
-        }
         }
         break;
     }

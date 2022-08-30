@@ -10,6 +10,18 @@
 #include "Editor/EditorComboBox.h"
 #include "Editor/EditorTree.h"
 #include "PathManager.h"
+#include "Scene/SceneManager.h"
+#include "Scene/Scene.h"
+#include "../GameObject\Player2D.h"
+#include "../GameObject\Bullet.h"
+#include "../GameObject\Monster.h"
+#include "ObjectWindow.h"
+#include "ComponentWindow.h"
+#include "Editor/EditorGUIManager.h"
+
+#include "Component/SpriteComponent.h"
+#include "Component/CameraComponent.h"
+#include "Component/TargetArm.h"
 
 CClassWindow::CClassWindow()
 {
@@ -27,6 +39,13 @@ bool CClassWindow::Init()
 	Label->SetAlign(0.5f, 0.5f);
 	Label->SetSizeY(30.f);
 
+	CEditorSameLine* Line = CreateWidget<CEditorSameLine>("Line");
+
+	CEditorButton* Button = CreateWidget<CEditorButton>("오브젝트생성", 150.f, 30.f);
+
+	Button->SetColor(29, 47, 73, 255);
+	Button->SetClickCallback<CClassWindow>(this, &CClassWindow::ObjectCreateCallback);
+
 	m_ObjectList = CreateWidget<CEditorListBox>("ObjectListBox");
 
 	m_ObjectList->SetHideName("ObjectListBox");
@@ -34,12 +53,27 @@ bool CClassWindow::Init()
 	m_ObjectList->SetSize(200.f, 300.f);
 	m_ObjectList->SetPageItemCount(6);
 
+	Line = CreateWidget<CEditorSameLine>("Line");
+
+	m_ObjectSelectName = CreateWidget<CEditorInput>("ObjectName");
+
+	m_ObjectSelectName->SetHideName("ObjectName");
+	m_ObjectSelectName->SetSize(150.f, 30.f);
+	m_ObjectSelectName->AddFlag(ImGuiInputTextFlags_ReadOnly);
+
 	Label = CreateWidget<CEditorLabel>("ComponentClass");
 
 	Label->SetColor(255, 0, 0, 255);
 	Label->SetAlign(0.5f, 0.5f);
 	Label->SetSizeY(30.f);
 	Label->SetSizeX(150.f);
+
+	Line = CreateWidget<CEditorSameLine>("Line");
+
+	Button = CreateWidget<CEditorButton>("컴포넌트생성", 150.f, 30.f);
+
+	Button->SetColor(29, 47, 73, 255);
+	Button->SetClickCallback<CClassWindow>(this, &CClassWindow::ComponentCreateCallback);
 
 	m_ObjectList->SetSelectCallback<CClassWindow>(this, &CClassWindow::ObjectClickCallback);
 
@@ -53,6 +87,14 @@ bool CClassWindow::Init()
 
 
 	m_ComponentList->SetSelectCallback<CClassWindow>(this, &CClassWindow::ComponentClickCallback);
+
+	Line = CreateWidget<CEditorSameLine>("Line");
+
+	m_ComponentSelectName = CreateWidget<CEditorInput>("ComponentName");
+
+	m_ComponentSelectName->SetHideName("ComponentName");
+	m_ComponentSelectName->SetSize(150.f, 30.f);
+	m_ComponentSelectName->AddFlag(ImGuiInputTextFlags_ReadOnly);
 
 	LoadGameObjectName();
 
@@ -69,11 +111,97 @@ void CClassWindow::Update(float DeltaTime)
 void CClassWindow::ObjectClickCallback(int Index, const std::string& Item)
 {
 	m_SelectObjectItem = Item;
+
+	m_ObjectSelectName->SetText(Item.c_str());
 }
 
 void CClassWindow::ComponentClickCallback(int Index, const std::string& Item)
 {
 	m_SelectComponentItem = Item;
+
+	m_ComponentSelectName->SetText(Item.c_str());
+}
+
+void CClassWindow::ObjectCreateCallback()
+{
+	CScene* Scene = CSceneManager::GetInst()->GetScene();
+
+	CGameObject* Obj = nullptr;
+
+	if (m_SelectObjectItem == "")
+		return;
+
+	CObjectWindow* Window = CEditorGUIManager::GetInst()->FindEditorWindow<CObjectWindow>("ObjectWindow");
+
+	if (m_SelectObjectItem == "GameObject")
+		Obj = Scene->CreateObject<CGameObject>(m_SelectObjectItem);
+
+	else if (m_SelectObjectItem == "Player2D")
+		Obj = Scene->CreateObject<CPlayer2D>(m_SelectObjectItem);
+
+	else if (m_SelectObjectItem == "Bullet")
+		Obj = Scene->CreateObject<CBullet>(m_SelectObjectItem);
+
+	else if (m_SelectObjectItem == "Monster")
+		Obj = Scene->CreateObject<CMonster>(m_SelectObjectItem);
+
+	if (Window)
+	{
+		Window->AddItem(Obj, m_SelectObjectItem);
+	}
+}
+
+void CClassWindow::ComponentCreateCallback()
+{
+	CScene* Scene = CSceneManager::GetInst()->GetScene();
+
+	CObjectWindow* ObjectWindow = CEditorGUIManager::GetInst()->FindEditorWindow<CObjectWindow>("ObjectWindow");
+	CComponentWindow* ComponentWindow = CEditorGUIManager::GetInst()->FindEditorWindow<CComponentWindow>("ComponentWindow");
+
+	CGameObject* SelectObject = ObjectWindow->GetSelectObject();
+
+	if (!SelectObject)
+		return;
+
+	CSceneComponent* SelectComponent = (CSceneComponent*)ComponentWindow->GetSelectComponent();
+
+	if (!SelectComponent)
+	{
+		SelectComponent = SelectObject->GetRootComponent();
+	}
+
+	std::string	ParentName = SelectComponent->GetName() + "(" + SelectComponent->GetComponentTypeName() + ")";
+	std::string	Name;
+
+	CSceneComponent* NewComponent = nullptr;
+
+	if (m_SelectComponentItem == "SpriteComponent")
+	{
+		Name = "SpriteComponent(SpriteComponent)";
+		NewComponent = (CSceneComponent*)SelectObject->CreateComponent<CSpriteComponent>("SpriteComponent");
+	}
+
+	else if (m_SelectComponentItem == "SceneComponent")
+	{
+		Name = "SceneComponent(SceneComponent)";
+		NewComponent = SelectObject->CreateComponent<CSceneComponent>("SceneComponent");
+	}
+
+	else if (m_SelectComponentItem == "TargetArm")
+	{
+		Name = "TargetArm(TargetArm)";
+		NewComponent = (CSceneComponent*)SelectObject->CreateComponent<CTargetArm>("TargetArm");
+	}
+
+	else if (m_SelectComponentItem == "CameraComponent")
+	{
+		Name = "CameraComponent(CameraComponent)";
+		NewComponent = (CSceneComponent*)SelectObject->CreateComponent<CCameraComponent>("CameraComponent");
+	}
+
+	SelectComponent->AddChild(NewComponent);
+
+	ComponentWindow->AddItem((CComponent*)NewComponent, Name, ParentName);
 }
 
 void CClassWindow::LoadGameObjectName()
@@ -228,7 +356,11 @@ void CClassWindow::LoadComponentName()
 		if (strcmp(Ext, ".cpp") == 0)
 			continue;
 
-		else if (strcmp(Name, "Transform") == 0 || strcmp(Name, "Transform2D") == 0)
+		else if (strcmp(Name, "Transform") == 0 || 
+			strcmp(Name, "Transform2D") == 0 ||
+			strcmp(Name, "Component") == 0 || 
+			strcmp(Name, "PrimitiveComponent") == 0 || 
+			strcmp(Name, "ObjectComponent") == 0)
 			continue;
 
 		m_ComponentList->AddItem(Name);

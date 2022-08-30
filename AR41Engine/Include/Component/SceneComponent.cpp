@@ -68,6 +68,9 @@ void CSceneComponent::SetOwner(CGameObject* Owner)
 
 void CSceneComponent::AddChild(CSceneComponent* Child, const std::string& SocketName)
 {
+	if (!Child)
+		return;
+
 	Child->m_Parent = this;
 
 	m_vecChild.push_back(Child);
@@ -76,7 +79,8 @@ void CSceneComponent::AddChild(CSceneComponent* Child, const std::string& Socket
 
 	m_Transform->m_vecChild.push_back(Child->m_Transform);
 
-	m_Owner->AddSceneComponent(Child);
+	if(m_Owner->FindComponent(Child->GetName()) == nullptr)
+		m_Owner->AddSceneComponent(Child);
 }
 
 void CSceneComponent::AddChild(CGameObject* Child, const std::string& SocketName)

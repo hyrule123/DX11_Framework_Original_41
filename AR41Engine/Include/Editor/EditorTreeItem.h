@@ -143,6 +143,8 @@ public:
 		{
 			if (m_SelectCallback)
 				m_SelectCallback(this, m_Item);
+
+
 		}
 
 		/*if (ImGui::BeginDragDropSource())

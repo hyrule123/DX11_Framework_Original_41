@@ -72,8 +72,6 @@ BEGIN
     BEGIN
         MENUITEM "TestWindow",                  ID_WINDOW_TEST
         MENUITEM "ObjectWindow",                ID_WINDOW_OBJECT
-        MENUITEM "ComponentWindow",             ID_WINDOW_COMPONENT
-        MENUITEM "ClassWindow",                 ID_WINDOW_CLASS
     END
     POPUP "오브젝트"
     BEGIN
