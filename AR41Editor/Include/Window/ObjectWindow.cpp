@@ -61,8 +61,8 @@ void CObjectWindow::TreeCallback(CEditorTreeItem<CGameObject*>* Node, const std:
 
 	CComponentWindow* ComponentWindow = CEditorGUIManager::GetInst()->FindEditorWindow<CComponentWindow>("ComponentWindow");
 
-	ComponentWindow->Clear();
 	ComponentWindow->ClearSelect();
+	ComponentWindow->Clear();
 
 	// 해당 게임오브젝트가 가지고 있는 모든 컴포넌트의 이름을 얻어온다.
 	CGameObject* Obj = Node->GetCustomData();

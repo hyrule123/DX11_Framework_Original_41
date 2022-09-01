@@ -108,6 +108,8 @@ public:
     void SetMaterial();
     void ResetMaterial();
     CMaterial* Clone()  const;
+    virtual void Save(FILE* File);
+    virtual void Load(FILE* File);
 
 };
 

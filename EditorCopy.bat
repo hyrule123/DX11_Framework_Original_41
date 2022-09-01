@@ -5,6 +5,6 @@ xcopy .\AR41Editor\Include\Scene\*.* .\Client2D\Include\Scene\ /d /s /y /i /excl
 
 xcopy .\AR41Editor\Bin\*.* .\Client2D\Bin\ /d /s /y /i /exclude:Exclude.txt
 
-:: Create Component Folder If Does not exists
+:: Create Component Folder If does not exists
 if not exist .\Client2D\Include\GameObject ( mkdir .\Client2D\Include\GameObject )
 if not exist .\Client2D\Include\Component ( mkdir .\Client2D\Include\Component )

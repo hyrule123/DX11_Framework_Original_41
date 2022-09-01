@@ -12,6 +12,7 @@
 #include "Window\ClassWindow.h"
 #include "Window\ComponentWindow.h"
 #include "Window\TransformWindow.h"
+#include "Window\SceneWindow.h"
 #include "Editor/EditorGUIManager.h"
 
 CEditorManager::CEditorManager()
@@ -40,6 +41,7 @@ bool CEditorManager::Init(HINSTANCE hInst)
     CEditorGUIManager::GetInst()->CreateEditorWindow<CClassWindow>("ClassWindow");
     CEditorGUIManager::GetInst()->CreateEditorWindow<CComponentWindow>("ComponentWindow");
     CEditorGUIManager::GetInst()->CreateEditorWindow<CTransformWindow>("TransformWindow");
+    CEditorGUIManager::GetInst()->CreateEditorWindow<CSceneWindow>("SceneWindow");
 
     // Å° µî·Ï
     /*CInput::GetInst()->AddBindKey("Rotation", 'D');

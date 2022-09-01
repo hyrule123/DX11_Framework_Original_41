@@ -115,6 +115,33 @@ void CScene::PostUpdate(float DeltaTime)
 	m_CameraManager->PostUpdate(DeltaTime);
 }
 
+void CScene::Save(const char* FullPath)
+{
+	FILE* File = nullptr;
+
+	fopen_s(&File, FullPath, "wb");
+
+	if (!File)
+		return;
+
+	// SceneInfo ÀúÀå
+	m_SceneInfo->Save(File);
+
+	auto	iter = m_ObjList.begin();
+	auto	iterEnd = m_ObjList.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		(*iter)->Save(File);
+	}
+
+	fclose(File);
+}
+
+void CScene::Load(const char* FullPath)
+{
+}
+
 CGameObject* CScene::FindObject(const std::string& Name)
 {
 	auto	iter = m_ObjList.begin();
