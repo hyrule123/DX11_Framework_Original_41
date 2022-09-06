@@ -14,6 +14,7 @@ CTargetArm::CTargetArm(const CTargetArm& component) :
 {
 	m_TargetDistance = component.m_TargetDistance;
 	m_TargetOffset = component.m_TargetOffset;
+	m_TargetDistanceAxis = component.m_TargetDistanceAxis;
 }
 
 CTargetArm::~CTargetArm()

@@ -13,6 +13,25 @@ protected:
 	CGameObject(const CGameObject& Obj);
 	virtual ~CGameObject();
 
+private:
+	static std::unordered_map<std::string, CGameObject*>	m_mapObjectCDO;
+
+public:
+	static void AddObjectCDO(const std::string& Name, CGameObject* CDO)
+	{
+		m_mapObjectCDO.insert(std::make_pair(Name, CDO));
+	}
+
+	static CGameObject* FindCDO(const std::string& Name)
+	{
+		auto	iter = m_mapObjectCDO.find(Name);
+
+		if (iter == m_mapObjectCDO.end())
+			return nullptr;
+
+		return iter->second;
+	}
+
 protected:
 	class CScene* m_Scene;
 	std::string		m_ObjectTypeName;
@@ -23,10 +42,7 @@ public:
 		return m_Scene;
 	}
 
-	void SetScene(class CScene* Scene)
-	{
-		m_Scene = Scene;
-	}
+	void SetScene(class CScene* Scene);
 
 	const std::string& GetObjectTypeName()	const
 	{

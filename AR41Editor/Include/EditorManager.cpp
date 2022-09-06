@@ -13,10 +13,18 @@
 #include "Window\ComponentWindow.h"
 #include "Window\TransformWindow.h"
 #include "Window\SceneWindow.h"
+#include "Window\DetailWindow.h"
 #include "Editor/EditorGUIManager.h"
 
 CEditorManager::CEditorManager()
 {
+    CSceneInfo* Info = new CEditorDefaultScene;
+
+    CScene::AddSceneInfoCDO("EditorDefaultScene", Info);
+
+    CScene::CreateObjectCDO<CPlayer2D>("Player2D");
+    CScene::CreateObjectCDO<CMonster>("Monster");
+    CScene::CreateObjectCDO<CBullet>("Bullet");
 }
 
 CEditorManager::~CEditorManager()
@@ -42,6 +50,7 @@ bool CEditorManager::Init(HINSTANCE hInst)
     CEditorGUIManager::GetInst()->CreateEditorWindow<CComponentWindow>("ComponentWindow");
     CEditorGUIManager::GetInst()->CreateEditorWindow<CTransformWindow>("TransformWindow");
     CEditorGUIManager::GetInst()->CreateEditorWindow<CSceneWindow>("SceneWindow");
+    CEditorGUIManager::GetInst()->CreateEditorWindow<CDetailWindow>("DetailWindow");
 
     // Å° µî·Ï
     /*CInput::GetInst()->AddBindKey("Rotation", 'D');

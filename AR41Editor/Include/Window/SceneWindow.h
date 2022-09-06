@@ -32,5 +32,6 @@ private:
 	void SceneChange();
 	void SceneSave();
 	void SceneClickCallback(int Index, const std::string& Item);
+	void LoadSceneDirectory();
 };
 

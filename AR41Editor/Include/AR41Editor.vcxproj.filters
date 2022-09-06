@@ -63,6 +63,9 @@
     <ClCompile Include="Window\SceneWindow.cpp">
       <Filter>03. Window</Filter>
     </ClCompile>
+    <ClCompile Include="Window\DetailWindow.cpp">
+      <Filter>03. Window</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -102,6 +105,9 @@
       <Filter>03. Window</Filter>
     </ClInclude>
     <ClInclude Include="Window\SceneWindow.h">
+      <Filter>03. Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Window\DetailWindow.h">
       <Filter>03. Window</Filter>
     </ClInclude>
   </ItemGroup>

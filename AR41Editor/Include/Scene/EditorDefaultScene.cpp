@@ -3,6 +3,7 @@
 
 CEditorDefaultScene::CEditorDefaultScene()
 {
+	m_ClassTypeName = "EditorDefaultScene";
 }
 
 CEditorDefaultScene::~CEditorDefaultScene()
