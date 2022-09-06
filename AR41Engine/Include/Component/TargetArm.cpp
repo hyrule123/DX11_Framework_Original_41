@@ -69,8 +69,18 @@ CTargetArm* CTargetArm::Clone() const
 
 void CTargetArm::Save(FILE* File)
 {
+	CSceneComponent::Save(File);
+
+	fwrite(&m_TargetOffset, sizeof(Vector3), 1, File);
+	fwrite(&m_TargetDistance, sizeof(float), 1, File);
+	fwrite(&m_TargetDistanceAxis, sizeof(AXIS), 1, File);
 }
 
 void CTargetArm::Load(FILE* File)
 {
+	CSceneComponent::Load(File);
+
+	fread(&m_TargetOffset, sizeof(Vector3), 1, File);
+	fread(&m_TargetDistance, sizeof(float), 1, File);
+	fread(&m_TargetDistanceAxis, sizeof(AXIS), 1, File);
 }

@@ -3,9 +3,9 @@
 std::unordered_map<std::string, CGameObject*> CGameObject::m_mapObjectCDO;
 
 CGameObject::CGameObject()  :
-	m_Parent(nullptr),
 	m_Scene(nullptr),
-	m_LifeTime(-1.f)
+	m_LifeTime(-1.f),
+	m_ComponentSerialNumber(0)
 {
 	SetTypeID<CGameObject>();
 
@@ -17,6 +17,7 @@ CGameObject::CGameObject(const CGameObject& Obj)    :
 {
 	m_ObjectTypeName = Obj.m_ObjectTypeName;
 	m_LifeTime = Obj.m_LifeTime;
+	m_ComponentSerialNumber = Obj.m_ComponentSerialNumber;
 
 	{
 		m_RootComponent = Obj.m_RootComponent->Clone();
@@ -47,7 +48,8 @@ void CGameObject::SetScene(CScene* Scene)
 {
 	m_Scene = Scene;
 
-	m_RootComponent->SetScene(Scene);
+	if (m_RootComponent)
+		m_RootComponent->SetScene(Scene);
 }
 
 void CGameObject::Destroy()
@@ -181,51 +183,30 @@ void CGameObject::Save(FILE* File)
 	fwrite(&m_LifeTime, 4, 1, File);
 
 	{
-		auto	iter = m_SceneComponentList.begin();
-		auto	iterEnd = m_SceneComponentList.end();
+		int	Length = (int)m_RootComponent->GetComponentTypeName().length();
 
-		for (; iter != iterEnd; ++iter)
-		{
-			(*iter)->Save(File);
-		}
+		fwrite(&Length, 4, 1, File);
+		fwrite(m_RootComponent->GetComponentTypeName().c_str(), 1, Length, File);
+
+		m_RootComponent->Save(File);
 	}
 
 	{
+		int	Count = (int)m_vecObjectComponent.size();
+
+		fwrite(&Count, 4, 1, File);
+
 		auto	iter = m_vecObjectComponent.begin();
 		auto	iterEnd = m_vecObjectComponent.end();
 
 		for (; iter != iterEnd; ++iter)
 		{
+			int	Length = (int)(*iter)->GetComponentTypeName().length();
+
+			fwrite(&Length, 4, 1, File);
+			fwrite((*iter)->GetComponentTypeName().c_str(), 1, Length, File);
+
 			(*iter)->Save(File);
-		}
-	}
-
-	bool	Parent = false;
-
-	if (m_Parent)
-		Parent = true;
-
-	fwrite(&Parent, 1, 1, File);
-
-	if (Parent)
-	{
-		int Length = (int)m_Parent->GetName().length();
-
-		fwrite(&Length, 4, 1, File);
-		fwrite(m_Parent->GetName().c_str(), 1, Length, File);
-	}
-
-	int	ChildCount = (int)m_vecChildObject.size();
-
-	fwrite(&ChildCount, 4, 1, File);
-
-	{
-		auto	iter = m_vecChildObject.begin();
-		auto	iterEnd = m_vecChildObject.end();
-
-		for (; iter != iterEnd; ++iter)
-		{
-			(*iter)->SaveChild(File);
 		}
 	}
 }
@@ -237,79 +218,47 @@ void CGameObject::Load(FILE* File)
 	fread(&m_LifeTime, 4, 1, File);
 
 	{
-		auto	iter = m_SceneComponentList.begin();
-		auto	iterEnd = m_SceneComponentList.end();
+		int	Length = 0;
+		char	TypeName[256] = {};
 
-		for (; iter != iterEnd; ++iter)
-		{
-			(*iter)->Save(File);
-		}
+		fread(&Length, 4, 1, File);
+		fread(TypeName, 1, Length, File);
+
+		CComponent* CDO = CComponent::FindCDO(TypeName);
+
+		m_RootComponent = (CSceneComponent*)CDO->Clone();
+
+		m_RootComponent->SetOwner(this);
+		m_RootComponent->SetScene(m_Scene);
+
+		m_RootComponent->Load(File);
+
+		m_RootComponent->AddOwner();
 	}
 
 	{
-		auto	iter = m_vecObjectComponent.begin();
-		auto	iterEnd = m_vecObjectComponent.end();
+		int	Count = 0;
 
-		for (; iter != iterEnd; ++iter)
+		fread(&Count, 4, 1, File);
+
+		for (int i = 0; i < Count; ++i)
 		{
-			(*iter)->Save(File);
+			int	Length = 0;
+			char	TypeName[256] = {};
+
+			fread(&Length, 4, 1, File);
+			fread(TypeName, 1, Length, File);
+
+			// CDO를 얻어온다.
+			CComponent* CDO = CComponent::FindCDO(TypeName);
+
+			CComponent* Component = CDO->Clone();
+
+			Component->Load(File);
+
+			m_vecObjectComponent.push_back((CObjectComponent*)Component);
 		}
 	}
-
-	bool	Parent = false;
-
-	if (m_Parent)
-		Parent = true;
-
-	fwrite(&Parent, 1, 1, File);
-
-	if (Parent)
-	{
-		int Length = (int)m_Parent->GetName().length();
-
-		fwrite(&Length, 4, 1, File);
-		fwrite(m_Parent->GetName().c_str(), 1, Length, File);
-	}
-
-	int	ChildCount = (int)m_vecChildObject.size();
-
-	fwrite(&ChildCount, 4, 1, File);
-
-	{
-		auto	iter = m_vecChildObject.begin();
-		auto	iterEnd = m_vecChildObject.end();
-
-		for (; iter != iterEnd; ++iter)
-		{
-			(*iter)->SaveChild(File);
-		}
-	}
-}
-
-void CGameObject::SaveChild(FILE* File)
-{
-	int	Length = (int)m_Name.length();
-
-	fwrite(&Length, 4, 1, File);
-	fwrite(m_Name.c_str(), 1, Length, File);
-
-	int	ChildCount = (int)m_vecChildObject.size();
-
-	fwrite(&ChildCount, 4, 1, File);
-
-	{
-		auto	iter = m_vecChildObject.begin();
-		auto	iterEnd = m_vecChildObject.end();
-
-		for (; iter != iterEnd; ++iter)
-		{
-			(*iter)->SaveChild(File);
-		}
-	}
-}
-
-void CGameObject::LoadChild(FILE* File)
-{
 }
 
 void CGameObject::SetInheritScale(bool Inherit)

@@ -90,8 +90,10 @@ void CSceneComponent::SetOwner(CGameObject* Owner)
 void CSceneComponent::AddChild(CSceneComponent* Child, const std::string& SocketName)
 {
 	Child->m_Parent = this;
+	Child->m_ParentName = m_Name;
 
 	m_vecChild.push_back(Child);
+	m_vecChildName.push_back(Child->GetName());
 
 	Child->m_Transform->m_Parent = m_Transform;
 
@@ -105,8 +107,10 @@ void CSceneComponent::AddChild(CGameObject* Child, const std::string& SocketName
 	CSceneComponent* ChildComponent = Child->GetRootComponent();
 
 	ChildComponent->m_Parent = this;
+	ChildComponent->m_ParentName = m_Name;
 
 	m_vecChild.push_back(ChildComponent);
+	m_vecChildName.push_back(ChildComponent->GetName());
 
 	ChildComponent->m_Transform->m_Parent = m_Transform;
 
@@ -124,12 +128,15 @@ bool CSceneComponent::DeleteChild(CSceneComponent* Child)
 		if (m_vecChild[i] == Child)
 		{
 			auto	iter = m_vecChild.begin() + i;
+			auto	iterName = m_vecChildName.begin() + i;
 
 			(*iter)->m_Parent = nullptr;
+			(*iter)->m_ParentName = "";
 
 			m_Owner->DeleteSceneComponent(*iter);
 
 			m_vecChild.erase(iter);
+			m_vecChildName.erase(iterName);
 
 			auto	iterTr = m_Transform->m_vecChild.begin() + i;
 
@@ -153,12 +160,15 @@ bool CSceneComponent::DeleteChild(const std::string& Name)
 		if (m_vecChild[i]->GetName() == Name)
 		{
 			auto	iter = m_vecChild.begin() + i;
+			auto	iterName = m_vecChildName.begin() + i;
 
 			(*iter)->m_Parent = nullptr;
+			(*iter)->m_ParentName = "";
 
 			m_Owner->DeleteSceneComponent(*iter);
 
 			m_vecChild.erase(iter);
+			m_vecChildName.erase(iterName);
 
 			auto	iterTr = m_Transform->m_vecChild.begin() + i;
 
@@ -274,30 +284,19 @@ void CSceneComponent::Save(FILE* File)
 	fwrite(&Length, 4, 1, File);
 	fwrite(m_LayerName.c_str(), 1, Length, File);
 
-	bool	Parent = false;
-
-	if (m_Parent)
-		Parent = true;
-
-	fwrite(&Parent, 1, 1, File);
-
-	if (m_Parent)
-	{
-		Length = (int)m_Parent->GetName().length();
-
-		fwrite(&Length, 4, 1, File);
-		fwrite(m_Parent->GetName().c_str(), 1, Length, File);
-	}
-
 	int	ChildCount = (int)m_vecChild.size();
+
+
 	fwrite(&ChildCount, 4, 1, File);
 
 	for (int i = 0; i < ChildCount; ++i)
 	{
-		Length = (int)m_vecChild[i]->GetName().length();
+		Length = (int)m_vecChild[i]->GetComponentTypeName().length();
 
 		fwrite(&Length, 4, 1, File);
-		fwrite(m_vecChild[i]->GetName().c_str(), 1, Length, File);
+		fwrite(m_vecChild[i]->GetComponentTypeName().c_str(), 1, Length, File);
+
+		m_vecChild[i]->Save(File);
 	}
 
 	m_Transform->Save(File);
@@ -306,6 +305,36 @@ void CSceneComponent::Save(FILE* File)
 void CSceneComponent::Load(FILE* File)
 {
 	CComponent::Load(File);
+
+	int	Length = 0;
+	char	LayerName[256] = {};
+
+	fread(&Length, 4, 1, File);
+	fread(LayerName, 1, Length, File);
+
+	m_LayerName = LayerName;
+
+	int	ChildCount = 0;
+	fread(&ChildCount, 4, 1, File);
+
+	for (int i = 0; i < ChildCount; ++i)
+	{
+		Length = 0;
+		char	TypeName[256] = {};
+
+		fread(&Length, 4, 1, File);
+		fread(TypeName, 1, Length, File);
+
+		CComponent* CDO = CComponent::FindCDO(TypeName);
+
+		CSceneComponent* Component = (CSceneComponent*)CDO->Clone();
+
+		AddChild(Component);
+
+		Component->Load(File);
+	}
+
+	m_Transform->Load(File);
 }
 
 void CSceneComponent::SetInheritScale(bool Inherit)

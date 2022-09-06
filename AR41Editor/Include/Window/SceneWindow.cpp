@@ -81,7 +81,7 @@ void CSceneWindow::SceneChange()
 	if (Scene->GetName() == m_SelectSceneItem && !m_SelectSceneItem.empty())
 		return;
 
-	CSceneManager::GetInst()->CreateNextScene(false);
+	CSceneManager::GetInst()->CreateNextScene();
 	CScene* NextScene = CSceneManager::GetInst()->GetNextScene();
 
 	const PathInfo* Info = CPathManager::GetInst()->FindPath(ROOT_PATH);
@@ -122,7 +122,8 @@ void CSceneWindow::SceneSave()
 
 	Scene->Save(FullPath);
 
-	m_SceneList->AddItem(Name);
+	if (!m_SceneList->CheckItem(Name))
+		m_SceneList->AddItem(Name);
 }
 
 void CSceneWindow::SceneClickCallback(int Index, const std::string& Item)

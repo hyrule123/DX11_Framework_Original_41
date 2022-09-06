@@ -7,6 +7,7 @@ class CGameObject :
 	public CRef
 {
 	friend class CScene;
+	friend class CSceneManager;
 
 protected:
 	CGameObject();
@@ -35,6 +36,7 @@ public:
 protected:
 	class CScene* m_Scene;
 	std::string		m_ObjectTypeName;
+	int		m_ComponentSerialNumber;
 
 public:
 	class CScene* GetScene()    const
@@ -58,9 +60,6 @@ protected:
 	CSharedPtr<CSceneComponent> m_RootComponent;
 	std::list<CSceneComponent*> m_SceneComponentList;
 	std::vector<CSharedPtr<CObjectComponent>>   m_vecObjectComponent;
-
-	CGameObject* m_Parent;
-	std::vector<CSharedPtr<CGameObject>>    m_vecChildObject;
 	float       m_LifeTime;
 
 public:
@@ -141,8 +140,6 @@ public:
 	virtual CGameObject* Clone()    const;
 	virtual void Save(FILE* File);
 	virtual void Load(FILE* File);
-	virtual void SaveChild(FILE* File);
-	virtual void LoadChild(FILE* File);
 
 
 public:
@@ -175,6 +172,10 @@ public:
 
 			m_SceneComponentList.push_back((CSceneComponent*)Component);
 		}
+
+		Component->SetSerialNumber(m_ComponentSerialNumber);
+
+		++m_ComponentSerialNumber;
 
 		return Component;
 	}

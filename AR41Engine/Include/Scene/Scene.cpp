@@ -2,6 +2,10 @@
 #include "Scene.h"
 #include "../GameObject/GameObject.h"
 #include "../Input.h"
+#include "../Component/SpriteComponent.h"
+#include "../Component/CameraComponent.h"
+#include "../Component/TargetArm.h"
+#include "../Component/SceneComponent.h"
 
 std::unordered_map<std::string, CSceneInfo*> CScene::m_mapSceneInfoCDO;
 
@@ -52,6 +56,30 @@ void CScene::CreateCDO()
 	ObjCDO->Init();
 
 	CGameObject::AddObjectCDO("GameObject", ObjCDO);
+
+	CComponent* ComCDO = new CSceneComponent;
+
+	ComCDO->Init();
+
+	CComponent::AddComponentCDO("SceneComponent", ComCDO);
+
+	ComCDO = new CSpriteComponent;
+
+	ComCDO->Init();
+
+	CComponent::AddComponentCDO("SpriteComponent", ComCDO);
+
+	ComCDO = new CCameraComponent;
+
+	ComCDO->Init();
+
+	CComponent::AddComponentCDO("CameraComponent", ComCDO);
+
+	ComCDO = new CTargetArm;
+
+	ComCDO->Init();
+
+	CComponent::AddComponentCDO("TargetArm", ComCDO);
 }
 
 void CScene::Start()

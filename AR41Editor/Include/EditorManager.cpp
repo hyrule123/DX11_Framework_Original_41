@@ -18,13 +18,6 @@
 
 CEditorManager::CEditorManager()
 {
-    CSceneInfo* Info = new CEditorDefaultScene;
-
-    CScene::AddSceneInfoCDO("EditorDefaultScene", Info);
-
-    CScene::CreateObjectCDO<CPlayer2D>("Player2D");
-    CScene::CreateObjectCDO<CMonster>("Monster");
-    CScene::CreateObjectCDO<CBullet>("Bullet");
 }
 
 CEditorManager::~CEditorManager()
@@ -41,6 +34,8 @@ bool CEditorManager::Init(HINSTANCE hInst)
     {
         return false;
     }
+
+    CreateCDO();
 
     CEngine::SetWndProcCallback<CEditorManager>(this, &CEditorManager::WndProc);
 
@@ -170,4 +165,15 @@ void CEditorManager::CreateObject()
     {
         Window->AddItem(Obj, SelectObjectItem);
     }
+}
+
+void CEditorManager::CreateCDO()
+{
+    CSceneInfo* Info = new CEditorDefaultScene;
+
+    CScene::AddSceneInfoCDO("EditorDefaultScene", Info);
+
+    CScene::CreateObjectCDO<CPlayer2D>("Player2D");
+    CScene::CreateObjectCDO<CMonster>("Monster");
+    CScene::CreateObjectCDO<CBullet>("Bullet");
 }
