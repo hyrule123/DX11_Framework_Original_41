@@ -188,11 +188,15 @@ void CPrimitiveComponent::Load(FILE* File)
 
 	fread(&MaterialCount, 4, 1, File);
 
+	m_vecMaterial.clear();
+
 	for (int i = 0; i < MaterialCount; ++i)
 	{
 		CMaterial* Material = m_Mesh->GetMaterial(i);
 
 		Material = Material->Clone();
+
+		Material->SetScene(m_Scene);
 
 		Material->Load(File);
 

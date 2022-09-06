@@ -317,21 +317,43 @@ void CSceneComponent::Load(FILE* File)
 	int	ChildCount = 0;
 	fread(&ChildCount, 4, 1, File);
 
-	for (int i = 0; i < ChildCount; ++i)
+	if (m_vecChild.empty())
 	{
-		Length = 0;
-		char	TypeName[256] = {};
+		for (int i = 0; i < ChildCount; ++i)
+		{
+			Length = 0;
+			char	TypeName[256] = {};
 
-		fread(&Length, 4, 1, File);
-		fread(TypeName, 1, Length, File);
+			fread(&Length, 4, 1, File);
+			fread(TypeName, 1, Length, File);
 
-		CComponent* CDO = CComponent::FindCDO(TypeName);
+			CComponent* CDO = CComponent::FindCDO(TypeName);
 
-		CSceneComponent* Component = (CSceneComponent*)CDO->Clone();
+			CSceneComponent* Component = (CSceneComponent*)CDO->Clone();
 
-		AddChild(Component);
+			Component->SetOwner(m_Owner);
+			Component->SetScene(m_Scene);
 
-		Component->Load(File);
+			AddChild(Component);
+
+			Component->Load(File);
+		}
+	}
+
+	else
+	{
+		for (int i = 0; i < ChildCount; ++i)
+		{
+			Length = 0;
+			char	TypeName[256] = {};
+
+			fread(&Length, 4, 1, File);
+			fread(TypeName, 1, Length, File);
+
+			m_vecChild[i]->SetScene(m_Scene);
+
+			m_vecChild[i]->Load(File);
+		}
 	}
 
 	m_Transform->Load(File);

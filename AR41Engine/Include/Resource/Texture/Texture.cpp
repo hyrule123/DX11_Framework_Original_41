@@ -342,7 +342,7 @@ void CTexture::Save(FILE* File)
 
 	for (int i = 0; i < Count; ++i)
 	{
-		fwrite(&m_vecTextureInfo[i]->FileName, sizeof(TCHAR), MAX_PATH, File);
+		fwrite(m_vecTextureInfo[i]->FileName, sizeof(TCHAR), MAX_PATH, File);
 		fwrite(m_vecTextureInfo[i]->PathName, sizeof(char), MAX_PATH, File);
 	}
 }

@@ -224,16 +224,27 @@ void CGameObject::Load(FILE* File)
 		fread(&Length, 4, 1, File);
 		fread(TypeName, 1, Length, File);
 
-		CComponent* CDO = CComponent::FindCDO(TypeName);
+		if (!m_RootComponent)
+		{
+			CComponent* CDO = CComponent::FindCDO(TypeName);
 
-		m_RootComponent = (CSceneComponent*)CDO->Clone();
+			m_RootComponent = (CSceneComponent*)CDO->Clone();
 
-		m_RootComponent->SetOwner(this);
-		m_RootComponent->SetScene(m_Scene);
+			m_RootComponent->SetOwner(this);
+			m_RootComponent->SetScene(m_Scene);
 
-		m_RootComponent->Load(File);
+			m_RootComponent->Load(File);
 
-		m_RootComponent->AddOwner();
+			m_RootComponent->AddOwner();
+		}
+
+		else
+		{
+			m_RootComponent->SetOwner(this);
+			m_RootComponent->SetScene(m_Scene);
+
+			m_RootComponent->Load(File);
+		}
 	}
 
 	{

@@ -380,6 +380,12 @@ BinObjDebug/
 # Except Original Bin Folder
 !AR41Engine/Bin/
 
+
+# Except Editor Results
+!AR41Editor/Bin/
+AR41Editor/Bin/*
+!AR41Editor/Bin/Scene/
+
 # Except Engine Folder : Used to gather header files - automatically generated at build time
 Engine/
 

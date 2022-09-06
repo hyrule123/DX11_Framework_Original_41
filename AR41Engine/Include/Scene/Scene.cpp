@@ -227,6 +227,8 @@ void CScene::Load(const char* FullPath)
 	fread(&Length, 4, 1, File);
 	fread(SceneInfoName, 1, Length, File);
 
+	SAFE_DELETE(m_SceneInfo);
+
 	CSceneInfo* CDO = FindSceneInfoCDO(SceneInfoName);
 
 	m_SceneInfo = CDO->Clone();
@@ -249,6 +251,8 @@ void CScene::Load(const char* FullPath)
 		CGameObject* ObjCDO = CGameObject::FindCDO(ObjClassTypeName);
 
 		CGameObject* NewObj = ObjCDO->Clone();
+
+		NewObj->SetScene(this);
 
 		NewObj->Load(File);
 
