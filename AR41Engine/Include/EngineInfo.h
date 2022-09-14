@@ -178,3 +178,13 @@ struct HierarchyName
 	class CComponent* Component;
 	class CComponent* Parent;
 };
+
+struct HierarchyObjectName
+{
+	std::string	Name;
+	std::string	ParentName;
+	std::string	ClassName;
+	std::string	ParentClassName;
+	class CGameObject* Obj;
+	class CGameObject* Parent;
+};

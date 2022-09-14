@@ -14,6 +14,9 @@ class CEditorInput :
 {
 	friend class CEditorWindow;
 
+	template <typename T>
+	friend class CEditorTreeItem;
+
 protected:
 	CEditorInput();
 	virtual ~CEditorInput();

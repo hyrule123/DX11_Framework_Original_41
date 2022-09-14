@@ -5,6 +5,9 @@ class CEditorImage :
 {
 	friend class CEditorWindow;
 
+	template <typename T>
+	friend class CEditorTreeItem;
+
 protected:
 	CEditorImage();
 	virtual ~CEditorImage();

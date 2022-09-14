@@ -5,6 +5,9 @@ class CEditorLabel :
 {
 	friend class CEditorWindow;
 
+	template <typename T>
+	friend class CEditorTreeItem;
+
 protected:
 	CEditorLabel();
 	virtual ~CEditorLabel();

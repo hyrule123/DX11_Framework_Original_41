@@ -7,6 +7,9 @@ class CEditorText :
 {
 	friend class CEditorWindow;
 
+	template <typename T>
+	friend class CEditorTreeItem;
+
 protected:
 	CEditorText();
 	virtual ~CEditorText();
