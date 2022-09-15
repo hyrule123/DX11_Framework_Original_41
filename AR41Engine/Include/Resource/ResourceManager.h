@@ -3,6 +3,7 @@
 #include "../EngineInfo.h"
 #include "Shader/ShaderManager.h"
 #include "Material/MaterialManager.h"
+#include "Animation/AnimationManager.h"
 
 class CResourceManager
 {
@@ -10,7 +11,8 @@ private:
 	class CMeshManager* m_MeshManager;
 	CShaderManager* m_ShaderManager;
 	class CTextureManager* m_TextureManager;
-	class CMaterialManager* m_MaterialManager;
+	CMaterialManager* m_MaterialManager;
+	CAnimationManager* m_AnimationManager;
 
 public:
 	bool Init();
@@ -68,6 +70,23 @@ public:	// ===================== Material =========================
 	{
 		return m_MaterialManager->CreateMaterial<T>(Name);
 	}
+
+
+
+public:	// ===================== Animation =========================
+	bool CreateAnimationSequence2D(const std::string& Name, const std::string& TextureName,
+		const TCHAR* FileName, const std::string& PathName = TEXTURE_PATH);
+	bool CreateAnimationSequence2D(const std::string& Name, class CTexture* Texture);
+	bool AddAnimationSequence2DFrame(const std::string& Name, const Vector2& Start, const Vector2& End);
+	bool AddAnimationSequence2DFrame(const std::string& Name, float StartX, float StartY, float EndX,
+		float EndY);
+	bool SaveSequence2D(const std::string& Name, const char* FullPath);
+	bool LoadSequence2D(const std::string& Name, const char* FullPath);
+	bool SaveSequence2D(const std::string& Name, const char* FileName, const std::string& PathName);
+	bool LoadSequence2D(const std::string& Name, const char* FileName, const std::string& PathName);
+
+	CAnimationSequence2D* FindAnimationSequence2D(const std::string& Name);
+	void ReleaseAnimationSequence2D(const std::string& Name);
 
 
 
