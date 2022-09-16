@@ -1,5 +1,8 @@
 #pragma once
+
 #include "PrimitiveComponent.h"
+#include "../Animation/Animation2D.h"
+
 class CSpriteComponent :
     public CPrimitiveComponent
 {
@@ -11,7 +14,11 @@ protected:
     CSpriteComponent(const CSpriteComponent& component);
     virtual ~CSpriteComponent();
 
+protected:
+    CSharedPtr<CAnimation2D> m_Animation;
+
 public:
+    bool SetTexture(class CTexture* Texture);
     bool SetTexture(const std::string& Name, const TCHAR* FileName,
         const std::string& PathName = TEXTURE_PATH);
     bool SetTextureFullPath(const std::string& Name, const TCHAR* FullPath);
@@ -30,5 +37,25 @@ public:
     virtual CSpriteComponent* Clone()    const;
     virtual void Save(FILE* File);
     virtual void Load(FILE* File);
+
+public:
+    template <typename T>
+    T* SetAnimation(const std::string& Name)
+    {
+        T* Anim = new T;
+
+        Anim->SetName(Name);
+        Anim->m_Owner = this;
+
+        if (!Anim->Init())
+        {
+            SAFE_DELETE(Anim);
+            return nullptr;
+        }
+
+        m_Animation = Anim;
+
+        return Anim;
+    }
 };
 

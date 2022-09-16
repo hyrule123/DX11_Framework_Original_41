@@ -25,6 +25,7 @@ class CAnimation2DData
 
 private:
 	CAnimation2DData();
+	CAnimation2DData(const CAnimation2DData& Anim);
 	~CAnimation2DData();
 
 private:
@@ -45,6 +46,7 @@ public:
 	void SetSequence(CAnimationSequence2D* Sequence);
 	void Save(FILE* File);
 	void Load(FILE* File);
+	CAnimation2DData* Clone();
 
 public:
 	const std::string& GetName()	const

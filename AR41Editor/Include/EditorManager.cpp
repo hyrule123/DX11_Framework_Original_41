@@ -15,6 +15,7 @@
 #include "Window\SceneWindow.h"
 #include "Window\DetailWindow.h"
 #include "Editor/EditorGUIManager.h"
+#include "Resource/Animation/AnimationSequence2D.h"
 
 CEditorManager::CEditorManager()
 {
@@ -34,6 +35,8 @@ bool CEditorManager::Init(HINSTANCE hInst)
     {
         return false;
     }
+
+    LoadResource();
 
     CreateCDO();
 
@@ -176,4 +179,16 @@ void CEditorManager::CreateCDO()
     CScene::CreateObjectCDO<CPlayer2D>("Player2D");
     CScene::CreateObjectCDO<CMonster>("Monster");
     CScene::CreateObjectCDO<CBullet>("Bullet");
+}
+
+void CEditorManager::LoadResource()
+{
+    CResourceManager::GetInst()->CreateAnimationSequence2D(
+        "PlayerIdle", "PlayerSprite", TEXT("Player.png"));
+
+    for (int i = 0; i < 14; ++i)
+    {
+        CResourceManager::GetInst()->AddAnimationSequence2DFrame("PlayerIdle",
+            Vector2(i * 45.f, 60.f), Vector2((i + 1) * 45.f, 120.f));
+    }
 }
