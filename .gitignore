@@ -369,7 +369,7 @@ FodyWeavers.xsd
 *.exe
 *.idb
 *.lib
-#Except DirectXTex Library
+#Exclude DirectXTex Library
 !DirectXTex.lib
 !DirectXTex_Debug.lib
 
@@ -377,13 +377,17 @@ FodyWeavers.xsd
 [Bb]in/
 BinObj/
 BinObjDebug/
-# Except Original Bin Folder
+# Exclude Original Bin Folder
 !AR41Engine/Bin/
+AR41Engine/Bin/Texture
 
 
-# Except Editor Results
+# Exclude Editor Results
 !AR41Editor/Bin/
 AR41Editor/Bin/*
+
+# Include Resources
+!AR41Editor/Bin/Texture
 !AR41Editor/Bin/Scene/
 
 # Except Engine Folder : Used to gather header files - automatically generated at build time

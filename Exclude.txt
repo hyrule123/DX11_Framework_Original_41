@@ -1,3 +1,4 @@
 .pdb
 .idb
 .ini
+\Texture\
