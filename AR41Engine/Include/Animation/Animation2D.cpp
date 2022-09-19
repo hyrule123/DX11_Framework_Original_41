@@ -3,11 +3,13 @@
 #include "../Scene/Scene.h"
 #include "../Scene/SceneResource.h"
 #include "../Resource/ResourceManager.h"
+#include "../Resource/Shader/Animation2DConstantBuffer.h"
 
 std::unordered_map<std::string, CAnimation2D*> CAnimation2D::m_mapAnimationCDO;
 
 CAnimation2D::CAnimation2D()	:
-	m_Owner(nullptr)
+	m_Owner(nullptr),
+	m_Play(true)
 {
 	m_ClassName = "Animation2D";
 }
@@ -15,6 +17,8 @@ CAnimation2D::CAnimation2D()	:
 CAnimation2D::CAnimation2D(const CAnimation2D& Anim)	:
 	CRef(Anim)
 {
+	m_Play = Anim.m_Play;
+
 	m_mapAnimation.clear();
 
 	auto	iter = Anim.m_mapAnimation.begin();
@@ -42,6 +46,14 @@ CAnimation2D::~CAnimation2D()
 	}
 }
 
+void CAnimation2D::Start()
+{
+	if (m_Owner && m_CurAnimation)
+	{
+		m_Owner->SetTexture(m_CurAnimation->m_Sequence->GetTexture());
+	}
+}
+
 bool CAnimation2D::Init()
 {
 	return true;
@@ -49,7 +61,82 @@ bool CAnimation2D::Init()
 
 void CAnimation2D::Update(float DeltaTime)
 {
+	if (!m_Play || !m_CurAnimation ||
+		m_CurAnimation->m_Sequence->GetFrameCount() == 0)
+		return;
 
+	m_CurAnimation->m_Time += DeltaTime * m_CurAnimation->m_PlayScale;
+
+	bool	AnimEnd = false;
+
+	m_CurAnimation->m_FrameTime = m_CurAnimation->m_PlayTime / 
+		m_CurAnimation->m_Sequence->GetFrameCount();
+
+	if (m_CurAnimation->m_Time >= m_CurAnimation->m_FrameTime)
+	{
+		m_CurAnimation->m_Time -= m_CurAnimation->m_FrameTime;
+
+		if (m_CurAnimation->m_Reverse)
+		{
+			--m_CurAnimation->m_Frame;
+
+			if (m_CurAnimation->m_Frame < 0)
+				AnimEnd = true;
+		}
+
+		else
+		{
+			++m_CurAnimation->m_Frame;
+
+			if (m_CurAnimation->m_Frame ==
+				m_CurAnimation->m_Sequence->GetFrameCount())
+				AnimEnd = true;
+		}
+	}
+
+	size_t	Size = m_CurAnimation->m_vecNotify.size();
+
+	for (size_t i = 0; i < Size; ++i)
+	{
+		if (!m_CurAnimation->m_vecNotify[i]->Call &&
+			m_CurAnimation->m_vecNotify[i]->Frame ==
+			m_CurAnimation->m_Frame)
+		{
+			m_CurAnimation->m_vecNotify[i]->Call = true;
+			m_CurAnimation->m_vecNotify[i]->Function();
+		}
+	}
+
+	if (AnimEnd)
+	{
+		if (m_CurAnimation->m_Loop)
+		{
+			if (m_CurAnimation->m_Reverse)
+				m_CurAnimation->m_Frame = m_CurAnimation->m_Sequence->GetFrameCount() - 1;
+
+			else
+				m_CurAnimation->m_Frame = 0;
+
+			Size = m_CurAnimation->m_vecNotify.size();
+
+			for (size_t i = 0; i < Size; ++i)
+			{
+				m_CurAnimation->m_vecNotify[i]->Call = false;
+			}
+		}
+
+		else
+		{
+			if (m_CurAnimation->m_Reverse)
+				m_CurAnimation->m_Frame = 0;
+
+			else
+				m_CurAnimation->m_Frame = m_CurAnimation->m_Sequence->GetFrameCount() - 1;
+		}
+
+		if (m_CurAnimation->m_EndFunction)
+			m_CurAnimation->m_EndFunction();
+	}
 }
 
 bool CAnimation2D::AddAnimation(const std::string& Name, 
@@ -132,18 +219,42 @@ bool CAnimation2D::AddAnimation(const std::string& Name,
 
 void CAnimation2D::SetPlayTime(const std::string& Name, float PlayTime)
 {
+	CAnimation2DData* Anim = FindAnimation(Name);
+
+	if (!Anim)
+		return;
+
+	Anim->m_PlayTime = PlayTime;
 }
 
-void CAnimation2D::SetPlayScale(const std::string& Name, float PlayTime)
+void CAnimation2D::SetPlayScale(const std::string& Name, float PlayScale)
 {
+	CAnimation2DData* Anim = FindAnimation(Name);
+
+	if (!Anim)
+		return;
+
+	Anim->m_PlayScale = PlayScale;
 }
 
 void CAnimation2D::SetLoop(const std::string& Name, bool Loop)
 {
+	CAnimation2DData* Anim = FindAnimation(Name);
+
+	if (!Anim)
+		return;
+
+	Anim->m_Loop = Loop;
 }
 
 void CAnimation2D::SetReverse(const std::string& Name, bool Reverse)
 {
+	CAnimation2DData* Anim = FindAnimation(Name);
+
+	if (!Anim)
+		return;
+
+	Anim->m_Reverse = Reverse;
 }
 
 void CAnimation2D::SetCurrentAnimation(const std::string& Name)
@@ -168,6 +279,7 @@ void CAnimation2D::SetCurrentAnimation(const std::string& Name)
 	if (m_Owner)
 	{
 		m_Owner->SetTexture(m_CurAnimation->m_Sequence->GetTexture());
+		m_Owner->SetTextureFrameIndex(0);
 	}
 }
 
@@ -194,6 +306,7 @@ void CAnimation2D::ChangeAnimation(const std::string& Name)
 	if (m_Owner)
 	{
 		m_Owner->SetTexture(m_CurAnimation->m_Sequence->GetTexture());
+		m_Owner->SetTextureFrameIndex(0);
 	}
 }
 
@@ -261,6 +374,51 @@ void CAnimation2D::Load(FILE* File)
 CAnimation2D* CAnimation2D::Clone()
 {
 	return new CAnimation2D(*this);
+}
+
+void CAnimation2D::SetShader()
+{
+	if (!m_CurAnimation || !m_CurAnimation->m_Sequence ||
+		!m_CurAnimation->m_Sequence->GetTexture())
+		return;
+
+	CAnimation2DConstantBuffer* Buffer = CResourceManager::GetInst()->GetAnim2DConstantBuffer();
+
+	const Animation2DFrameData& FrameData = m_CurAnimation->m_Sequence->GetFrameData(m_CurAnimation->m_Frame);
+
+	EAnimation2DType	Type = m_CurAnimation->m_Sequence->GetAnim2DType();
+
+	if (Type == EAnimation2DType::Atlas)
+	{
+		Buffer->SetImageSize((float)m_CurAnimation->m_Sequence->GetTexture()->GetWidth(),
+			(float)m_CurAnimation->m_Sequence->GetTexture()->GetHeight());
+		Buffer->SetImageFrame(FrameData.Start, FrameData.End);
+	}
+
+	else if (Type == EAnimation2DType::Frame)
+	{
+		if (m_Owner)
+		{
+			m_Owner->SetTexture(m_CurAnimation->m_Sequence->GetTexture());
+			m_Owner->SetTextureFrameIndex(m_CurAnimation->m_Frame);
+		}
+
+		else
+		{
+			m_CurAnimation->m_Sequence->GetTexture()->SetShader(0,
+				(int)EShaderBufferType::Pixel, m_CurAnimation->m_Frame);
+		}
+	}
+
+	else
+	{
+		Buffer->SetFrame(m_CurAnimation->m_Frame);
+	}
+	
+	Buffer->SetImageType(m_CurAnimation->m_Sequence->GetAnim2DType());
+	Buffer->SetAnim2DEnable(true);
+
+	Buffer->UpdateBuffer();
 }
 
 CAnimation2DData* CAnimation2D::FindAnimation(const std::string& Name)

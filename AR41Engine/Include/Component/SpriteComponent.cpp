@@ -1,6 +1,8 @@
 
 #include "SpriteComponent.h"
 #include "../Resource/Material/Material.h"
+#include "../Resource/ResourceManager.h"
+#include "../Resource/Shader/Animation2DConstantBuffer.h"
 
 CSpriteComponent::CSpriteComponent()
 {
@@ -74,6 +76,11 @@ bool CSpriteComponent::SetTextureFullPath(const std::string& Name,
 	return true;
 }
 
+void CSpriteComponent::SetTextureFrameIndex(int Index)
+{
+	m_vecMaterial[0]->SetTextureFrameIndex(0, Index);
+}
+
 CTexture* CSpriteComponent::GetTexture(int Index) const
 {
 	if (m_vecMaterial.empty())
@@ -85,6 +92,9 @@ CTexture* CSpriteComponent::GetTexture(int Index) const
 void CSpriteComponent::Start()
 {
 	CPrimitiveComponent::Start();
+
+	if (m_Animation)
+		m_Animation->Start();
 }
 
 bool CSpriteComponent::Init()
@@ -114,6 +124,18 @@ void CSpriteComponent::PostUpdate(float DeltaTime)
 
 void CSpriteComponent::Render()
 {
+	if (m_Animation)
+		m_Animation->SetShader();
+
+	else
+	{
+		CAnimation2DConstantBuffer* Buffer = CResourceManager::GetInst()->GetAnim2DConstantBuffer();
+
+		Buffer->SetAnim2DEnable(false);
+
+		Buffer->UpdateBuffer();
+	}
+
 	CPrimitiveComponent::Render();
 }
 
@@ -135,7 +157,7 @@ void CSpriteComponent::Save(FILE* File)
 
 	if (m_Animation)
 	{
-		int	Length = m_Animation->m_ClassName.length();
+		int	Length = (int)m_Animation->m_ClassName.length();
 
 		fwrite(&Length, 4, 1, File);
 		fwrite(m_Animation->m_ClassName.c_str(), 1, Length, File);

@@ -39,8 +39,10 @@ protected:
     class CSpriteComponent* m_Owner;
     std::unordered_map<std::string, CAnimation2DData*>  m_mapAnimation;
     CAnimation2DData* m_CurAnimation;
+	bool	m_Play;
 
 public:
+	void Start();
     virtual bool Init();
 	virtual void Update(float DeltaTime);
 	bool AddAnimation(const std::string& Name, const std::string& SequenceName,
@@ -49,7 +51,7 @@ public:
 	bool AddAnimation(const std::string& Name,  class CAnimationSequence2D* Sequence, float PlayTime = 1.f, float PlayScale = 1.f,
 		bool Loop = false, bool Reverse = false);
 	void SetPlayTime(const std::string& Name, float PlayTime);
-	void SetPlayScale(const std::string& Name, float PlayTime);
+	void SetPlayScale(const std::string& Name, float PlayScale);
 	void SetLoop(const std::string& Name, bool Loop);
 	void SetReverse(const std::string& Name, bool Reverse);
 	void SetCurrentAnimation(const std::string& Name);
@@ -57,6 +59,7 @@ public:
 	virtual void Save(FILE* File);
 	virtual void Load(FILE* File);
 	virtual CAnimation2D* Clone();
+	void SetShader();
 
 protected:
 	CAnimation2DData* FindAnimation(const std::string& Name);

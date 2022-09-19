@@ -139,6 +139,9 @@
     <Filter Include="08. Animation\02. 3D">
       <UniqueIdentifier>{1d6312d6-6142-4c06-b5c3-016df3515a38}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. Resource\02. Shader\03. ConstantBuffer\03. Animation2D">
+      <UniqueIdentifier>{23edd93b-c2ae-4bba-ad09-16dde4310719}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -375,6 +378,9 @@
     <ClInclude Include="Animation\Animation2DData.h">
       <Filter>08. Animation\01. 2D</Filter>
     </ClInclude>
+    <ClInclude Include="Resource\Shader\Animation2DConstantBuffer.h">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\03. Animation2D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -583,6 +589,9 @@
     </ClCompile>
     <ClCompile Include="Animation\Animation2DData.cpp">
       <Filter>08. Animation\01. 2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\Animation2DConstantBuffer.cpp">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\03. Animation2D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

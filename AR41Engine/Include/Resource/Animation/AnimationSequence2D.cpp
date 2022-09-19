@@ -6,7 +6,8 @@
 #include "../ResourceManager.h"
 
 CAnimationSequence2D::CAnimationSequence2D()	:
-	m_Scene(nullptr)
+	m_Scene(nullptr),
+	m_Anim2DType(EAnimation2DType::Atlas)
 {
 	SetTypeID<CAnimationSequence2D>();
 }
@@ -16,6 +17,7 @@ CAnimationSequence2D::CAnimationSequence2D(const CAnimationSequence2D& Anim)	:
 {
 	m_Texture = Anim.m_Texture;
 	m_vecFrameData = Anim.m_vecFrameData;
+	m_Anim2DType = Anim.m_Anim2DType;
 }
 
 CAnimationSequence2D::~CAnimationSequence2D()
@@ -25,6 +27,9 @@ CAnimationSequence2D::~CAnimationSequence2D()
 bool CAnimationSequence2D::Init(CTexture* Texture)
 {
 	m_Texture = Texture;
+
+	if (m_Texture)
+		m_Anim2DType = (EAnimation2DType)m_Texture->GetImageType();
 
 	return true;
 }
@@ -47,6 +52,85 @@ bool CAnimationSequence2D::Init(const std::string& Name, const TCHAR* FileName, 
 		m_Texture = CResourceManager::GetInst()->FindTexture(Name);
 	}
 
+	if (m_Texture)
+		m_Anim2DType = (EAnimation2DType)m_Texture->GetImageType();
+
+	return true;
+}
+
+bool CAnimationSequence2D::InitFullPath(const std::string& Name, 
+	const TCHAR* FullPath)
+{
+	if (m_Scene)
+	{
+		if (!m_Scene->GetResource()->LoadTextureFullPath(Name, FullPath))
+			return false;
+
+		m_Texture = m_Scene->GetResource()->FindTexture(Name);
+	}
+
+	else
+	{
+		if (!CResourceManager::GetInst()->LoadTextureFullPath(Name, FullPath))
+			return false;
+
+		m_Texture = CResourceManager::GetInst()->FindTexture(Name);
+	}
+
+	if (m_Texture)
+		m_Anim2DType = (EAnimation2DType)m_Texture->GetImageType();
+
+	return true;
+}
+
+bool CAnimationSequence2D::Init(const std::string& Name, 
+	const std::vector<const TCHAR*>& vecFileName,
+	const std::string& PathName)
+{
+	if (m_Scene)
+	{
+		if (!m_Scene->GetResource()->LoadTexture(Name, vecFileName, PathName))
+			return false;
+
+		m_Texture = m_Scene->GetResource()->FindTexture(Name);
+	}
+
+	else
+	{
+		if (!CResourceManager::GetInst()->LoadTexture(Name, vecFileName, PathName))
+			return false;
+
+		m_Texture = CResourceManager::GetInst()->FindTexture(Name);
+	}
+
+	if (m_Texture)
+		m_Anim2DType = (EAnimation2DType)m_Texture->GetImageType();
+
+	return true;
+}
+
+bool CAnimationSequence2D::InitFullPath(const std::string& Name, 
+	const std::vector<const TCHAR*>& vecFullPath)
+{
+	if (m_Scene)
+	{
+		if (!m_Scene->GetResource()->LoadTextureFullPath(Name, vecFullPath))
+			return false;
+
+		m_Texture = m_Scene->GetResource()->FindTexture(Name);
+	}
+
+	else
+	{
+		if (!CResourceManager::GetInst()->LoadTextureFullPath(Name, vecFullPath))
+			return false;
+
+		m_Texture = CResourceManager::GetInst()->FindTexture(Name);
+	}
+
+	if (m_Texture)
+		m_Anim2DType = (EAnimation2DType)m_Texture->GetImageType();
+
 	return true;
 }
 
@@ -68,6 +152,32 @@ void CAnimationSequence2D::AddFrame(float StartX, float StartY, float EndX, floa
 	Data.End = Vector2(EndX, EndY);
 
 	m_vecFrameData.push_back(Data);
+}
+
+void CAnimationSequence2D::AddFrameAll(int Count, const Vector2& Start, const Vector2& End)
+{
+	for (int i = 0; i < Count; ++i)
+	{
+		Animation2DFrameData	Data;
+
+		Data.Start = Start;
+		Data.End = End;
+
+		m_vecFrameData.push_back(Data);
+	}
+}
+
+void CAnimationSequence2D::AddFrameAll(int Count, float StartX, float StartY, float EndX, float EndY)
+{
+	for (int i = 0; i < Count; ++i)
+	{
+		Animation2DFrameData	Data;
+
+		Data.Start = Vector2(StartX, StartY);
+		Data.End = Vector2(EndX, EndY);
+
+		m_vecFrameData.push_back(Data);
+	}
 }
 
 void CAnimationSequence2D::DeleteFrame(int Index)
@@ -99,6 +209,8 @@ bool CAnimationSequence2D::Save(const char* FullPath)
 	int	Length = (int)m_Name.length();
 	fwrite(&Length, 4, 1, File);
 	fwrite(m_Name.c_str(), 1, Length, File);
+
+	fwrite(&m_Anim2DType, sizeof(EAnimation2DType), 1, File);
 
 	bool	TexEnable = false;
 
@@ -143,6 +255,8 @@ bool CAnimationSequence2D::Load(const char* FullPath)
 	fread(Name, 1, Length, File);
 
 	m_Name = Name;
+
+	fread(&m_Anim2DType, sizeof(EAnimation2DType), 1, File);
 
 	bool	TexEnable = false;
 

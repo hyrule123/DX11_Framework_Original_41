@@ -171,6 +171,8 @@ bool CTexture::LoadTextureFullPath(const std::string& Name,
 {
 	SetName(Name);
 
+	m_ImageType = EImageType::Frame;
+
 	size_t	Size = vecFullPath.size();
 
 	for (size_t i = 0; i < Size; ++i)

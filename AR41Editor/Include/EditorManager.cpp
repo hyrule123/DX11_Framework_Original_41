@@ -191,4 +191,31 @@ void CEditorManager::LoadResource()
         CResourceManager::GetInst()->AddAnimationSequence2DFrame("PlayerIdle",
             Vector2(i * 45.f, 60.f), Vector2((i + 1) * 45.f, 120.f));
     }
+
+    std::vector<const TCHAR*>   vecFileName;
+
+    for (int i = 1; i <= 89; ++i)
+    {
+        TCHAR* FileName = new TCHAR[MAX_PATH];
+
+        memset(FileName, 0, sizeof(TCHAR) * MAX_PATH);
+
+        wsprintf(FileName, TEXT("Explosion/Explosion%d.png"), i);
+
+        vecFileName.push_back(FileName);
+    }
+
+
+    CResourceManager::GetInst()->CreateAnimationSequence2D(
+        "PlayerRun", "Explosion", vecFileName);
+
+    CResourceManager::GetInst()->AddAnimationSequence2DFrameAll("PlayerRun",
+        89, Vector2(0.f, 0.f), Vector2(320.f, 240.f));
+
+    for (int i = 0; i <= 88; ++i)
+    {
+        SAFE_DELETE_ARRAY(vecFileName[i]);
+    }
+
+    vecFileName.clear();
 }

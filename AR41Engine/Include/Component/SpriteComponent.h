@@ -25,6 +25,7 @@ public:
     bool SetTexture(const std::string& Name, const std::vector<const TCHAR*>& vecFileName,
         const std::string& PathName = TEXTURE_PATH);
     bool SetTextureFullPath(const std::string& Name, const std::vector<const TCHAR*>& vecFullPath);
+    void SetTextureFrameIndex(int Index);
 
     class CTexture* GetTexture(int Index = 0)    const;
 
