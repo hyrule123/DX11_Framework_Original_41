@@ -7,6 +7,7 @@
 #include "Render/RenderManager.h"
 #include "Input.h"
 #include "Editor/EditorGUIManager.h"
+#include "CollisionManager.h"
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
@@ -36,6 +37,8 @@ CEngine::~CEngine()
 	CSceneManager::DestroyInst();
 
 	CEditorGUIManager::DestroyInst();
+
+	CCollisionManager::DestroyInst();
 
 	CRenderManager::DestroyInst();
 
@@ -74,6 +77,10 @@ bool CEngine::Init(HINSTANCE hInst, const TCHAR* Title,
 
 	// Resource 관리자 초기화
 	if (!CResourceManager::GetInst()->Init())
+		return false;
+
+	// 충돌 관리자 초기화
+	if (!CCollisionManager::GetInst()->Init())
 		return false;
 
 	
