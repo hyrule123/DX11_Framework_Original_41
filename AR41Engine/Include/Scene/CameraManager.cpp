@@ -56,3 +56,11 @@ void CCameraManager::PostUpdate(float DeltaTime)
 		m_CurrentCamera->PostUpdate(DeltaTime);
 	}
 }
+
+void CCameraManager::Save(FILE* File)
+{
+}
+
+void CCameraManager::Load(FILE* File)
+{
+}

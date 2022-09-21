@@ -387,7 +387,7 @@ AR41Engine/Bin/Texture
 AR41Editor/Bin/*
 
 # Include Resources
-!AR41Editor/Bin/Texture
+!AR41Editor/Bin/Texture/
 !AR41Editor/Bin/Scene/
 
 # Except Engine Folder : Used to gather header files - automatically generated at build time

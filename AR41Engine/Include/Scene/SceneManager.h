@@ -24,6 +24,7 @@ public:
 	bool Init();
 	bool Update(float DeltaTime);
     bool PostUpdate(float DeltaTime);
+	bool Collision(float DeltaTime);
 
 private:
 	bool ChangeScene();

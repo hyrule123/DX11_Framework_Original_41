@@ -97,7 +97,8 @@
     <ClInclude Include="Resource\Texture\Texture.h" />
     <ClInclude Include="Resource\Texture\TextureManager.h" />
     <ClInclude Include="Scene\CameraManager.h" />
-    <ClInclude Include="Scene\CollisionSection.h" />
+    <ClInclude Include="Scene\CollisionSection2D.h" />
+    <ClInclude Include="Scene\CollisionSection3D.h" />
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="Scene\SceneCollision.h" />
     <ClInclude Include="Scene\SceneInfo.h" />
@@ -180,7 +181,8 @@
     <ClCompile Include="Resource\Texture\Texture.cpp" />
     <ClCompile Include="Resource\Texture\TextureManager.cpp" />
     <ClCompile Include="Scene\CameraManager.cpp" />
-    <ClCompile Include="Scene\CollisionSection.cpp" />
+    <ClCompile Include="Scene\CollisionSection2D.cpp" />
+    <ClCompile Include="Scene\CollisionSection3D.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="Scene\SceneCollision.cpp" />
     <ClCompile Include="Scene\SceneInfo.cpp" />
