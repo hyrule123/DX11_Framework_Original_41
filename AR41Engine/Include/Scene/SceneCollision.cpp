@@ -69,6 +69,10 @@ void CSceneCollision::Update(float DeltaTime)
 
 		else if (!(*iter)->GetEnable())
 		{
+			// 이전프레임에 충돌되고 있던 물체가 있다면 해당 물체들에게 충돌이 해제되었다는 통보를
+			// 보내야 한다.
+			(*iter)->SendPrevCollisionEnd();
+
 			++iter;
 			continue;
 		}
@@ -85,13 +89,37 @@ void CSceneCollision::Update(float DeltaTime)
 
 	for (; iter != iterEnd; ++iter)
 	{
-		/*if (!(*iter)->GetEnable())
-		{
-			++iter;
+		if (!(*iter)->GetEnable())
 			continue;
-		}*/
 
 		(*iter)->CheckPrevCollisionColliderSection();
+	}
+
+	// 마우스와 먼저 충돌처리를 진행해야 한다.
+
+
+	// 충돌체끼리 충돌처리를 진행한다.
+	// 모든 Section을 반복하며 충돌처리를 수행한다.
+	for (int i = 0; i < m_Section2D.Count; ++i)
+	{
+		m_Section2D.vecSection[i]->Collision(DeltaTime);
+	}
+
+	for (int i = 0; i < m_Section3D.Count; ++i)
+	{
+		m_Section3D.vecSection[i]->Collision(DeltaTime);
+	}
+
+	// 충돌처리가 완료되었다면 충돌체를 Clear해준다.
+	iter = m_ColliderList.begin();
+	iterEnd = m_ColliderList.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		if (!(*iter)->GetEnable())
+			continue;
+
+		(*iter)->ClearFrame();
 	}
 }
 

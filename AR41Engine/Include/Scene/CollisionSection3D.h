@@ -21,5 +21,6 @@ private:
 
 public:
 	void AddCollider(class CCollider3D* Collider);
+	void Collision(float DeltaTime);
 };
 

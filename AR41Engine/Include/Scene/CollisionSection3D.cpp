@@ -15,3 +15,7 @@ void CCollisionSection3D::AddCollider(CCollider3D* Collider)
 
 	Collider->AddSectionIndex(m_Index);
 }
+
+void CCollisionSection3D::Collision(float DeltaTime)
+{
+}

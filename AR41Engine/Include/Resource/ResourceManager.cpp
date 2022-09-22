@@ -45,6 +45,7 @@ bool CResourceManager::Init()
 
 void CResourceManager::Update()
 {
+
 }
 
 bool CResourceManager::CreateMesh(CScene* Scene, MeshType Type,
@@ -66,6 +67,11 @@ CMesh* CResourceManager::FindMesh(const std::string& Name)
 void CResourceManager::ReleaseMesh(const std::string& Name)
 {
 	m_MeshManager->ReleaseMesh(Name);
+}
+
+CColliderConstantBuffer* CResourceManager::GetColliderCBuffer() const
+{
+	return m_ShaderManager->GetColliderCBuffer();
 }
 
 CShader* CResourceManager::FindShader(const std::string& Name)

@@ -51,11 +51,6 @@ void CCollider3D::Render()
 	CCollider::Render();
 }
 
-CCollider3D* CCollider3D::Clone() const
-{
-	return new CCollider3D(*this);
-}
-
 void CCollider3D::Save(FILE* File)
 {
 	CCollider::Save(File);
