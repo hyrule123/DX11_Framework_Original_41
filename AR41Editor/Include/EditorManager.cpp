@@ -16,6 +16,7 @@
 #include "Window\DetailWindow.h"
 #include "Editor/EditorGUIManager.h"
 #include "Resource/Animation/AnimationSequence2D.h"
+#include "Input.h"
 
 CEditorManager::CEditorManager()
 {
@@ -51,13 +52,13 @@ bool CEditorManager::Init(HINSTANCE hInst)
     CEditorGUIManager::GetInst()->CreateEditorWindow<CDetailWindow>("DetailWindow");
 
     // 키 등록
-    /*CInput::GetInst()->AddBindKey("Rotation", 'D');
+    CInput::GetInst()->AddBindKey("Rotation", 'D');
     CInput::GetInst()->AddBindKey("RotationInv", 'A');
 
     CInput::GetInst()->AddBindKey("MoveUp", 'W');
     CInput::GetInst()->AddBindKey("MoveDown", 'S');
 
-    CInput::GetInst()->AddBindKey("Fire", VK_SPACE);*/
+    CInput::GetInst()->AddBindKey("Fire", VK_SPACE);
 
     // SceneInfo 생성
     CSceneManager::GetInst()->CreateSceneInfo<CEditorDefaultScene>();

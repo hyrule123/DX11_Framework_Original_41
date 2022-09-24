@@ -36,10 +36,13 @@ public:
 
 protected:
 	std::string	m_ClassName;
-    class CSpriteComponent* m_Owner;
+	class CSpriteComponent* m_Owner;
     std::unordered_map<std::string, CAnimation2DData*>  m_mapAnimation;
     CAnimation2DData* m_CurAnimation;
 	bool	m_Play;
+
+public:
+	class CScene* GetScene()	const;
 
 public:
 	void Start();

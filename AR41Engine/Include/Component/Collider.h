@@ -5,6 +5,7 @@ class CCollider :
 {
     friend class CGameObject;
     friend class CScene;
+    friend class CCollisionManager;
 
 protected:
     CCollider();
@@ -23,6 +24,7 @@ protected:
     std::list<CCollider*>   m_PrevCollisionList;    // 이전 프레임에 충돌하고 있던 물체들
     std::list<int>          m_CurrentSectionList;   // 현재 충돌체가 어느 충돌영역에 속해있는지 판단하기 위한 정보.
     CollisionProfile* m_Profile;
+    Vector3                 m_HitPoint;
 
 
     std::function<void(const CollisionResult&)> m_CollisionCallback[(int)ECollision_Result::Max];

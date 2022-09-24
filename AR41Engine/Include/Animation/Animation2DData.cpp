@@ -1,5 +1,9 @@
 
 #include "Animation2DData.h"
+#include "Animation2D.h"
+#include "../Scene/Scene.h"
+#include "../Scene/SceneResource.h"
+#include "../Resource/ResourceManager.h"
 
 CAnimation2DData::CAnimation2DData()	:
 	m_Frame(0),
@@ -89,6 +93,12 @@ void CAnimation2DData::Load(FILE* File)
 
 	fread(&m_Loop, 1, 1, File);
 	fread(&m_Reverse, 1, 1, File);
+
+	if (m_Owner->GetScene())
+		m_Sequence = m_Owner->GetScene()->GetResource()->FindAnimationSequence2D(SequenceName);
+
+	else
+		m_Sequence = CResourceManager::GetInst()->FindAnimationSequence2D(SequenceName);
 }
 
 CAnimation2DData* CAnimation2DData::Clone()

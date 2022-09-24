@@ -45,7 +45,6 @@ bool CResourceManager::Init()
 
 void CResourceManager::Update()
 {
-
 }
 
 bool CResourceManager::CreateMesh(CScene* Scene, MeshType Type,

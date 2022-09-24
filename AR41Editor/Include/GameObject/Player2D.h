@@ -17,7 +17,8 @@ private:
 	CSharedPtr<class CSceneComponent>	m_RightChild;
 	CSharedPtr<class CSpriteComponent>	m_SpriteChild;
 	CSharedPtr<class CCameraComponent>	m_Camera;
-	CSharedPtr<class CTargetArm>	m_Arm;
+	CSharedPtr<class CTargetArm>		m_Arm;
+	CSharedPtr<class CColliderBox2D>	m_Body;
 
 public:
 	virtual void Start();
@@ -25,6 +26,8 @@ public:
 	virtual void Update(float DeltaTime);
 	virtual void PostUpdate(float DeltaTime);
 	virtual CPlayer2D* Clone()    const;
+	virtual void Save(FILE* File);
+	virtual void Load(FILE* File);
 
 public:
 	void MoveUp();

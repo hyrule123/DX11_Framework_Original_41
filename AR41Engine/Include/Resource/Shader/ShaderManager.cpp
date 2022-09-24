@@ -12,6 +12,7 @@ CShaderManager::CShaderManager()
 
 CShaderManager::~CShaderManager()
 {
+	SAFE_DELETE(m_ColliderCBuffer);
 }
 
 bool CShaderManager::Init()

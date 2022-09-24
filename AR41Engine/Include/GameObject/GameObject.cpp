@@ -69,27 +69,18 @@ void CGameObject::Destroy()
 
 void CGameObject::GetAllComponentHierarchyName(std::vector<HierarchyName>& vecName)
 {
-	auto    iter = m_SceneComponentList.begin();
-	auto    iterEnd = m_SceneComponentList.end();
-
-	for (; iter != iterEnd; ++iter)
+	if (m_RootComponent)
 	{
 		HierarchyName	Names;
 
-		CSceneComponent* Parent = (*iter)->GetParent();
-
-		Names.Name = (*iter)->GetName();
-		Names.ClassName = (*iter)->GetComponentTypeName();
-		Names.Component = *iter;
-		Names.Parent = Parent;
-
-		if (Parent)
-		{
-			Names.ParentName = Parent->GetName();
-			Names.ParentClassName = Parent->GetComponentTypeName();
-		}
+		Names.Name = m_RootComponent->GetName();
+		Names.ClassName = m_RootComponent->GetComponentTypeName();
+		Names.Component = m_RootComponent;
+		Names.Parent = nullptr;
 
 		vecName.push_back(Names);
+
+		m_RootComponent->GetAllComponentHierarchyName(vecName);
 	}
 }
 

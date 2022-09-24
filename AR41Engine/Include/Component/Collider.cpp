@@ -228,6 +228,13 @@ bool CCollider::Init()
 
 	m_Profile = CCollisionManager::GetInst()->FindProfile("Default");
 
+
+	if (CEngine::GetEditorMode())
+	{
+		m_Shader = CResourceManager::GetInst()->FindShader("ColliderShader");
+	}
+
+
 	return true;
 }
 
@@ -255,10 +262,30 @@ void CCollider::Render()
 void CCollider::Save(FILE* File)
 {
 	CSceneComponent::Save(File);
+
+	fwrite(&m_ColliderType, sizeof(ECollider_Type), 1, File);
+
+	int	Length = (int)m_Profile->Name.size();
+	fwrite(&Length, sizeof(int), 1, File);
+	fwrite(m_Profile->Name.c_str(), 1, Length, File);
 }
 
 void CCollider::Load(FILE* File)
 {
 	CSceneComponent::Load(File);
+
+	fread(&m_ColliderType, sizeof(ECollider_Type), 1, File);
+
+	int	Length = 0;
+	char	Name[256] = {};
+	fread(&Length, sizeof(int), 1, File);
+	fread(Name, 1, Length, File);
+
+	SetCollisionProfile(Name);
+
+	if (CEngine::GetEditorMode())
+	{
+		m_Shader = CResourceManager::GetInst()->FindShader("ColliderShader");
+	}
 }
 

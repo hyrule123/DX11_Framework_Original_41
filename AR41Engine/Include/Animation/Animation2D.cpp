@@ -46,6 +46,14 @@ CAnimation2D::~CAnimation2D()
 	}
 }
 
+CScene* CAnimation2D::GetScene() const
+{
+	if (!m_Owner)
+		return nullptr;
+
+	return m_Owner->GetScene();
+}
+
 void CAnimation2D::Start()
 {
 	if (m_Owner && m_CurAnimation)
@@ -166,6 +174,7 @@ bool CAnimation2D::AddAnimation(const std::string& Name,
 	Anim->m_Loop = Loop;
 	Anim->m_Reverse = Reverse;
 	Anim->m_FrameTime = PlayTime / Sequence->GetFrameCount();
+	Anim->m_Owner = this;
 
 	if (m_mapAnimation.empty())
 	{
@@ -201,6 +210,7 @@ bool CAnimation2D::AddAnimation(const std::string& Name,
 	Anim->m_Loop = Loop;
 	Anim->m_Reverse = Reverse;
 	Anim->m_FrameTime = PlayTime / Sequence->GetFrameCount();
+	Anim->m_Owner = this;
 
 	if (m_mapAnimation.empty())
 	{
@@ -357,6 +367,7 @@ void CAnimation2D::Load(FILE* File)
 	{
 		CAnimation2DData* Data = new CAnimation2DData;
 
+		Data->m_Owner = this;
 		Data->Load(File);
 
 		m_mapAnimation.insert(std::make_pair(Data->GetName(), Data));
