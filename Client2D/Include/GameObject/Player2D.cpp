@@ -68,6 +68,8 @@ bool CPlayer2D::Init()
 
 	SetRootComponent(m_Body);
 
+	m_Body->SetCollisionProfile("Player");
+
 	m_Body->AddChild(m_Sprite);
 
 	m_Sprite->AddChild(m_RightChild);
@@ -172,4 +174,5 @@ void CPlayer2D::Fire()
 
 	Bullet->SetWorldPosition(GetWorldPos());
 	Bullet->SetWorldRotation(GetWorldRot());
+	Bullet->SetCollisionProfileName("PlayerAttack");
 }

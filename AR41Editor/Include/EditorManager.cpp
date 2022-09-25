@@ -17,6 +17,7 @@
 #include "Editor/EditorGUIManager.h"
 #include "Resource/Animation/AnimationSequence2D.h"
 #include "Input.h"
+#include "CollisionManager.h"
 
 CEditorManager::CEditorManager()
 {
@@ -59,6 +60,32 @@ bool CEditorManager::Init(HINSTANCE hInst)
     CInput::GetInst()->AddBindKey("MoveDown", 'S');
 
     CInput::GetInst()->AddBindKey("Fire", VK_SPACE);
+
+    CCollisionManager::GetInst()->CreateChannel("Player", ECollision_Interaction::Collision);
+    CCollisionManager::GetInst()->CreateChannel("PlayerAttack", ECollision_Interaction::Collision);
+    CCollisionManager::GetInst()->CreateChannel("Monster", ECollision_Interaction::Collision);
+    CCollisionManager::GetInst()->CreateChannel("MonsterAttack", ECollision_Interaction::Collision);
+
+    CCollisionManager::GetInst()->CreateProfile("Player", "Player", true);
+    CCollisionManager::GetInst()->CreateProfile("PlayerAttack", "PlayerAttack", true);
+    CCollisionManager::GetInst()->CreateProfile("Monster", "Monster", true);
+    CCollisionManager::GetInst()->CreateProfile("MonsterAttack", "MonsterAttack", true);
+
+    CCollisionManager::GetInst()->SetCollisionInteraction("Player", "PlayerAttack", ECollision_Interaction::Ignore);
+    CCollisionManager::GetInst()->SetCollisionInteraction("Player", "Monster", ECollision_Interaction::Ignore);
+    CCollisionManager::GetInst()->SetCollisionInteraction("Player", "Player", ECollision_Interaction::Ignore);
+
+    CCollisionManager::GetInst()->SetCollisionInteraction("PlayerAttack", "Player", ECollision_Interaction::Ignore);
+    CCollisionManager::GetInst()->SetCollisionInteraction("PlayerAttack", "MonsterAttack", ECollision_Interaction::Ignore);
+    CCollisionManager::GetInst()->SetCollisionInteraction("PlayerAttack", "PlayerAttack", ECollision_Interaction::Ignore);
+
+    CCollisionManager::GetInst()->SetCollisionInteraction("Monster", "Player", ECollision_Interaction::Ignore);
+    CCollisionManager::GetInst()->SetCollisionInteraction("Monster", "MonsterAttack", ECollision_Interaction::Ignore);
+    CCollisionManager::GetInst()->SetCollisionInteraction("Monster", "Monster", ECollision_Interaction::Ignore);
+
+    CCollisionManager::GetInst()->SetCollisionInteraction("MonsterAttack", "Monster", ECollision_Interaction::Ignore);
+    CCollisionManager::GetInst()->SetCollisionInteraction("MonsterAttack", "MonsterAttack", ECollision_Interaction::Ignore);
+    CCollisionManager::GetInst()->SetCollisionInteraction("MonsterAttack", "PlayerAttack", ECollision_Interaction::Ignore);
 
     // SceneInfo »ý¼º
     CSceneManager::GetInst()->CreateSceneInfo<CEditorDefaultScene>();

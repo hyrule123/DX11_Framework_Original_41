@@ -34,6 +34,8 @@ bool CMonster::Init()
 
 	m_Body->AddChild(m_Sprite);
 
+	m_Body->SetCollisionProfile("Monster");
+
 	m_Sprite->SetPivot(0.5f, 0.f);
 	m_Sprite->SetRelativeScale(100.f, 100.f);
 	m_Sprite->SetRelativePosition(0.f, -50.f);

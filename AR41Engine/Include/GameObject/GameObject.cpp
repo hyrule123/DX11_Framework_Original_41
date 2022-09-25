@@ -305,12 +305,6 @@ void CGameObject::SetInheritParentRotationPosZ(bool Inherit)
 		m_RootComponent->SetInheritParentRotationPosZ(Inherit);
 }
 
-void CGameObject::InheritScale()
-{
-	if (m_RootComponent)
-		m_RootComponent->InheritScale();
-}
-
 void CGameObject::InheritRotation(bool Current)
 {
 	if (m_RootComponent)
@@ -321,12 +315,6 @@ void CGameObject::InheritParentRotationPos()
 {
 	if (m_RootComponent)
 		m_RootComponent->InheritParentRotationPos();
-}
-
-void CGameObject::InheritWorldScale()
-{
-	if (m_RootComponent)
-		m_RootComponent->InheritWorldScale();
 }
 
 void CGameObject::InheritWorldRotation(bool Current)
