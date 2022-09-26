@@ -39,6 +39,7 @@
     <ClInclude Include="Component\Transform.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="Editor\EditorButton.h" />
+    <ClInclude Include="Editor\EditorCheckbox.h" />
     <ClInclude Include="Editor\EditorComboBox.h" />
     <ClInclude Include="Editor\EditorGUIManager.h" />
     <ClInclude Include="Editor\EditorImage.h" />
@@ -133,6 +134,7 @@
     <ClCompile Include="Component\Transform.cpp" />
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="Editor\EditorButton.cpp" />
+    <ClCompile Include="Editor\EditorCheckbox.cpp" />
     <ClCompile Include="Editor\EditorComboBox.cpp" />
     <ClCompile Include="Editor\EditorGUIManager.cpp" />
     <ClCompile Include="Editor\EditorImage.cpp" />

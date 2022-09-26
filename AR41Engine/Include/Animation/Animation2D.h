@@ -135,5 +135,12 @@ public:
 
 		Animation->AddNotify<T>(Name, Time, Obj, Func);
 	}
+
+
+	inline std::unordered_map<std::string, CAnimation2DData*> GetmapAnim() const;
 };
 
+inline std::unordered_map<std::string, CAnimation2DData*> CAnimation2D::GetmapAnim() const
+{
+	return m_mapAnimation;
+}

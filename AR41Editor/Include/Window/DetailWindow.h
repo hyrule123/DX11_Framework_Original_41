@@ -2,10 +2,23 @@
 
 #include "Editor\EditorWindow.h"
 
+
+
 class CDetailWindow :
     public CEditorWindow
 {
 	friend class CEditorGUIManager;
+
+	struct AnimFrameInfo
+	{
+		class CEditorInput* StartX;
+		class CEditorSameLine* SameLine1;
+		class CEditorInput* StartY;
+		class CEditorSameLine* SameLine2;
+		class CEditorInput* EndX;
+		class CEditorSameLine* SameLine3;
+		class CEditorInput* EndY;
+	};
 
 protected:
 	CDetailWindow();
@@ -16,7 +29,10 @@ protected:
 	std::vector<class CEditorWidget*>	m_vecSpriteComponent;
 	std::vector<class CEditorWidget*>	m_vecCameraComponent;
 	std::vector<class CEditorWidget*>	m_vecTargetArmComponent;
+	std::vector<class CEditorWidget*>	m_vecAnimComponent;
 	CSharedPtr<class CSceneComponent> m_SelectComponent;
+
+	std::vector<AnimFrameInfo*> m_AnimFrameInfo;
 
 public:
 	void SetSelectComponent(class CSceneComponent* Component);
@@ -34,5 +50,7 @@ private:
 
 private:
 	void LoadButtonClick();
+	void SetAnimation(bool& B);
+	void LoadAnimation(class CSceneComponent* Component);
 };
 

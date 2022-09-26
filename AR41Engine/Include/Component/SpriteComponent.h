@@ -40,6 +40,7 @@ public:
     virtual void Load(FILE* File);
 
 public:
+    inline bool GetAnimation() const;
     template <typename T>
     T* SetAnimation(const std::string& Name)
     {
@@ -60,3 +61,11 @@ public:
     }
 };
 
+
+inline bool CSpriteComponent::GetAnimation() const
+{
+    if (m_Animation)
+        return true;
+
+    return false;
+}

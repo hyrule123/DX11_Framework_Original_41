@@ -8,11 +8,17 @@
 #include "Editor/EditorListBox.h"
 #include "Editor/EditorTree.h"
 #include "Editor/EditorComboBox.h"
+#include "Editor/EditorCheckbox.h"
 #include "Component/SpriteComponent.h"
 #include "Component/CameraComponent.h"
 #include "Component/TargetArm.h"
 #include "Engine.h"
 #include "PathManager.h"
+#include "Animation/Animation2D.h"
+#include "Resource/Animation/AnimationSequence2D.h"
+
+
+
 
 CDetailWindow::CDetailWindow()
 {
@@ -132,6 +138,12 @@ void CDetailWindow::CreateSpriteComponentWidget()
 
 	LoadButton->SetClickCallback<CDetailWindow>(this, &CDetailWindow::LoadButtonClick);
 
+	Category->AddItem(nullptr, "Animation");
+
+	CEditorCheckbox* Checkbox = Category->CreateWidget<CEditorCheckbox>("Animation", "Use Animation", 100.f, 100.f);
+
+	Checkbox->SetCheckCallbackFunc<CDetailWindow>(this, &CDetailWindow::SetAnimation);
+
 	m_vecSpriteComponent.push_back(Category);
 }
 
@@ -162,6 +174,7 @@ void CDetailWindow::ChangeWidget(CSceneComponent* Component)
 		for (size_t i = 0; i < Size; ++i)
 		{
 			AddWidget(m_vecSpriteComponent[i]);
+			
 		}
 
 		if (Component)
@@ -173,6 +186,20 @@ void CDetailWindow::ChangeWidget(CSceneComponent* Component)
 			CEditorImage* ImageWidget = Category->FindWidget<CEditorImage>("SpriteImage");
 
 			ImageWidget->SetTexture(Texture);
+
+			if (((CSpriteComponent*)Component)->GetAnimation())
+			{
+
+				CEditorCheckbox* Check = Category->FindWidget<CEditorCheckbox>("Use Animation");
+
+				if (Check)
+				{
+					Check->SetChecked(true);
+					Check->SetReadOnly(true);
+				}
+			}
+
+			LoadAnimation(Component);
 		}
 	}
 
@@ -195,6 +222,7 @@ void CDetailWindow::ChangeWidget(CSceneComponent* Component)
 			AddWidget(m_vecTargetArmComponent[i]);
 		}
 	}
+
 }
 
 void CDetailWindow::LoadButtonClick()
@@ -240,3 +268,76 @@ void CDetailWindow::LoadButtonClick()
 		}
 	}
 }
+
+void CDetailWindow::SetAnimation(bool& B)
+{
+	CSpriteComponent* Com = (CSpriteComponent*)m_SelectComponent.Get();
+
+	if (B)
+	{
+		if(!Com->GetAnimation())
+			Com->SetAnimation<CAnimation2D>("Anim");
+		
+		CEditorTree<void*>* Tree = (CEditorTree<void*>*)FindWidget("SpriteComponent");
+		if (Tree)
+		{
+			CEditorCheckbox* Check = Tree->FindWidget<CEditorCheckbox>("Use Animation");
+
+			if (Check)
+				Check->SetReadOnly(true);
+		}
+	}
+}
+
+void CDetailWindow::LoadAnimation(CSceneComponent* Component)
+{
+	CAnimation2D* Anim = nullptr;
+
+	if (Component)
+		Anim = ((CSpriteComponent*)Component)->GetAnimation();
+
+	if (!Anim)
+		return;
+
+	std::unordered_map<std::string, CAnimation2DData*> mapAnim = Anim->GetmapAnim();
+
+	if (!mapAnim.empty())
+	{
+		CAnimation2DData* Data = mapAnim.begin()->second;
+
+		CAnimationSequence2D* Seq = Data->GetAnimationSequence();
+
+		int count = Seq->GetFrameCount();
+
+		for (int i = 0; i < count; ++i)
+		{
+			AnimFrameInfo* Info = new AnimFrameInfo;
+
+			Animation2DFrameData FData = Seq->GetFrameData(i);
+
+			Info->StartX = CreateWidget<CEditorInput>("StartX");
+			Info->SameLine1 = CreateWidget<CEditorSameLine>("SameLine");
+			Info->StartY = CreateWidget<CEditorInput>("StartY");
+			Info->SameLine2 = CreateWidget<CEditorSameLine>("SameLine");
+			Info->EndX = CreateWidget<CEditorInput>("EndX");
+			Info->SameLine3 = CreateWidget<CEditorSameLine>("SameLine");
+			Info->EndY = CreateWidget<CEditorInput>("EndY");
+
+			Info->StartX->ReadOnly(true);
+			Info->StartY->ReadOnly(true);
+			Info->EndX->ReadOnly(true);
+			Info->EndY->ReadOnly(true);
+
+			
+			Info->StartX->SetFloat(FData.Start.x);
+			Info->StartY->SetFloat(FData.Start.y);
+			Info->EndX->SetFloat(FData.End.x);
+			Info->EndY->SetFloat(FData.End.y);
+
+			m_AnimFrameInfo.push_back(Info);
+		}
+
+
+	}
+}
+

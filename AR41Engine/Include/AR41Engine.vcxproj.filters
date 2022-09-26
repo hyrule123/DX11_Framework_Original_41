@@ -441,6 +441,9 @@
     <ClInclude Include="Resource\Shader\ColliderConstantBuffer.h">
       <Filter>02. Resource\02. Shader\03. ConstantBuffer\04. Collider</Filter>
     </ClInclude>
+    <ClInclude Include="Editor\EditorCheckbox.h">
+      <Filter>07. Editor\03. Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -691,6 +694,9 @@
     </ClCompile>
     <ClCompile Include="Resource\Shader\ColliderConstantBuffer.cpp">
       <Filter>02. Resource\02. Shader\03. ConstantBuffer\04. Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\EditorCheckbox.cpp">
+      <Filter>07. Editor\03. Widget</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

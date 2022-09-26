@@ -21,8 +21,17 @@ protected:
 	ImVec4			m_Color;
 
 public:
-	const std::string& GetName()	const
+	const std::string GetName()	const
 	{
+		//앞에 Hide Name 설정인 ##이 들어가 있을 경우
+		if (m_Name.find("##") != std::string::npos)
+		{
+			std::string Name = m_Name;
+			Name.erase(Name.begin(), Name.begin() + 2);
+
+			return Name;
+		}
+
 		return  m_Name;
 	}
 

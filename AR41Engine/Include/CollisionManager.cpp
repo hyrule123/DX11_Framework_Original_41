@@ -164,6 +164,8 @@ bool CCollisionManager::CollisionBox2DToBox2D(Vector2& HitPoint, CColliderBox2D*
 		Dest->m_HitPoint = Vector3(HitPoint.x, HitPoint.y, 0.f);
 		return true;
 	}
+
+	return false;
 }
 
 bool CCollisionManager::CollisionSphere2DToSphere2D(Vector2& HitPoint, CColliderSphere2D* Src, CColliderSphere2D* Dest)
