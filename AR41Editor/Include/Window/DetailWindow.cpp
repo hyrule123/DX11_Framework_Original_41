@@ -311,28 +311,28 @@ void CDetailWindow::LoadAnimation(CSceneComponent* Component)
 
 		for (int i = 0; i < count; ++i)
 		{
-			AnimFrameInfo* Info = new AnimFrameInfo;
+			AnimFrameInfo Info;
 
 			Animation2DFrameData FData = Seq->GetFrameData(i);
 
-			Info->StartX = CreateWidget<CEditorInput>("StartX");
-			Info->SameLine1 = CreateWidget<CEditorSameLine>("SameLine");
-			Info->StartY = CreateWidget<CEditorInput>("StartY");
-			Info->SameLine2 = CreateWidget<CEditorSameLine>("SameLine");
-			Info->EndX = CreateWidget<CEditorInput>("EndX");
-			Info->SameLine3 = CreateWidget<CEditorSameLine>("SameLine");
-			Info->EndY = CreateWidget<CEditorInput>("EndY");
+			Info.StartX = CreateWidget<CEditorInput>("StartX");
+			Info.SameLine1 =  CreateWidget<CEditorSameLine>("SameLine");
+			Info.StartY =  CreateWidget<CEditorInput>("StartY");
+			Info.SameLine2 =  CreateWidget<CEditorSameLine>("SameLine");
+			Info.EndX = CreateWidget<CEditorInput>("EndX");
+			Info.SameLine3 =  CreateWidget<CEditorSameLine>("SameLine");
+			Info.EndY = CreateWidget<CEditorInput>("EndY");
 
-			Info->StartX->ReadOnly(true);
-			Info->StartY->ReadOnly(true);
-			Info->EndX->ReadOnly(true);
-			Info->EndY->ReadOnly(true);
+			Info.StartX->ReadOnly(true);
+			Info.StartY->ReadOnly(true);
+			Info.EndX->ReadOnly(true);
+			Info.EndY->ReadOnly(true);
 
 			
-			Info->StartX->SetFloat(FData.Start.x);
-			Info->StartY->SetFloat(FData.Start.y);
-			Info->EndX->SetFloat(FData.End.x);
-			Info->EndY->SetFloat(FData.End.y);
+			Info.StartX->SetFloat(FData.Start.x);
+			Info.StartY->SetFloat(FData.Start.y);
+			Info.EndX->SetFloat(FData.End.x);
+			Info.EndY->SetFloat(FData.End.y);
 
 			m_AnimFrameInfo.push_back(Info);
 		}

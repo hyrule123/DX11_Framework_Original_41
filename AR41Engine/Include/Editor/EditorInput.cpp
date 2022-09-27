@@ -35,6 +35,8 @@ void CEditorInput::SetText(const char* Text)
 	Length = WideCharToMultiByte(CP_UTF8, 0, m_wText, -1, nullptr, 0, nullptr, nullptr);
 
 	WideCharToMultiByte(CP_UTF8, 0, m_wText, -1, m_TextUTF8, Length, nullptr, nullptr);
+
+	m_InputType = EImGuiInputType::String;
 }
 
 void CEditorInput::SetHintText(const char* Text)
@@ -57,11 +59,13 @@ void CEditorInput::SetHintText(const char* Text)
 void CEditorInput::SetInt(int Value)
 {
 	m_ValueInt = Value;
+	m_InputType = EImGuiInputType::Int;
 }
 
 void CEditorInput::SetFloat(float Value)
 {
 	m_ValueFloat = Value;
+	m_InputType = EImGuiInputType::Float;
 }
 
 void CEditorInput::SetMultiLine(bool MultiLine)
