@@ -93,6 +93,7 @@ bool CPlayer2D::Init()
 	m_Sprite->SetRelativeScale(100.f, 100.f);
 	m_Sprite->SetPivot(0.5f, 0.5f);
 	m_Sprite->SetInheritRotZ(true);
+	m_Sprite->SetRelativeRotationZ(30.f);
 
 	CMaterial* Material = m_Sprite->GetMaterial(0);
 

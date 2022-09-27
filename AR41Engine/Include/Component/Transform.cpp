@@ -376,6 +376,18 @@ void CTransform::SetRelativeRotation(const Vector3& Rot)
 	if (!m_Parent)
 		m_WorldRot = Rot;
 
+	else
+	{
+		if (m_InheritRotX)
+			m_WorldRot.x = Rot.x + m_Parent->GetWorldRot().x;
+
+		if (m_InheritRotY)
+			m_WorldRot.y = Rot.y + m_Parent->GetWorldRot().y;
+
+		if (m_InheritRotZ)
+			m_WorldRot.z = Rot.z + m_Parent->GetWorldRot().z;
+	}
+
 	size_t	Size = m_vecChild.size();
 
 	for (size_t i = 0; i < Size; ++i)
@@ -423,6 +435,9 @@ void CTransform::SetRelativePosition(const Vector3& Pos)
 	// 부모가 없을 경우라면 월드공간에서의 위치를 상대적인 위치와 동일한 위치로 적용을 한다.
 	if (!m_Parent)
 		m_WorldPos = Pos;
+
+	else
+		m_WorldPos = Pos + m_Parent->GetWorldPos();
 
 	size_t	Size = m_vecChild.size();
 
@@ -529,6 +544,18 @@ void CTransform::AddRelativeRotation(const Vector3& Rot)
 	if (!m_Parent)
 		m_WorldRot = m_RelativeRot;
 
+	else
+	{
+		if (m_InheritRotX)
+			m_WorldRot.x = Rot.x + m_Parent->GetWorldRot().x;
+
+		if (m_InheritRotY)
+			m_WorldRot.y = Rot.y + m_Parent->GetWorldRot().y;
+
+		if (m_InheritRotZ)
+			m_WorldRot.z = Rot.z + m_Parent->GetWorldRot().z;
+	}
+
 	size_t	Size = m_vecChild.size();
 
 	for (size_t i = 0; i < Size; ++i)
@@ -576,6 +603,9 @@ void CTransform::AddRelativePosition(const Vector3& Pos)
 	// 부모가 없을 경우라면 월드공간에서의 위치를 상대적인 위치와 동일한 위치로 적용을 한다.
 	if (!m_Parent)
 		m_WorldPos = m_RelativePos;
+
+	else
+		m_WorldPos = m_RelativePos + m_Parent->GetWorldPos();
 
 	size_t	Size = m_vecChild.size();
 
@@ -1328,6 +1358,5 @@ void CTransform::Load(FILE* File)
 
 	m_UpdateScale = true;
 	m_UpdateRot = true;
-	m_UpdateRotAxis	 = true;
 	m_UpdatePos = true;
 }
