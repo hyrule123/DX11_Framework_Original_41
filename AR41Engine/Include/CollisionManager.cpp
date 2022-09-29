@@ -182,6 +182,12 @@ bool CCollisionManager::CollisionSphere2DToSphere2D(Vector2& HitPoint, CCollider
 
 bool CCollisionManager::CollisionOBB2DToOBB2D(Vector2& HitPoint, CColliderOBB2D* Src, CColliderOBB2D* Dest)
 {
+	if (CollisionOBB2DToOBB2D(HitPoint, Src->GetInfo(), Dest->GetInfo()))
+	{
+		Dest->m_HitPoint = Vector3(HitPoint.x, HitPoint.y, 0.f);
+		return true;
+	}
+
 	return false;
 }
 
@@ -198,6 +204,12 @@ bool CCollisionManager::CollisionBox2DToSphere2D(Vector2& HitPoint, CColliderBox
 
 bool CCollisionManager::CollisionBox2DToOBB2D(Vector2& HitPoint, CColliderBox2D* Src, CColliderOBB2D* Dest)
 {
+	if (CollisionBox2DToOBB2D(HitPoint, Src->GetInfo(), Dest->GetInfo()))
+	{
+		Dest->m_HitPoint = Vector3(HitPoint.x, HitPoint.y, 0.f);
+		return true;
+	}
+
 	return false;
 }
 
@@ -208,6 +220,12 @@ bool CCollisionManager::CollisionBox2DToPixel(Vector2& HitPoint, CColliderBox2D*
 
 bool CCollisionManager::CollisionSphere2DToOBB2D(Vector2& HitPoint, CColliderSphere2D* Src, CColliderOBB2D* Dest)
 {
+	if (CollisionSphere2DToOBB2D(HitPoint, Src->GetInfo(), Dest->GetInfo()))
+	{
+		Dest->m_HitPoint = Vector3(HitPoint.x, HitPoint.y, 0.f);
+		return true;
+	}
+
 	return false;
 }
 
@@ -256,13 +274,7 @@ bool CCollisionManager::CollisionBox2DToBox2D(Vector2& HitPoint, const Box2DInfo
 	else if (Src.Top < Dest.Bottom)
 		return false;
 
-	float Left = Src.Left > Dest.Left ? Src.Left : Dest.Left;
-	float Bottom = Src.Bottom > Dest.Bottom ? Src.Bottom : Dest.Bottom;
-	float Right = Src.Right < Dest.Right ? Src.Right : Dest.Right;
-	float Top = Src.Top < Dest.Top ? Src.Top : Dest.Top;
-
-	HitPoint.x = (Left + Right) / 2.f;
-	HitPoint.y = (Top + Bottom) / 2.f;
+	ComputeHitPoint(HitPoint, Src, Dest);
 
 	return true;
 }
@@ -279,9 +291,65 @@ bool CCollisionManager::CollisionSphere2DToSphere2D(Vector2& HitPoint, const Sph
 	return result;
 }
 
-bool CCollisionManager::CollisionOBB2DToOBB2D(Vector2& HitPoint, const OBB2DInfo& Src, const OBB2DInfo& Dest)
+bool CCollisionManager::CollisionOBB2DToOBB2D(Vector2& HitPoint, const OBB2DInfo& Src, 
+	const OBB2DInfo& Dest)
 {
-	return false;
+	Vector2	CenterLine = Src.Center - Dest.Center;
+
+	Vector2	Axis = Src.Axis[AXIS2D_X];
+
+	float CenterProjDist = abs(CenterLine.Dot(Axis));
+
+	float SrcDist, DestDist;
+
+	SrcDist = Src.Length[AXIS2D_X];
+	DestDist = abs(Axis.Dot(Dest.Axis[AXIS2D_X]) * Dest.Length[AXIS2D_X]) +
+		abs(Axis.Dot(Dest.Axis[AXIS2D_Y]) * Dest.Length[AXIS2D_Y]);
+
+	if (CenterProjDist > SrcDist + DestDist)
+		return false;
+
+	Axis = Src.Axis[AXIS2D_Y];
+
+	CenterProjDist = abs(CenterLine.Dot(Axis));
+
+	SrcDist = Src.Length[AXIS2D_Y];
+	DestDist = abs(Axis.Dot(Dest.Axis[AXIS2D_X]) * Dest.Length[AXIS2D_X]) +
+		abs(Axis.Dot(Dest.Axis[AXIS2D_Y]) * Dest.Length[AXIS2D_Y]);
+
+	if (CenterProjDist > SrcDist + DestDist)
+		return false;
+
+	Axis = Dest.Axis[AXIS2D_X];
+
+	CenterProjDist = abs(CenterLine.Dot(Axis));
+
+	SrcDist = abs(Axis.Dot(Src.Axis[AXIS2D_X]) * Src.Length[AXIS2D_X]) +
+		abs(Axis.Dot(Src.Axis[AXIS2D_Y]) * Src.Length[AXIS2D_Y]);
+	DestDist = Dest.Length[AXIS2D_X];
+
+	if (CenterProjDist > SrcDist + DestDist)
+		return false;
+
+	Axis = Dest.Axis[AXIS2D_Y];
+
+	CenterProjDist = abs(CenterLine.Dot(Axis));
+
+	SrcDist = abs(Axis.Dot(Src.Axis[AXIS2D_X]) * Src.Length[AXIS2D_X]) +
+		abs(Axis.Dot(Src.Axis[AXIS2D_Y]) * Src.Length[AXIS2D_Y]);;
+	DestDist = Dest.Length[AXIS2D_Y];
+
+	if (CenterProjDist > SrcDist + DestDist)
+		return false;
+
+
+	Box2DInfo	SrcInfo = ConvertBox2DInfo(Src);
+	Box2DInfo	DestInfo = ConvertBox2DInfo(Dest);
+
+	ComputeHitPoint(HitPoint, SrcInfo, DestInfo);
+
+
+	return true;
 }
 
 bool CCollisionManager::CollisionBox2DToSphere2D(Vector2& HitPoint, const Box2DInfo& Src,
@@ -308,20 +376,9 @@ bool CCollisionManager::CollisionBox2DToSphere2D(Vector2& HitPoint, const Box2DI
 		else if (Info.Top < Dest.Center.y)
 			return false;
 
-		Box2DInfo	OverlapBox;
+		Box2DInfo	OverlapBox = ConvertBox2DInfo(Dest);
 
-		OverlapBox.Left = Dest.Center.x - Dest.Radius;
-		OverlapBox.Bottom = Dest.Center.y - Dest.Radius;
-		OverlapBox.Right = Dest.Center.x + Dest.Radius;
-		OverlapBox.Top = Dest.Center.y + Dest.Radius;
-
-		OverlapBox.Left = Src.Left > OverlapBox.Left ? Src.Left : OverlapBox.Left;
-		OverlapBox.Bottom = Src.Bottom > OverlapBox.Bottom ? Src.Bottom : OverlapBox.Bottom;
-		OverlapBox.Right = Src.Right < OverlapBox.Right ? Src.Right : OverlapBox.Right;
-		OverlapBox.Top = Src.Top < OverlapBox.Top ? Src.Top : OverlapBox.Top;
-
-		HitPoint.x = (OverlapBox.Left + OverlapBox.Right) / 2.f;
-		HitPoint.y = (OverlapBox.Bottom + OverlapBox.Top) / 2.f;
+		ComputeHitPoint(HitPoint, Src, OverlapBox);
 
 		return true;
 	}
@@ -340,20 +397,9 @@ bool CCollisionManager::CollisionBox2DToSphere2D(Vector2& HitPoint, const Box2DI
 
 		if (Dist <= Dest.Radius)
 		{
-			Box2DInfo	OverlapBox;
+			Box2DInfo	OverlapBox = ConvertBox2DInfo(Dest);
 
-			OverlapBox.Left = Dest.Center.x - Dest.Radius;
-			OverlapBox.Bottom = Dest.Center.y - Dest.Radius;
-			OverlapBox.Right = Dest.Center.x + Dest.Radius;
-			OverlapBox.Top = Dest.Center.y + Dest.Radius;
-
-			OverlapBox.Left = Src.Left > OverlapBox.Left ? Src.Left : OverlapBox.Left;
-			OverlapBox.Bottom = Src.Bottom > OverlapBox.Bottom ? Src.Bottom : OverlapBox.Bottom;
-			OverlapBox.Right = Src.Right < OverlapBox.Right ? Src.Right : OverlapBox.Right;
-			OverlapBox.Top = Src.Top < OverlapBox.Top ? Src.Top : OverlapBox.Top;
-
-			HitPoint.x = (OverlapBox.Left + OverlapBox.Right) / 2.f;
-			HitPoint.y = (OverlapBox.Bottom + OverlapBox.Top) / 2.f;
+			ComputeHitPoint(HitPoint, Src, OverlapBox);
 
 			return true;
 		}
@@ -362,9 +408,17 @@ bool CCollisionManager::CollisionBox2DToSphere2D(Vector2& HitPoint, const Box2DI
 	return false;
 }
 
-bool CCollisionManager::CollisionBox2DToOBB2D(Vector2& HitPoint, const Box2DInfo& Src, const OBB2DInfo& Dest)
+bool CCollisionManager::CollisionBox2DToOBB2D(Vector2& HitPoint, const Box2DInfo& Src, 
+	const OBB2DInfo& Dest)
 {
-	return false;
+	OBB2DInfo	SrcInfo;
+	SrcInfo.Center = Vector2((Src.Left + Src.Right) / 2.f, (Src.Top + Src.Bottom) / 2.f);
+	SrcInfo.Axis[AXIS2D_X] = Vector2(1.f, 0.f);
+	SrcInfo.Axis[AXIS2D_Y] = Vector2(0.f, 1.f);
+	SrcInfo.Length[AXIS2D_X] = (Src.Right - Src.Left) / 2.f;
+	SrcInfo.Length[AXIS2D_Y] = (Src.Top - Src.Bottom) / 2.f;
+
+	return CollisionOBB2DToOBB2D(HitPoint, SrcInfo, Dest);
 }
 
 bool CCollisionManager::CollisionBox2DToPixel(Vector2& HitPoint, const Box2DInfo& Src, const PixelInfo& Dest)
@@ -374,7 +428,49 @@ bool CCollisionManager::CollisionBox2DToPixel(Vector2& HitPoint, const Box2DInfo
 
 bool CCollisionManager::CollisionSphere2DToOBB2D(Vector2& HitPoint, const Sphere2DInfo& Src, const OBB2DInfo& Dest)
 {
-	return false;
+	Vector2	CenterLine = Src.Center - Dest.Center;
+
+	float CenterProjDist = CenterLine.Length();
+
+	Vector2	Axis = CenterLine;
+	Axis.Normalize();
+
+	float SrcDist, DestDist;
+
+	SrcDist = Src.Radius;
+	DestDist = abs(Axis.Dot(Dest.Axis[AXIS2D_X]) * Dest.Length[AXIS2D_X]) +
+		abs(Axis.Dot(Dest.Axis[AXIS2D_Y]) * Dest.Length[AXIS2D_Y]);
+
+	if (CenterProjDist > SrcDist + DestDist)
+		return false;
+
+	Axis = Dest.Axis[AXIS2D_X];
+
+	CenterProjDist = abs(Axis.Dot(CenterLine));
+
+	DestDist = Dest.Length[AXIS2D_X];
+
+	if (CenterProjDist > SrcDist + DestDist)
+		return false;
+
+	Axis = Dest.Axis[AXIS2D_Y];
+
+	CenterProjDist = abs(Axis.Dot(CenterLine));
+
+	DestDist = Dest.Length[AXIS2D_Y];
+
+	if (CenterProjDist > SrcDist + DestDist)
+		return false;
+
+
+
+	Box2DInfo	SrcInfo, DestInfo;
+	SrcInfo = ConvertBox2DInfo(Src);
+	DestInfo = ConvertBox2DInfo(Dest);
+
+	ComputeHitPoint(HitPoint, SrcInfo, DestInfo);
+
+	return true;
 }
 
 bool CCollisionManager::CollisionSphere2DToPixel(Vector2& HitPoint, const Sphere2DInfo& Src, CColliderPixel* Dest)
@@ -405,4 +501,64 @@ bool CCollisionManager::CollisionPointToOBB2D(Vector2& HitPoint, const Vector2& 
 bool CCollisionManager::CollisionPointToPixel(Vector2& HitPoint, const Vector2& Src, const PixelInfo& Dest)
 {
 	return false;
+}
+
+Box2DInfo CCollisionManager::ConvertBox2DInfo(const Sphere2DInfo& Info)
+{
+	Box2DInfo	result;
+
+	result.Left = Info.Center.x - Info.Radius;
+	result.Bottom = Info.Center.y - Info.Radius;
+	result.Right = Info.Center.x + Info.Radius;
+	result.Top = Info.Center.y + Info.Radius;
+
+	return result;
+}
+
+Box2DInfo CCollisionManager::ConvertBox2DInfo(const OBB2DInfo& Info)
+{
+	Box2DInfo	result;
+
+	Vector2	Pos[4];
+
+	Pos[0] = Info.Center - Info.Axis[AXIS2D_X] * Info.Length[AXIS2D_X] +
+		Info.Axis[AXIS2D_Y] * Info.Length[AXIS2D_Y];
+
+	Pos[1] = Info.Center + Info.Axis[AXIS2D_X] * Info.Length[AXIS2D_X] +
+		Info.Axis[AXIS2D_Y] * Info.Length[AXIS2D_Y];
+
+	Pos[2] = Info.Center - Info.Axis[AXIS2D_X] * Info.Length[AXIS2D_X] -
+		Info.Axis[AXIS2D_Y] * Info.Length[AXIS2D_Y];
+
+	Pos[3] = Info.Center + Info.Axis[AXIS2D_X] * Info.Length[AXIS2D_X] -
+		Info.Axis[AXIS2D_Y] * Info.Length[AXIS2D_Y];
+
+	result.Left = Pos[0].x;
+	result.Bottom = Pos[0].y;
+
+	result.Right = Pos[0].x;
+	result.Top = Pos[0].y;
+
+	for (int i = 1; i < 4; ++i)
+	{
+		result.Left = result.Left > Pos[i].x ? Pos[i].x : result.Left;
+		result.Bottom = result.Bottom > Pos[i].y ? Pos[i].y : result.Bottom;
+
+		result.Right = result.Right < Pos[i].x ? Pos[i].x : result.Right;
+		result.Top = result.Top < Pos[i].y ? Pos[i].y : result.Top;
+	}
+
+	return result;
+}
+
+void CCollisionManager::ComputeHitPoint(Vector2& HitPoint, const Box2DInfo& Src, const Box2DInfo& Dest)
+{
+	float Left = Src.Left > Dest.Left ? Src.Left : Dest.Left;
+	float Bottom = Src.Bottom > Dest.Bottom ? Src.Bottom : Dest.Bottom;
+	float Right = Src.Right < Dest.Right ? Src.Right : Dest.Right;
+	float Top = Src.Top < Dest.Top ? Src.Top : Dest.Top;
+
+	HitPoint.x = (Left + Right) / 2.f;
+	HitPoint.y = (Top + Bottom) / 2.f;
+
 }

@@ -21,7 +21,6 @@
 
 CEditorManager::CEditorManager()
 {
-
 }
 
 CEditorManager::~CEditorManager()

@@ -14,7 +14,7 @@ protected:
 
 private:
 	CSharedPtr<class CSpriteComponent>	m_Sprite;
-	CSharedPtr<class CColliderBox2D>	m_Body;
+	CSharedPtr<class CColliderSphere2D>	m_Body;
 
 public:
 	void SetCollisionProfileName(const std::string& Name);

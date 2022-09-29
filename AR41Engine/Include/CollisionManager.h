@@ -54,6 +54,13 @@ public:
 	bool CollisionPointToOBB2D(Vector2& HitPoint, const Vector2& Src, const OBB2DInfo& Dest);
 	bool CollisionPointToPixel(Vector2& HitPoint, const Vector2& Src, const PixelInfo& Dest);
 
+
+
+private:
+	Box2DInfo ConvertBox2DInfo(const Sphere2DInfo& Info);
+	Box2DInfo ConvertBox2DInfo(const OBB2DInfo& Info);
+	void ComputeHitPoint(Vector2& HitPoint, const Box2DInfo& Src, const Box2DInfo& Dest);
+
 	DECLARE_SINGLE(CCollisionManager)
 };
 
