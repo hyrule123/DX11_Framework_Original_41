@@ -3,6 +3,7 @@
 #include "SpriteColorShader.h"
 #include "SpriteShader.h"
 #include "ColliderShader.h"
+#include "ColliderImageShader.h"
 #include "ConstantBuffer.h"
 #include "ColliderConstantBuffer.h"
 
@@ -24,6 +25,9 @@ bool CShaderManager::Init()
 
 
 	CreateShader<CColliderShader>("ColliderShader");
+
+
+	CreateShader<CColliderImageShader>("ColliderImageShader");
 
 
 

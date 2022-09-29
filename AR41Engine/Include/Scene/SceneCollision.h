@@ -38,6 +38,7 @@ private:
 	Section2D	m_Section2D;
 	Section3D	m_Section3D;
 	std::list<CSharedPtr<class CCollider>>	m_ColliderList;
+	std::unordered_map<std::string, PixelInfo*>	m_mapPixelCollision;
 
 public:
 	void AddCollider(class CCollider* Collider);
@@ -54,5 +55,12 @@ public:
 
 private:
 	void CheckSection(class CCollider* Collider);
+
+public:
+	bool CreatePixelCollision(const std::string& Name, const TCHAR* FileName, const std::string& PathName = TEXTURE_PATH);
+	bool CreatePixelCollisionFullPath(const std::string& Name, const TCHAR* FullPath);
+	bool CreatePixelCollisionMultibyte(const std::string& Name, const char* FileName, const std::string& PathName = TEXTURE_PATH);
+	bool CreatePixelCollisionMultibyteFullPath(const std::string& Name, const char* FullPath);
+	PixelInfo* FindPixelCollision(const std::string& Name);
 };
 

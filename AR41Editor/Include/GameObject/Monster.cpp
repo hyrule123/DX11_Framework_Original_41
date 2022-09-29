@@ -1,7 +1,7 @@
 
 #include "Monster.h"
 #include "Component/SpriteComponent.h"
-#include "Component/ColliderSphere2D.h"
+#include "Component/ColliderPixel.h"
 #include "Resource/Material/Material.h"
 
 CMonster::CMonster()
@@ -23,13 +23,17 @@ CMonster::~CMonster()
 void CMonster::Start()
 {
 	CGameObject::Start();
+
+	m_Body->SetInfo("PixelCollision", TEXT("PixelCollision.bmp"));
+	m_Body->SetPixelColorCollisionType(EPixelCollision_Type::Color_Ignore);
+	m_Body->SetPixelColor(255, 0, 255);
 }
 
 bool CMonster::Init()
 {
 	CGameObject::Init();
 
-	m_Body = CreateComponent<CColliderSphere2D>("Body");
+	m_Body = CreateComponent<CColliderPixel>("Body");
 	m_Sprite = CreateComponent<CSpriteComponent>("Sprite");
 
 	m_Body->AddChild(m_Sprite);

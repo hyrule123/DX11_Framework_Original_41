@@ -7,6 +7,7 @@ DEFINITION_SINGLE(CResourceManager)
 
 CResourceManager::CResourceManager()
 {
+
 }
 
 CResourceManager::~CResourceManager()
