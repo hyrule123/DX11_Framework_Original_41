@@ -152,7 +152,28 @@ void CColliderPixel::Load(FILE* File)
 
 bool CColliderPixel::Collision(CCollider* Dest)
 {
-	return false;
+	Vector2	HitPoint;
+	bool	Result = false;
+
+	switch (((CCollider2D*)Dest)->GetCollider2DType())
+	{
+	case ECollider2D_Type::Box2D:
+		Result = CCollisionManager::GetInst()->CollisionBox2DToPixel(HitPoint, (CColliderBox2D*)Dest, this);
+		break;
+	case ECollider2D_Type::OBB2D:
+		Result = CCollisionManager::GetInst()->CollisionOBB2DToPixel(HitPoint, (CColliderOBB2D*)Dest, this);
+		break;
+	case ECollider2D_Type::Sphere2D:
+		Result = CCollisionManager::GetInst()->CollisionSphere2DToPixel(HitPoint, (CColliderSphere2D*)Dest, this);
+		break;
+	case ECollider2D_Type::Pixel:
+		Result = CCollisionManager::GetInst()->CollisionPixelToPixel(HitPoint, this, (CColliderPixel*)Dest);
+		break;
+	}
+
+	m_HitPoint = Vector3(HitPoint.x, HitPoint.y, 0.f);
+
+	return Result;
 }
 
 void CColliderPixel::SetInfo(const std::string& Name, const TCHAR* FileName, const std::string& PathName)

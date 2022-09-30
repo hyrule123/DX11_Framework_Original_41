@@ -5,6 +5,7 @@
 #include "../Component/Collider2D.h"
 #include "../Component/Collider3D.h"
 #include "../PathManager.h"
+#include "../Input.h"
 
 CSceneCollision::CSceneCollision()
 {
@@ -114,6 +115,7 @@ void CSceneCollision::Update(float DeltaTime)
 	}
 
 	// 마우스와 먼저 충돌처리를 진행해야 한다.
+	CollisionMouse(DeltaTime);
 
 
 	// 충돌체끼리 충돌처리를 진행한다.
@@ -218,6 +220,78 @@ void CSceneCollision::Save(FILE* File)
 
 void CSceneCollision::Load(FILE* File)
 {
+}
+
+void CSceneCollision::CollisionMouse(float DeltaTime)
+{
+	if (!m_MouseCollision)
+		return;
+
+	if (!m_MouseCollision->GetActive())
+	{
+		m_MouseCollision->CallCollisionMouseCallback(ECollision_Result::Release);
+		m_MouseCollision = nullptr;
+	}
+
+	// UI와 마우스가 충돌이 없을 경우 월드물체와 충돌을 시작한다.
+	bool MouseUICollision = false;
+	bool	MouseWorldCollision = false;
+
+	if (!MouseUICollision)
+	{
+		// World위치를 얻어온다.
+		Vector2	MouseWorldPos = CInput::GetInst()->GetMouseWorldPos();
+
+		// 마우스가 2D Section에서 어느 영역에 있는지를 판단한다.
+		Vector2	MouseIndex = MouseWorldPos;
+		MouseIndex -= m_Section2D.WorldStart;
+
+		int	IndexX = 0, IndexY = 0;
+
+		IndexX = (int)(MouseIndex.x / m_Section2D.SectionSize.x);
+		IndexY = (int)(MouseIndex.y / m_Section2D.SectionSize.y);
+
+		IndexX = IndexX < 0 ? -1 : IndexX;
+		IndexY = IndexY < 0 ? -1 : IndexY;
+
+		IndexX = IndexX >= m_Section2D.CountX ? -1 : IndexX;
+		IndexY = IndexY >= m_Section2D.CountY ? -1 : IndexY;
+
+		if (IndexX != -1 && IndexY != -1)
+		{
+			CCollider* ColliderMouse = m_Section2D.vecSection[IndexY * m_Section2D.CountX + IndexX]->CollisionMouse(MouseWorldPos, DeltaTime);
+
+			if (ColliderMouse)
+			{
+				if (ColliderMouse != m_MouseCollision)
+					ColliderMouse->CallCollisionMouseCallback(ECollision_Result::Collision);
+
+				if (m_MouseCollision && m_MouseCollision != ColliderMouse)
+				{
+					m_MouseCollision->CallCollisionMouseCallback(ECollision_Result::Release);
+				}
+
+				m_MouseCollision = ColliderMouse;
+				MouseWorldCollision = true;
+			}
+		}
+	}
+
+	// 마우스와 UI가 충돌되었다면 기존에 충돌되고 있던 월드물체가 있을 경우 충돌 해제한다.
+	else if(m_MouseCollision)
+	{
+		m_MouseCollision->CallCollisionMouseCallback(ECollision_Result::Release);
+		m_MouseCollision = nullptr;
+	}
+
+	if (!MouseWorldCollision)
+	{
+		if (m_MouseCollision)
+		{
+			m_MouseCollision->CallCollisionMouseCallback(ECollision_Result::Release);
+			m_MouseCollision = nullptr;
+		}
+	}
 }
 
 void CSceneCollision::CheckSection(CCollider* Collider)
@@ -374,9 +448,7 @@ bool CSceneCollision::CreatePixelCollisionFullPath(const std::string& Name,
 
 	Info->Pixel = new unsigned char[Image->GetPixelsSize()];
 
-
 	memcpy(Info->Pixel, Image->GetPixels(), Image->GetPixelsSize());
-
 
 	// bmp 파일은 메모리에 픽셀정보가 저장될때 상하반전되어 저장이 된다.
 	if (strcmp(FileExt, ".BMP") == 0)
@@ -397,7 +469,6 @@ bool CSceneCollision::CreatePixelCollisionFullPath(const std::string& Name,
 
 		SAFE_DELETE_ARRAY(Line);
 	}
-
 
 	if (FAILED(DirectX::CreateShaderResourceView(CDevice::GetInst()->GetDevice(),
 		Image->GetImages(),

@@ -24,7 +24,7 @@ void CMonster::Start()
 {
 	CGameObject::Start();
 
-	m_Body->SetInfo("PixelCollision", TEXT("PixelCollision.bmp"));
+	m_Body->SetInfo("PixelCollision", TEXT("PixelCollision.png"));
 	m_Body->SetPixelColorCollisionType(EPixelCollision_Type::Color_Ignore);
 	m_Body->SetPixelColor(255, 0, 255);
 }

@@ -39,6 +39,7 @@ private:
 	Section3D	m_Section3D;
 	std::list<CSharedPtr<class CCollider>>	m_ColliderList;
 	std::unordered_map<std::string, PixelInfo*>	m_mapPixelCollision;
+	CSharedPtr<class CCollider> m_MouseCollision;
 
 public:
 	void AddCollider(class CCollider* Collider);
@@ -54,6 +55,7 @@ public:
 	void Load(FILE* File);
 
 private:
+	void CollisionMouse(float DeltaTime);
 	void CheckSection(class CCollider* Collider);
 
 public:

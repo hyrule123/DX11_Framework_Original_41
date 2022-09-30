@@ -4,6 +4,7 @@
 #include "Component/CameraComponent.h"
 #include "Component/TargetArm.h"
 #include "Component/ColliderBox2D.h"
+#include "Component/ColliderSphere2D.h"
 #include "Component/ColliderOBB2D.h"
 #include "Input.h"
 #include "Scene/Scene.h"

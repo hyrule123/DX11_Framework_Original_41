@@ -213,11 +213,6 @@ bool CCollisionManager::CollisionBox2DToOBB2D(Vector2& HitPoint, CColliderBox2D*
 	return false;
 }
 
-bool CCollisionManager::CollisionBox2DToPixel(Vector2& HitPoint, CColliderBox2D* Src, CColliderPixel* Dest)
-{
-	return false;
-}
-
 bool CCollisionManager::CollisionSphere2DToOBB2D(Vector2& HitPoint, CColliderSphere2D* Src, CColliderOBB2D* Dest)
 {
 	if (CollisionSphere2DToOBB2D(HitPoint, Src->GetInfo(), Dest->GetInfo()))
@@ -229,33 +224,93 @@ bool CCollisionManager::CollisionSphere2DToOBB2D(Vector2& HitPoint, CColliderSph
 	return false;
 }
 
-bool CCollisionManager::CollisionSphere2DToPixel(Vector2& HitPoint, CColliderSphere2D* Src, CColliderPixel* Dest)
+bool CCollisionManager::CollisionBox2DToPixel(Vector2& HitPoint, CColliderBox2D* Src, CColliderPixel* Dest)
 {
+	if (CollisionBox2DToPixel(HitPoint, Src->GetInfo(), Dest->GetInfo()))
+	{
+		Dest->m_HitPoint = Vector3(HitPoint.x, HitPoint.y, 0.f);
+		return true;
+	}
+
 	return false;
 }
 
-bool CCollisionManager::CollisionOBB2DToPixel(Vector2& HitPoint, CColliderOBB2D* Src, CColliderPixel* Dest)
+bool CCollisionManager::CollisionSphere2DToPixel(Vector2& HitPoint, CColliderSphere2D* Src, 
+	CColliderPixel* Dest)
 {
+	if (CollisionSphere2DToPixel(HitPoint, Src->GetInfo(), Dest->GetInfo()))
+	{
+		Dest->m_HitPoint = Vector3(HitPoint.x, HitPoint.y, 0.f);
+		return true;
+	}
+
+	return false;
+}
+
+bool CCollisionManager::CollisionOBB2DToPixel(Vector2& HitPoint, CColliderOBB2D* Src, 
+	CColliderPixel* Dest)
+{
+	if (CollisionOBB2DToPixel(HitPoint, Src->GetInfo(), Dest->GetInfo()))
+	{
+		Dest->m_HitPoint = Vector3(HitPoint.x, HitPoint.y, 0.f);
+		return true;
+	}
+
+	return false;
+}
+
+bool CCollisionManager::CollisionPixelToPixel(Vector2& HitPoint, CColliderPixel* Src, CColliderPixel* Dest)
+{
+	if (CollisionPixelToPixel(HitPoint, Src->GetInfo(), Dest->GetInfo()))
+	{
+		Dest->m_HitPoint = Vector3(HitPoint.x, HitPoint.y, 0.f);
+		return true;
+	}
+
 	return false;
 }
 
 bool CCollisionManager::CollisionPointToBox2D(Vector2& HitPoint, const Vector2& Src, CColliderBox2D* Dest)
 {
+	if (CollisionPointToBox2D(HitPoint, Src, Dest->GetInfo()))
+	{
+		Dest->m_HitPoint = Vector3(HitPoint.x, HitPoint.y, 0.f);
+		return true;
+	}
+
 	return false;
 }
 
 bool CCollisionManager::CollisionPointToSphere2D(Vector2& HitPoint, const Vector2& Src, CColliderSphere2D* Dest)
 {
+	if (CollisionPointToSphere2D(HitPoint, Src, Dest->GetInfo()))
+	{
+		Dest->m_HitPoint = Vector3(HitPoint.x, HitPoint.y, 0.f);
+		return true;
+	}
+
 	return false;
 }
 
 bool CCollisionManager::CollisionPointToOBB2D(Vector2& HitPoint, const Vector2& Src, CColliderOBB2D* Dest)
 {
+	if (CollisionPointToOBB2D(HitPoint, Src, Dest->GetInfo()))
+	{
+		Dest->m_HitPoint = Vector3(HitPoint.x, HitPoint.y, 0.f);
+		return true;
+	}
+
 	return false;
 }
 
 bool CCollisionManager::CollisionPointToPixel(Vector2& HitPoint, const Vector2& Src, CColliderPixel* Dest)
 {
+	if (CollisionPointToPixel(HitPoint, Src, Dest->GetInfo()))
+	{
+		Dest->m_HitPoint = Vector3(HitPoint.x, HitPoint.y, 0.f);
+		return true;
+	}
+
 	return false;
 }
 
@@ -421,11 +476,6 @@ bool CCollisionManager::CollisionBox2DToOBB2D(Vector2& HitPoint, const Box2DInfo
 	return CollisionOBB2DToOBB2D(HitPoint, SrcInfo, Dest);
 }
 
-bool CCollisionManager::CollisionBox2DToPixel(Vector2& HitPoint, const Box2DInfo& Src, const PixelInfo& Dest)
-{
-	return false;
-}
-
 bool CCollisionManager::CollisionSphere2DToOBB2D(Vector2& HitPoint, const Sphere2DInfo& Src, const OBB2DInfo& Dest)
 {
 	Vector2	CenterLine = Src.Center - Dest.Center;
@@ -473,32 +523,343 @@ bool CCollisionManager::CollisionSphere2DToOBB2D(Vector2& HitPoint, const Sphere
 	return true;
 }
 
-bool CCollisionManager::CollisionSphere2DToPixel(Vector2& HitPoint, const Sphere2DInfo& Src, CColliderPixel* Dest)
+bool CCollisionManager::CollisionBox2DToPixel(Vector2& HitPoint, const Box2DInfo& Src, 
+	const PixelInfo& Dest)
+{
+	// 픽셀충돌체를 구성하는 사각형과 충돌처리를 먼저 한다.
+	if (!CollisionBox2DToBox2D(HitPoint, Src, Dest.Box2D))
+		return false;
+
+	// 두 사각형이 겹쳐지는 영역을 구하고 해당 영역의 픽셀정보를 확인하여 충돌이 되었는지를 판단한다.
+	Box2DInfo OverlapInfo = OverlapBox2D(Src, Dest.Box2D);
+
+	OverlapInfo.Left -= Dest.Box2D.Left;
+	OverlapInfo.Bottom -= Dest.Box2D.Bottom;
+	OverlapInfo.Right -= Dest.Box2D.Left;
+	OverlapInfo.Top -= Dest.Box2D.Bottom;
+
+	float Width = (float)Dest.Width;
+	float Height = (float)Dest.Height;
+
+	OverlapInfo.Left = OverlapInfo.Left < 0.f ? 0.f : OverlapInfo.Left;
+	OverlapInfo.Bottom = OverlapInfo.Bottom < 0.f ? 0.f : OverlapInfo.Bottom;
+
+	OverlapInfo.Right = OverlapInfo.Right > Width ? Width - 1.f : OverlapInfo.Right;
+	OverlapInfo.Top = OverlapInfo.Top > Height ? Height - 1.f : OverlapInfo.Top;
+
+	// Bottom과 Top을 뒤집어서 이미지에 맞춰준다.
+	OverlapInfo.Bottom = Height - OverlapInfo.Bottom;
+	OverlapInfo.Top = Height - OverlapInfo.Top;
+
+	bool	Collision = false;
+
+	for (int y = (int)OverlapInfo.Top; y < (int)OverlapInfo.Bottom; ++y)
+	{
+		for (int x = (int)OverlapInfo.Left; x < (int)OverlapInfo.Right; ++x)
+		{
+			int	Index = y * (int)Dest.Width * 4 + x * 4;
+
+			switch (Dest.PixelColorCollisionType)
+			{
+			case EPixelCollision_Type::Color_Ignore:
+				if (Dest.Pixel[Index] == Dest.TypeColor[0] &&
+					Dest.Pixel[Index + 1] == Dest.TypeColor[1] &&
+					Dest.Pixel[Index + 2] == Dest.TypeColor[2])
+					continue;
+
+				Collision = true;
+				break;
+			case EPixelCollision_Type::Color_Confirm:
+				if (Dest.Pixel[Index] == Dest.TypeColor[0] &&
+					Dest.Pixel[Index + 1] == Dest.TypeColor[1] &&
+					Dest.Pixel[Index + 2] == Dest.TypeColor[2])
+					Collision = true;
+
+				else
+					continue;
+				break;
+			}
+
+			switch (Dest.PixelAlphaCollisionType)
+			{
+			case EPixelCollision_Type::Alpha_Ignore:
+				if (Dest.Pixel[Index + 3] == Dest.TypeColor[3])
+					continue;
+
+				Collision = true;
+				break;
+			case EPixelCollision_Type::Alpha_Confirm:
+				if (Dest.Pixel[Index + 3] == Dest.TypeColor[3])
+					Collision = true;
+
+				else
+					continue;
+				break;
+			}
+
+			if (Collision)
+				break;
+		}
+
+		if (Collision)
+			break;
+	}
+
+	ComputeHitPoint(HitPoint, Src, Dest.Box2D);
+
+	return Collision;
+}
+
+bool CCollisionManager::CollisionSphere2DToPixel(Vector2& HitPoint, const Sphere2DInfo& Src, 
+	const PixelInfo& Dest)
+{
+	// 픽셀충돌체를 구성하는 사각형과 충돌처리를 먼저 한다.
+	if (!CollisionBox2DToSphere2D(HitPoint, Dest.Box2D, Src))
+		return false;
+
+	// 두 사각형이 겹쳐지는 영역을 구하고 해당 영역의 픽셀정보를 확인하여 충돌이 되었는지를 판단한다.
+	Box2DInfo OverlapInfo = OverlapBox2D(Dest.Box2D, Src);
+
+	OverlapInfo.Left -= Dest.Box2D.Left;
+	OverlapInfo.Bottom -= Dest.Box2D.Bottom;
+	OverlapInfo.Right -= Dest.Box2D.Left;
+	OverlapInfo.Top -= Dest.Box2D.Bottom;
+
+	float Width = (float)Dest.Width;
+	float Height = (float)Dest.Height;
+
+	OverlapInfo.Left = OverlapInfo.Left < 0.f ? 0.f : OverlapInfo.Left;
+	OverlapInfo.Bottom = OverlapInfo.Bottom < 0.f ? 0.f : OverlapInfo.Bottom;
+
+	OverlapInfo.Right = OverlapInfo.Right > Width ? Width - 1.f : OverlapInfo.Right;
+	OverlapInfo.Top = OverlapInfo.Top > Height ? Height - 1.f : OverlapInfo.Top;
+
+	// Bottom과 Top을 뒤집어서 이미지에 맞춰준다.
+	OverlapInfo.Bottom = Height - OverlapInfo.Bottom;
+	OverlapInfo.Top = Height - OverlapInfo.Top;
+
+	bool	Collision = false;
+
+	for (int y = (int)OverlapInfo.Top; y < (int)OverlapInfo.Bottom; ++y)
+	{
+		for (int x = (int)OverlapInfo.Left; x < (int)OverlapInfo.Right; ++x)
+		{
+			int	Index = y * (int)Dest.Width * 4 + x * 4;
+
+			// 픽셀의 인덱스를 이용하여 월드공간으로 변환해준다.
+			Vector2	PixelWorldPos = Vector2(Dest.Box2D.Left, Dest.Box2D.Bottom) +
+				Vector2((float)x, (float)Height - (float)y);
+
+			if (!CollisionPointToSphere2D(HitPoint, PixelWorldPos, Src))
+				continue;
+
+			switch (Dest.PixelColorCollisionType)
+			{
+			case EPixelCollision_Type::Color_Ignore:
+				if (Dest.Pixel[Index] == Dest.TypeColor[0] &&
+					Dest.Pixel[Index + 1] == Dest.TypeColor[1] &&
+					Dest.Pixel[Index + 2] == Dest.TypeColor[2])
+					continue;
+
+				Collision = true;
+				break;
+			case EPixelCollision_Type::Color_Confirm:
+				if (Dest.Pixel[Index] == Dest.TypeColor[0] &&
+					Dest.Pixel[Index + 1] == Dest.TypeColor[1] &&
+					Dest.Pixel[Index + 2] == Dest.TypeColor[2])
+					Collision = true;
+
+				else
+					continue;
+				break;
+			}
+
+			switch (Dest.PixelAlphaCollisionType)
+			{
+			case EPixelCollision_Type::Alpha_Ignore:
+				if (Dest.Pixel[Index + 3] == Dest.TypeColor[3])
+					continue;
+
+				Collision = true;
+				break;
+			case EPixelCollision_Type::Alpha_Confirm:
+				if (Dest.Pixel[Index + 3] == Dest.TypeColor[3])
+					Collision = true;
+
+				else
+					continue;
+				break;
+			}
+
+			if (Collision)
+				break;
+		}
+
+		if (Collision)
+			break;
+	}
+
+	ComputeHitPoint(HitPoint, OverlapInfo, Dest.Box2D);
+
+	return Collision;
+}
+
+bool CCollisionManager::CollisionOBB2DToPixel(Vector2& HitPoint, const OBB2DInfo& Src,
+	const PixelInfo& Dest)
+{
+	// 픽셀충돌체를 구성하는 사각형과 충돌처리를 먼저 한다.
+	if (!CollisionBox2DToOBB2D(HitPoint, Dest.Box2D, Src))
+		return false;
+
+	// 두 사각형이 겹쳐지는 영역을 구하고 해당 영역의 픽셀정보를 확인하여 충돌이 되었는지를 판단한다.
+	Box2DInfo OverlapInfo = OverlapBox2D(Dest.Box2D, Src);
+
+	OverlapInfo.Left -= Dest.Box2D.Left;
+	OverlapInfo.Bottom -= Dest.Box2D.Bottom;
+	OverlapInfo.Right -= Dest.Box2D.Left;
+	OverlapInfo.Top -= Dest.Box2D.Bottom;
+
+	float Width = (float)Dest.Width;
+	float Height = (float)Dest.Height;
+
+	OverlapInfo.Left = OverlapInfo.Left < 0.f ? 0.f : OverlapInfo.Left;
+	OverlapInfo.Bottom = OverlapInfo.Bottom < 0.f ? 0.f : OverlapInfo.Bottom;
+
+	OverlapInfo.Right = OverlapInfo.Right > Width ? Width - 1.f : OverlapInfo.Right;
+	OverlapInfo.Top = OverlapInfo.Top > Height ? Height - 1.f : OverlapInfo.Top;
+
+	// Bottom과 Top을 뒤집어서 이미지에 맞춰준다.
+	OverlapInfo.Bottom = Height - OverlapInfo.Bottom;
+	OverlapInfo.Top = Height - OverlapInfo.Top;
+
+	bool	Collision = false;
+
+	for (int y = (int)OverlapInfo.Top; y < (int)OverlapInfo.Bottom; ++y)
+	{
+		for (int x = (int)OverlapInfo.Left; x < (int)OverlapInfo.Right; ++x)
+		{
+			int	Index = y * (int)Dest.Width * 4 + x * 4;
+
+			// 픽셀의 인덱스를 이용하여 월드공간으로 변환해준다.
+			Vector2	PixelWorldPos = Vector2(Dest.Box2D.Left, Dest.Box2D.Bottom) +
+				Vector2((float)x, (float)Height - (float)y);
+
+			if (!CollisionPointToOBB2D(HitPoint, PixelWorldPos, Src))
+				continue;
+
+			switch (Dest.PixelColorCollisionType)
+			{
+			case EPixelCollision_Type::Color_Ignore:
+				if (Dest.Pixel[Index] == Dest.TypeColor[0] &&
+					Dest.Pixel[Index + 1] == Dest.TypeColor[1] &&
+					Dest.Pixel[Index + 2] == Dest.TypeColor[2])
+					continue;
+
+				Collision = true;
+				break;
+			case EPixelCollision_Type::Color_Confirm:
+				if (Dest.Pixel[Index] == Dest.TypeColor[0] &&
+					Dest.Pixel[Index + 1] == Dest.TypeColor[1] &&
+					Dest.Pixel[Index + 2] == Dest.TypeColor[2])
+					Collision = true;
+
+				else
+					continue;
+				break;
+			}
+
+			switch (Dest.PixelAlphaCollisionType)
+			{
+			case EPixelCollision_Type::Alpha_Ignore:
+				if (Dest.Pixel[Index + 3] == Dest.TypeColor[3])
+					continue;
+
+				Collision = true;
+				break;
+			case EPixelCollision_Type::Alpha_Confirm:
+				if (Dest.Pixel[Index + 3] == Dest.TypeColor[3])
+					Collision = true;
+
+				else
+					continue;
+				break;
+			}
+
+			if (Collision)
+				break;
+		}
+
+		if (Collision)
+			break;
+	}
+
+	ComputeHitPoint(HitPoint, OverlapInfo, Dest.Box2D);
+
+	return Collision;
+}
+
+bool CCollisionManager::CollisionPixelToPixel(Vector2& HitPoint, const PixelInfo& Src, const PixelInfo& Dest)
 {
 	return false;
 }
 
-bool CCollisionManager::CollisionOBB2DToPixel(Vector2& HitPoint, const OBB2DInfo& Src, const PixelInfo& Dest)
+bool CCollisionManager::CollisionPointToBox2D(Vector2& HitPoint, const Vector2& Src, 
+	const Box2DInfo& Dest)
 {
-	return false;
+	if (Src.x < Dest.Left)
+		return false;
+
+	else if (Src.x > Dest.Right)
+		return false;
+
+	else if (Src.y < Dest.Bottom)
+		return false;
+
+	else if (Src.y > Dest.Top)
+		return false;
+
+	HitPoint = Src;
+
+	return true;
 }
 
-bool CCollisionManager::CollisionPointToBox2D(Vector2& HitPoint, const Vector2& Src, const Box2DInfo& Dest)
+bool CCollisionManager::CollisionPointToSphere2D(Vector2& HitPoint, const Vector2& Src, 
+	const Sphere2DInfo& Dest)
 {
-	return false;
+	bool result = Src.Distance(Dest.Center) <= Dest.Radius;
+
+	if (result)
+		HitPoint = Src;
+
+	return result;
 }
 
-bool CCollisionManager::CollisionPointToSphere2D(Vector2& HitPoint, const Vector2& Src, const Sphere2DInfo& Dest)
+bool CCollisionManager::CollisionPointToOBB2D(Vector2& HitPoint, const Vector2& Src, 
+	const OBB2DInfo& Dest)
 {
-	return false;
+	Vector2	CenterLine = Src - Dest.Center;
+
+	Vector2	Axis = Dest.Axis[AXIS2D_X];
+
+	float CenterProjDist = abs(Axis.Dot(CenterLine));
+
+	if (CenterProjDist > Dest.Length[AXIS2D_X])
+		return false;
+
+	Axis = Dest.Axis[AXIS2D_Y];
+
+	CenterProjDist = abs(Axis.Dot(CenterLine));
+
+	if (CenterProjDist > Dest.Length[AXIS2D_Y])
+		return false;
+
+	HitPoint = Src;
+
+	return true;
 }
 
-bool CCollisionManager::CollisionPointToOBB2D(Vector2& HitPoint, const Vector2& Src, const OBB2DInfo& Dest)
-{
-	return false;
-}
-
-bool CCollisionManager::CollisionPointToPixel(Vector2& HitPoint, const Vector2& Src, const PixelInfo& Dest)
+bool CCollisionManager::CollisionPointToPixel(Vector2& HitPoint, const Vector2& Src, 
+	const PixelInfo& Dest)
 {
 	return false;
 }
@@ -551,6 +912,46 @@ Box2DInfo CCollisionManager::ConvertBox2DInfo(const OBB2DInfo& Info)
 	return result;
 }
 
+Box2DInfo CCollisionManager::OverlapBox2D(const Box2DInfo& Src, const Box2DInfo& Dest)
+{
+	Box2DInfo	Info;
+
+	Info.Left = Src.Left > Dest.Left ? Src.Left : Dest.Left;
+	Info.Bottom = Src.Bottom > Dest.Bottom ? Src.Bottom : Dest.Bottom;
+	Info.Right = Src.Right < Dest.Right ? Src.Right : Dest.Right;
+	Info.Top = Src.Top < Dest.Top ? Src.Top : Dest.Top;
+
+	return Info;
+}
+
+Box2DInfo CCollisionManager::OverlapBox2D(const Box2DInfo& Src, const Sphere2DInfo& Dest)
+{
+	Box2DInfo	Info, DestInfo;
+
+	DestInfo = ConvertBox2DInfo(Dest);
+
+	Info.Left = Src.Left > DestInfo.Left ? Src.Left : DestInfo.Left;
+	Info.Bottom = Src.Bottom > DestInfo.Bottom ? Src.Bottom : DestInfo.Bottom;
+	Info.Right = Src.Right < DestInfo.Right ? Src.Right : DestInfo.Right;
+	Info.Top = Src.Top < DestInfo.Top ? Src.Top : DestInfo.Top;
+
+	return Info;
+}
+
+Box2DInfo CCollisionManager::OverlapBox2D(const Box2DInfo& Src, const OBB2DInfo& Dest)
+{
+	Box2DInfo	Info, DestInfo;
+
+	DestInfo = ConvertBox2DInfo(Dest);
+
+	Info.Left = Src.Left > DestInfo.Left ? Src.Left : DestInfo.Left;
+	Info.Bottom = Src.Bottom > DestInfo.Bottom ? Src.Bottom : DestInfo.Bottom;
+	Info.Right = Src.Right < DestInfo.Right ? Src.Right : DestInfo.Right;
+	Info.Top = Src.Top < DestInfo.Top ? Src.Top : DestInfo.Top;
+
+	return Info;
+}
+
 void CCollisionManager::ComputeHitPoint(Vector2& HitPoint, const Box2DInfo& Src, const Box2DInfo& Dest)
 {
 	float Left = Src.Left > Dest.Left ? Src.Left : Dest.Left;
@@ -560,5 +961,4 @@ void CCollisionManager::ComputeHitPoint(Vector2& HitPoint, const Box2DInfo& Src,
 
 	HitPoint.x = (Left + Right) / 2.f;
 	HitPoint.y = (Top + Bottom) / 2.f;
-
 }

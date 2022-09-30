@@ -179,6 +179,7 @@ bool CColliderOBB2D::Collision(CCollider* Dest)
 		Result = CCollisionManager::GetInst()->CollisionSphere2DToOBB2D(HitPoint, (CColliderSphere2D*)Dest, this);
 		break;
 	case ECollider2D_Type::Pixel:
+		Result = CCollisionManager::GetInst()->CollisionOBB2DToPixel(HitPoint, this, (CColliderPixel*)Dest);
 		break;
 	}
 
