@@ -119,6 +119,8 @@ bool CPlayer2D::Init()
 
 	Anim->SetCurrentAnimation("Idle");
 
+	m_Body->SetWorldPosition(Vector2(-50.f, 50.f));
+
 	return true;
 }
 

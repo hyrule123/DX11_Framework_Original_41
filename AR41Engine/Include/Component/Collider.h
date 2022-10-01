@@ -25,6 +25,7 @@ protected:
     std::list<int>          m_CurrentSectionList;   // 현재 충돌체가 어느 충돌영역에 속해있는지 판단하기 위한 정보.
     CollisionProfile* m_Profile;
     Vector3                 m_HitPoint;
+    bool                    m_MouseCollision;
 
 
     std::function<void(const CollisionResult&)> m_CollisionCallback[(int)ECollision_Result::Max];

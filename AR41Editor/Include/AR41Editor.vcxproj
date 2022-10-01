@@ -178,7 +178,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="EditorManager.cpp" />
+    <ClCompile Include="GameObject\BoxText.cpp" />
     <ClCompile Include="GameObject\Bullet.cpp" />
+    <ClCompile Include="GameObject\CircleCollTest.cpp" />
     <ClCompile Include="GameObject\Monster.cpp" />
     <ClCompile Include="GameObject\Player2D.cpp" />
     <ClCompile Include="main.cpp" />
@@ -194,7 +196,9 @@
   <ItemGroup>
     <ClInclude Include="Editor.h" />
     <ClInclude Include="EditorManager.h" />
+    <ClInclude Include="GameObject\BoxText.h" />
     <ClInclude Include="GameObject\Bullet.h" />
+    <ClInclude Include="GameObject\CircleCollTest.h" />
     <ClInclude Include="GameObject\Monster.h" />
     <ClInclude Include="GameObject\Player2D.h" />
     <ClInclude Include="resource.h" />

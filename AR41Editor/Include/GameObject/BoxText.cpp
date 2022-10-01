@@ -1,44 +1,41 @@
-
-#include "Monster.h"
+#include "BoxText.h"
 #include "Component/SpriteComponent.h"
-#include "Component/ColliderPixel.h"
+#include "Component/ColliderBox2D.h"
 #include "Resource/Material/Material.h"
 
-CMonster::CMonster()
+CBoxText::CBoxText()
 {
-	SetTypeID<CMonster>();
+	SetTypeID<CBoxText>();
 
-	m_ObjectTypeName = "Monster";
+	m_ObjectTypeName = "BoxTest";
 }
 
-CMonster::CMonster(const CMonster& Obj) :
+CBoxText::CBoxText(const CBoxText& Obj) :
 	CGameObject(Obj)
 {
 }
 
-CMonster::~CMonster()
+CBoxText::~CBoxText()
 {
 }
 
-void CMonster::Start()
+void CBoxText::Start()
 {
 	CGameObject::Start();
 
-	m_Body->SetInfo("PixelCollision", TEXT("PixelCollision.png"));
-	m_Body->SetPixelColorCollisionType(EPixelCollision_Type::Color_Ignore);
-	m_Body->SetPixelColor(255, 0, 255);
 }
 
-bool CMonster::Init()
+bool CBoxText::Init()
 {
 	CGameObject::Init();
 
-	m_Body = CreateComponent<CColliderPixel>("Body");
+	m_Body = CreateComponent<CColliderBox2D>("Body");
 	m_Sprite = CreateComponent<CSpriteComponent>("Sprite");
 
 	m_Body->AddChild(m_Sprite);
 
 	m_Body->SetCollisionProfile("Monster");
+
 
 	m_Sprite->SetPivot(0.5f, 0.f);
 	m_Sprite->SetRelativeScale(100.f, 100.f);
@@ -51,21 +48,21 @@ bool CMonster::Init()
 	//m_Sprite->GetMaterial(0)->SetRenderState("DepthDisable");
 
 
-	m_Body->SetWorldPosition(50.f, -50.f);
+	m_Body->SetWorldPosition(50.f, 50.f);
 	return true;
 }
 
-void CMonster::Update(float DeltaTime)
+void CBoxText::Update(float DeltaTime)
 {
 	CGameObject::Update(DeltaTime);
 }
 
-void CMonster::PostUpdate(float DeltaTime)
+void CBoxText::PostUpdate(float DeltaTime)
 {
 	CGameObject::PostUpdate(DeltaTime);
 }
 
-CMonster* CMonster::Clone() const
+CBoxText* CBoxText::Clone() const
 {
-	return new CMonster(*this);
+	return new CBoxText(*this);
 }

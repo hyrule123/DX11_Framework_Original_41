@@ -224,18 +224,20 @@ void CSceneCollision::Load(FILE* File)
 
 void CSceneCollision::CollisionMouse(float DeltaTime)
 {
-	if (!m_MouseCollision)
-		return;
-
-	if (!m_MouseCollision->GetActive())
+	if (m_MouseCollision)
 	{
-		m_MouseCollision->CallCollisionMouseCallback(ECollision_Result::Release);
-		m_MouseCollision = nullptr;
+		if (!m_MouseCollision->GetActive())
+		{
+			m_MouseCollision->CallCollisionMouseCallback(ECollision_Result::Release);
+			m_MouseCollision = nullptr;
+		}
 	}
 
 	// UI와 마우스가 충돌이 없을 경우 월드물체와 충돌을 시작한다.
 	bool MouseUICollision = false;
 	bool	MouseWorldCollision = false;
+
+	// UI와 마우스 충돌처리를 진행한다. 그 결과에 따라 다른 충돌처리를 할지 말지를 결정한다.
 
 	if (!MouseUICollision)
 	{

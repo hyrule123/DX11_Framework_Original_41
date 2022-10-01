@@ -23,6 +23,9 @@
 #include "Component/CameraComponent.h"
 #include "Component/TargetArm.h"
 
+#include "../GameObject/CircleCollTest.h"
+#include "../GameObject/BoxText.h"
+
 CClassWindow::CClassWindow()
 {
 }
@@ -144,6 +147,13 @@ void CClassWindow::ObjectCreateCallback()
 
 	else if (m_SelectObjectItem == "Monster")
 		Obj = Scene->CreateObject<CMonster>(m_SelectObjectItem);
+
+	else if (m_SelectObjectItem == "CircleCollTest")
+		Obj = Scene->CreateObject<CCircleCollTest>(m_SelectObjectItem);
+
+	else if (m_SelectObjectItem == "BoxText")
+		Obj = Scene->CreateObject<CBoxText>(m_SelectObjectItem);
+
 
 	if (Window)
 	{

@@ -163,6 +163,18 @@
     <Filter Include="02. Resource\02. Shader\03. ConstantBuffer\04. Collider">
       <UniqueIdentifier>{1cab03e0-6d3e-4f0e-8d8f-2be437cc5782}</UniqueIdentifier>
     </Filter>
+    <Filter Include="09. UI">
+      <UniqueIdentifier>{4aa3a47c-651e-4d52-b399-25918cc5ecc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="09. UI\01. Window">
+      <UniqueIdentifier>{ffbad27b-00d9-4722-be14-0a43afc43b7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="09. UI\02. Widget">
+      <UniqueIdentifier>{d7e8bf6b-5da9-45a5-9469-6b57789d64ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Scene\05. Viewport">
+      <UniqueIdentifier>{9d7ac62c-3089-4de3-829b-402c1e8ddd9d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -444,6 +456,18 @@
     <ClInclude Include="Resource\Shader\ColliderImageShader.h">
       <Filter>02. Resource\02. Shader\02. ShaderClass\02. Collider</Filter>
     </ClInclude>
+    <ClInclude Include="UI\UIWindow.h">
+      <Filter>09. UI\01. Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneViewport.h">
+      <Filter>03. Scene\05. Viewport</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UIWidget.h">
+      <Filter>09. UI\02. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UIButton.h">
+      <Filter>09. UI\02. Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -697,6 +721,18 @@
     </ClCompile>
     <ClCompile Include="Resource\Shader\ColliderImageShader.cpp">
       <Filter>02. Resource\02. Shader\02. ShaderClass\02. Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UIWindow.cpp">
+      <Filter>09. UI\01. Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneViewport.cpp">
+      <Filter>03. Scene\05. Viewport</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UIWidget.cpp">
+      <Filter>09. UI\02. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UIButton.cpp">
+      <Filter>09. UI\02. Widget</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

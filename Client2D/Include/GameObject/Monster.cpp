@@ -51,7 +51,7 @@ bool CMonster::Init()
 	//m_Sprite->GetMaterial(0)->SetRenderState("DepthDisable");
 
 
-
+	m_Body->SetWorldPosition(50.f, -50.f);
 	return true;
 }
 

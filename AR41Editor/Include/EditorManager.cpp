@@ -6,6 +6,8 @@
 #include "GameObject\Player2D.h"
 #include "GameObject\Bullet.h"
 #include "GameObject\Monster.h"
+#include "GameObject/CircleCollTest.h"
+#include "GameObject/BoxText.h"
 
 #include "Window\TestWindow.h"
 #include "Window\ObjectWindow.h"
@@ -18,6 +20,9 @@
 #include "Resource/Animation/AnimationSequence2D.h"
 #include "Input.h"
 #include "CollisionManager.h"
+
+
+
 
 CEditorManager::CEditorManager()
 {
@@ -205,6 +210,8 @@ void CEditorManager::CreateCDO()
     CScene::CreateObjectCDO<CPlayer2D>("Player2D");
     CScene::CreateObjectCDO<CMonster>("Monster");
     CScene::CreateObjectCDO<CBullet>("Bullet");
+    CScene::CreateObjectCDO<CCircleCollTest>("CircleCollTest");
+    CScene::CreateObjectCDO<CBoxText>("BoxTest");
 }
 
 void CEditorManager::LoadResource()
