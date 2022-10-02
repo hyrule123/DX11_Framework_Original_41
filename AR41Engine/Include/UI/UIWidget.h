@@ -3,6 +3,30 @@
 #include "../Ref.h"
 #include "../Resource/Shader/UIConstantBuffer.h"
 #include "../Resource/Shader/Animation2DConstantBuffer.h"
+#include "../Resource/Texture/Texture.h"
+
+struct UIWidgetImageInfo
+{
+    CSharedPtr<class CTexture>	Texture;
+    Vector4		Tint;
+    std::vector<Animation2DFrameData>   vecFrameData;
+
+    int     Frame;
+    float   Time;
+    float   FrameTime;
+    float   PlayTime;
+    float   PlayScale;
+
+    UIWidgetImageInfo() :
+        Tint(Vector4::White),
+        Frame(0),
+        Time(0.f),
+        FrameTime(0.f),
+        PlayTime(1.f),
+        PlayScale(1.f)
+    {
+    }
+};
 
 class CUIWidget :
     public CRef

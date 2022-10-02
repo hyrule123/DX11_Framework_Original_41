@@ -369,9 +369,21 @@ FodyWeavers.xsd
 *.exe
 *.idb
 *.lib
-#Exclude DirectXTex Library
+*.dll
+## HLSL Compiled Shader
+*.cso
+
+
+# Include External Libraries
+##DirectXTex
 !DirectXTex.lib
 !DirectXTex_Debug.lib
+##fmod
+!fmod_vc.lib
+!fmod64_vc.lib
+!fmod64.dll
+!fmod.dll
+
 
 # Client2D, Editor Bin Folder
 [Bb]in/
@@ -380,6 +392,7 @@ BinObjDebug/
 # Exclude Original Bin Folder
 !AR41Engine/Bin/
 AR41Engine/Bin/Texture
+AR41Engine/Bin/Sound
 
 
 # Exclude Editor Results
@@ -388,6 +401,7 @@ AR41Editor/Bin/*
 
 # Include Resources
 !AR41Editor/Bin/Texture/
+!AR41Editor/Bin/Sound/
 !AR41Editor/Bin/Scene/
 
 # Except Engine Folder : Used to gather header files - automatically generated at build time

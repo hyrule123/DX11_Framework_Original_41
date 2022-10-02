@@ -160,5 +160,3 @@ enum class EPixelCollision_Type
 	Alpha_Ignore,
 	Alpha_Confirm
 };
-
-

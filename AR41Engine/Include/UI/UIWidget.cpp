@@ -96,6 +96,9 @@ bool CUIWidget::Init()
 
 void CUIWidget::Update(float DeltaTime)
 {
+    // 출력될 위치정보를 만들어준다. m_Pos는 위젯을 가지고 있는 윈도우로부터 상대적인 위치
+    // 정보로 구성된다. 그러므로 최종 출력될 위치는 윈도우위치 + m_Pos 가 된다.
+    m_RenderPos = m_Owner->GetPos() + m_Pos;
 }
 
 void CUIWidget::PostUpdate(float DeltaTime)
