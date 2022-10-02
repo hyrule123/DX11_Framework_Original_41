@@ -6,6 +6,7 @@
 #include "ColliderImageShader.h"
 #include "ConstantBuffer.h"
 #include "ColliderConstantBuffer.h"
+#include "UIShader.h"
 
 CShaderManager::CShaderManager()
 {
@@ -30,11 +31,15 @@ bool CShaderManager::Init()
 	CreateShader<CColliderImageShader>("ColliderImageShader");
 
 
+	CreateShader<CUIShader>("UIShader");
+
+
 
 	CreateConstantBuffer("Transform", sizeof(TransformCBuffer), 0);
 	CreateConstantBuffer("Material", sizeof(MaterialCBuffer), 1);
 	CreateConstantBuffer("Animation2D", sizeof(Animation2DCBuffer), 2);
 	CreateConstantBuffer("Collider", sizeof(ColliderCBuffer), 10);
+	CreateConstantBuffer("UI", sizeof(UICBuffer), 10);
 
 	m_ColliderCBuffer = new CColliderConstantBuffer;
 

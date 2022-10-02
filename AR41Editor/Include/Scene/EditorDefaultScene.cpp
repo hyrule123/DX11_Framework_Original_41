@@ -1,5 +1,8 @@
 
 #include "EditorDefaultScene.h"
+#include "Scene/Scene.h"
+#include "Scene/SceneViewport.h"
+#include "../UI/StartSceneUI.h"
 
 CEditorDefaultScene::CEditorDefaultScene()
 {
@@ -12,5 +15,7 @@ CEditorDefaultScene::~CEditorDefaultScene()
 
 bool CEditorDefaultScene::Init()
 {
+	m_Owner->GetViewport()->CreateUIWindow<CStartSceneUI>("StartUI");
+
 	return true;
 }

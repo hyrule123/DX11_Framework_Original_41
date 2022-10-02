@@ -90,6 +90,11 @@ public:
 		return m_CollisionManager;
 	}
 
+	CSceneViewport* GetViewport()	const
+	{
+		return m_Viewport;
+	}
+
 
 public:
 	void Start();

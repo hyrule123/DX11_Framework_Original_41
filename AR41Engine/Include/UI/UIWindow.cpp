@@ -88,6 +88,8 @@ void CUIWindow::PostUpdate(float DeltaTime)
 
 void CUIWindow::Render()
 {
+	std::sort(m_vecWidget.begin(), m_vecWidget.end(), CUIWindow::SortWidget);
+
 	auto	iter = m_vecWidget.begin();
 	auto	iterEnd = m_vecWidget.end();
 
@@ -122,4 +124,9 @@ void CUIWindow::Save(FILE* File)
 
 void CUIWindow::Load(FILE* File)
 {
+}
+
+bool CUIWindow::SortWidget(CSharedPtr<CUIWidget> Src, CSharedPtr<CUIWidget> Dest)
+{
+	return Src->GetZOrder() > Dest->GetZOrder();
 }

@@ -28,6 +28,9 @@ public:
 	void Save(FILE* File);
 	void Load(FILE* File);
 
+private:
+	static bool SortWindow(CSharedPtr<CUIWindow> Src, CSharedPtr<CUIWindow> Dest);
+
 public:
 	template <typename T>
 	T* FindUIWindow(const std::string& Name)
@@ -37,7 +40,7 @@ public:
 		for (size_t i = 0; i < Size; ++i)
 		{
 			if (m_vecWindow[i]->GetName() == Name)
-				return (T*)m_vecWindow[i];
+				return (T*)m_vecWindow[i].Get();
 		}
 
 		return nullptr;
@@ -55,6 +58,7 @@ public:
 
 		Window->SetName(Name);
 		Window->m_Owner = this;
+		Window->m_Scene = m_Owner;
 
 		if (!Window->Init())
 		{

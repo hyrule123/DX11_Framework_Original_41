@@ -14,6 +14,7 @@ protected:
     virtual ~CUIWindow();
 
 protected:
+	class CScene* m_Scene;
 	class CSceneViewport* m_Owner;
     std::vector<CSharedPtr<CUIWidget>>	m_vecWidget;
     int     m_ZOrder;
@@ -85,6 +86,9 @@ public:
     virtual void Save(FILE* File);
     virtual void Load(FILE* File);
 
+private:
+	static bool SortWidget(CSharedPtr<CUIWidget> Src, CSharedPtr<CUIWidget> Dest);
+
 public:
 	template <typename T>
 	T* FindWidget(const std::string& Name)
@@ -94,7 +98,7 @@ public:
 		for (size_t i = 0; i < Size; ++i)
 		{
 			if (m_vecWidget[i]->GetName() == Name)
-				return (T*)m_vecWidget[i];
+				return (T*)m_vecWidget[i].Get();
 		}
 
 		return nullptr;
@@ -112,6 +116,7 @@ public:
 
 		Widget->SetName(Name);
 		Widget->m_Owner = this;
+		Widget->m_Scene = m_Scene;
 
 		if (!Widget->Init())
 		{

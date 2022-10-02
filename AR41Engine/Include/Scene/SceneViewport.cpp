@@ -83,6 +83,8 @@ void CSceneViewport::PostUpdate(float DeltaTime)
 
 void CSceneViewport::Render()
 {
+	std::sort(m_vecWindow.begin(), m_vecWindow.end(), CSceneViewport::SortWindow);
+
 	auto	iter = m_vecWindow.begin();
 	auto	iterEnd = m_vecWindow.end();
 
@@ -112,4 +114,9 @@ void CSceneViewport::Save(FILE* File)
 
 void CSceneViewport::Load(FILE* File)
 {
+}
+
+bool CSceneViewport::SortWindow(CSharedPtr<CUIWindow> Src, CSharedPtr<CUIWindow> Dest)
+{
+	return Src->GetZOrder() > Dest->GetZOrder();
 }
