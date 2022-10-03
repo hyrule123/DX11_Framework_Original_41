@@ -22,6 +22,8 @@ class CUIButton :
     public CUIWidget
 {
     friend class CUIWindow;
+    friend class CScene;
+    friend class CSceneManager;
 
 protected:
     CUIButton();

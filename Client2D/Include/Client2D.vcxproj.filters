@@ -22,6 +22,12 @@
     <Filter Include="03. GameObject">
       <UniqueIdentifier>{61235511-6738-4291-823b-0c51a509d816}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. Setting">
+      <UniqueIdentifier>{0f3065b3-02ce-4fb7-a78c-e13ace4d09e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. UI">
+      <UniqueIdentifier>{d1e13e30-88be-4c8d-85f6-d4bd61d9bb7c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -41,6 +47,15 @@
     </ClCompile>
     <ClCompile Include="GameObject\Bullet.cpp">
       <Filter>03. GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Setting\DefaultSetting.cpp">
+      <Filter>04. Setting</Filter>
+    </ClCompile>
+    <ClCompile Include="Setting\EngineShareSetting.cpp">
+      <Filter>04. Setting</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\StartSceneUI.cpp">
+      <Filter>05. UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -64,6 +79,15 @@
     </ClInclude>
     <ClInclude Include="GameObject\Bullet.h">
       <Filter>03. GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Setting\DefaultSetting.h">
+      <Filter>04. Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="Setting\EngineShareSetting.h">
+      <Filter>04. Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\StartSceneUI.h">
+      <Filter>05. UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

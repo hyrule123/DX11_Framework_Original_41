@@ -187,6 +187,9 @@
     <Filter Include="02. Resource\06. Sound\01. FMOD">
       <UniqueIdentifier>{9554e242-7a8a-4dd9-bdab-d667ed500061}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Manager\09. Setting">
+      <UniqueIdentifier>{3ae37f1f-1fd2-4011-95c9-50c07abc5309}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -516,6 +519,12 @@
     <ClInclude Include="Resource\Sound\SoundManager.h">
       <Filter>02. Resource\06. Sound</Filter>
     </ClInclude>
+    <ClInclude Include="UI\UIImage.h">
+      <Filter>09. UI\02. Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineSetting.h">
+      <Filter>01. Manager\09. Setting</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -793,6 +802,12 @@
     </ClCompile>
     <ClCompile Include="Resource\Sound\Sound.cpp">
       <Filter>02. Resource\06. Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UIImage.cpp">
+      <Filter>09. UI\02. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineSetting.cpp">
+      <Filter>01. Manager\09. Setting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

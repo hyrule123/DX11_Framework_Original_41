@@ -8,7 +8,9 @@ CSound::CSound() :
 	m_Channel(nullptr),
 	m_Play(false),
 	m_Loop(false),
-	m_Pause(false)
+	m_Pause(false),
+	m_FileName{},
+	m_PathName{}
 {
 }
 
@@ -26,6 +28,9 @@ bool CSound::LoadSound(FMOD::System* System, FMOD::ChannelGroup* Group, bool Loo
 	m_System = System;
 	m_Group = Group;
 	m_Loop = Loop;
+
+	strcpy_s(m_FileName, FileName);
+	strcpy_s(m_PathName, PathName.c_str());
 
 	char	FullPath[MAX_PATH] = {};
 
@@ -101,5 +106,15 @@ void CSound::Resume()
 			m_Pause = false;
 		}
 	}
+}
+
+void CSound::Save(FILE* File)
+{
+	fwrite(m_FileName, sizeof(char), MAX_PATH, File);
+	fwrite(m_PathName, sizeof(char), MAX_PATH, File);
+}
+
+void CSound::Load(FILE* File)
+{
 }
 

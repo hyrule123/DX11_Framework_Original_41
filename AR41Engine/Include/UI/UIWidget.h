@@ -33,11 +33,32 @@ class CUIWidget :
 {
     friend class CUIWindow;
     friend class CResourceManager;
+    friend class CScene;
+    friend class CSceneManager;
 
 protected:
     CUIWidget();
     CUIWidget(const CUIWidget& Widget);
     virtual ~CUIWidget() = 0;
+
+private:
+    static std::unordered_map<std::string, CUIWidget*>	m_mapUIWidgetCDO;
+
+public:
+    static void AddUIWidgetCDO(const std::string& Name, CUIWidget* CDO)
+    {
+        m_mapUIWidgetCDO.insert(std::make_pair(Name, CDO));
+    }
+
+    static CUIWidget* FindCDO(const std::string& Name)
+    {
+        auto	iter = m_mapUIWidgetCDO.find(Name);
+
+        if (iter == m_mapUIWidgetCDO.end())
+            return nullptr;
+
+        return iter->second;
+    }
 
 protected:
     static CUIConstantBuffer* m_CBuffer;
@@ -56,6 +77,13 @@ protected:
     Vector4 m_Tint;
     CSharedPtr<class CShader>   m_Shader;
     CSharedPtr<class CMesh>     m_Mesh;
+    std::string		m_WiwdgetTypeName;
+
+public:
+    const std::string& GetWidgetTypeName()	const
+    {
+        return m_WiwdgetTypeName;
+    }
 
 
 public:

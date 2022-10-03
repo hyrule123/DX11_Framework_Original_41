@@ -19,6 +19,8 @@ private:
     bool        m_Play;
     bool        m_Loop;
     bool        m_Pause;
+    char        m_FileName[MAX_PATH];
+    char        m_PathName[MAX_PATH];
 
 public:
     bool GetPlay()   const
@@ -38,5 +40,10 @@ public:
     void Stop();
     void Pause();
     void Resume();
+
+
+public:
+    void Save(FILE* File);
+    void Load(FILE* File);
 };
 

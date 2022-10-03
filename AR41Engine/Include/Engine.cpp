@@ -29,7 +29,7 @@ CEngine::CEngine()	:
 	m_ClearColor{}
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(1244);
+	//_CrtSetBreakAlloc(636);
 }
 
 CEngine::~CEngine()
@@ -46,6 +46,8 @@ CEngine::~CEngine()
 
 	CPathManager::DestroyInst();
 	CResourceManager::DestroyInst();
+
+	SAFE_DELETE(m_Setting);
 
 	SAFE_DELETE(m_Timer);
 
@@ -65,6 +67,10 @@ bool CEngine::Init(HINSTANCE hInst, const TCHAR* Title,
 	Register(ClassName, IconID, SmallIconID, MenuID);
 
 	Create(Title, ClassName);
+
+	m_Setting = new CEngineSetting;
+
+	m_Setting->Init();
 
 	// Device ÃÊ±âÈ­
 	if (!CDevice::GetInst()->Init(m_hWnd, DeviceWidth, DeviceHeight, WindowMode))
