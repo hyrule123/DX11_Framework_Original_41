@@ -14,6 +14,8 @@ CMonster::CMonster()
 CMonster::CMonster(const CMonster& Obj) :
 	CGameObject(Obj)
 {
+	m_Body = (CColliderPixel*)FindComponent("Body");
+	m_Sprite = (CSpriteComponent*)FindComponent("Sprite");
 }
 
 CMonster::~CMonster()

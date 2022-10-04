@@ -17,9 +17,9 @@ CDefaultSetting::~CDefaultSetting()
 
 void CDefaultSetting::Init()
 {
-	CreateCDO();
+    LoadResource();
 
-	LoadResource();
+	CreateCDO();
 
 	SetInput();
 

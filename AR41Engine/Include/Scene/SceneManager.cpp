@@ -4,7 +4,8 @@
 #include "../GameObject/GameObject.h"
 #include "../Component/SceneComponent.h"
 #include "../Animation/Animation2D.h"
-
+#include "../UI/UIWindow.h"
+#include "../UI/UIWidget.h"
 
 DEFINITION_SINGLE(CSceneManager)
 

@@ -23,7 +23,6 @@ class CUIButton :
 {
     friend class CUIWindow;
     friend class CScene;
-    friend class CSceneManager;
 
 protected:
     CUIButton();

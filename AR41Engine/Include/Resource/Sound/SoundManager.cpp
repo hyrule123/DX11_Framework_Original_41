@@ -102,6 +102,8 @@ bool CSoundManager::LoadSound(const std::string& GroupName, const std::string& N
 		return false;
 	}
 
+	Sound->SetGroupName(GroupName);
+
 	m_mapSound.insert(std::make_pair(Name, Sound));
 
 	return true;

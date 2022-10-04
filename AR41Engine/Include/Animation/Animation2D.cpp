@@ -166,9 +166,6 @@ bool CAnimation2D::AddAnimation(const std::string& Name,
 	else
 		Sequence = CResourceManager::GetInst()->FindAnimationSequence2D(SequenceName);
 
-	if (!Sequence)
-		return false;
-
 	Anim = new CAnimation2DData;
 
 	Anim->m_Sequence = Sequence;
