@@ -15,7 +15,27 @@ private:
 	HWND	m_hWnd;
 	Resolution	m_RS;
 
+private:
+	ID2D1RenderTarget* m_2DTarget;
+	ID2D1RenderTarget* m_2DTargetWorld;
+	ID2D1Factory* m_2DFactory;
+
 public:
+	ID2D1RenderTarget* Get2DTarget()	const
+	{
+		return m_2DTarget;
+	}
+
+	ID2D1RenderTarget* Get2DWorldTarget()	const
+	{
+		return m_2DTargetWorld;
+	}
+
+	ID2D1Factory* Get2DFactory()	const
+	{
+		return m_2DFactory;
+	}
+
 	Resolution GetResolution()	const
 	{
 		return m_RS;

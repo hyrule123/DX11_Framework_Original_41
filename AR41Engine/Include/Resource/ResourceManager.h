@@ -5,6 +5,7 @@
 #include "Material/MaterialManager.h"
 #include "Animation/AnimationManager.h"
 #include "Sound/SoundManager.h"
+#include "Font/FontManager.h"
 
 class CResourceManager
 {
@@ -15,6 +16,7 @@ private:
 	CMaterialManager* m_MaterialManager;
 	CAnimationManager* m_AnimationManager;
 	CSoundManager* m_SoundManager;
+	CFontManager* m_FontManager;
 
 public:
 	bool Init();

@@ -186,6 +186,8 @@ void CSpriteComponent::Load(FILE* File)
 
 		m_Animation = CDO->Clone();
 
+		m_Animation->m_Owner = this;
+
 		m_Animation->Load(File);
 	}
 }

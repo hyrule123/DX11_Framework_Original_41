@@ -17,6 +17,11 @@
 #include <d3dcompiler.h>
 #include <dinput.h>
 #include <filesystem>
+#include <dwrite_3.h>
+#include <d2d1.h>
+
+#pragma comment(lib, "dwrite.lib")
+#pragma comment(lib, "d2d1.lib")
 
 #include "Vector2.h"
 #include "Vector3.h"

@@ -38,11 +38,11 @@ void CDefaultSetting::CreateCDO()
 void CDefaultSetting::LoadResource()
 {
     CResourceManager::GetInst()->CreateAnimationSequence2D(
-        "PlayerIdle", "PlayerSprite", TEXT("Player.png"));
+        "PlayerRun", "PlayerSprite", TEXT("Player.png"));
 
     for (int i = 0; i < 14; ++i)
     {
-        CResourceManager::GetInst()->AddAnimationSequence2DFrame("PlayerIdle",
+        CResourceManager::GetInst()->AddAnimationSequence2DFrame("PlayerRun",
             Vector2(i * 45.f, 60.f), Vector2((i + 1) * 45.f, 120.f));
     }
 
@@ -61,9 +61,9 @@ void CDefaultSetting::LoadResource()
 
 
     CResourceManager::GetInst()->CreateAnimationSequence2D(
-        "PlayerRun", "Explosion", vecFileName);
+        "PlayerIdle", "Explosion", vecFileName);
 
-    CResourceManager::GetInst()->AddAnimationSequence2DFrameAll("PlayerRun",
+    CResourceManager::GetInst()->AddAnimationSequence2DFrameAll("PlayerIdle",
         89, Vector2(0.f, 0.f), Vector2(320.f, 240.f));
 
     for (int i = 0; i <= 88; ++i)

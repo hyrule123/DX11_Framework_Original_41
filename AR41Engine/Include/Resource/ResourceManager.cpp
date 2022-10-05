@@ -15,6 +15,7 @@ CResourceManager::~CResourceManager()
 	SAFE_DELETE(CUIWidget::m_CBuffer);
 	SAFE_DELETE(CUIWidget::m_AnimCBuffer);
 
+	SAFE_DELETE(m_FontManager);
 	SAFE_DELETE(m_SoundManager);
 	SAFE_DELETE(m_AnimationManager);
 	SAFE_DELETE(m_MaterialManager);
@@ -56,6 +57,10 @@ bool CResourceManager::Init()
 	m_SoundManager = new CSoundManager;
 
 	m_SoundManager->Init();
+
+	m_FontManager = new CFontManager;
+
+	m_FontManager->Init();
 
 	return true;
 }
