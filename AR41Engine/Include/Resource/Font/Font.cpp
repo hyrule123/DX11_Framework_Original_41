@@ -13,6 +13,8 @@ CFont::~CFont()
 bool CFont::LoadFont(IDWriteFactory5* WriteFactory, const std::string& Name, 
     const TCHAR* FontName, int Weight, float FontSize, const TCHAR* LocalName, int Stretch)
 {
+    m_Factory = WriteFactory;
+
     SetName(Name);
 
     if (FAILED(WriteFactory->CreateTextFormat(FontName, nullptr, (DWRITE_FONT_WEIGHT)Weight,
@@ -20,4 +22,15 @@ bool CFont::LoadFont(IDWriteFactory5* WriteFactory, const std::string& Name,
         return false;
 
     return true;
+}
+
+IDWriteTextLayout* CFont::CreateLayout(const TCHAR* Text, float Width, float Height)
+{
+    IDWriteTextLayout* Layout = nullptr;
+
+    if (FAILED(m_Factory->CreateTextLayout(Text, lstrlen(Text), m_Format, Width,
+        Height, &Layout)))
+        return nullptr;
+
+    return Layout;
 }

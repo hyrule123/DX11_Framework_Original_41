@@ -20,7 +20,7 @@ CUIWidget::CUIWidget()  :
     m_Start(false),
     m_Tint(1.f, 1.f, 1.f, 1.f)
 {
-    m_WiwdgetTypeName = "UIWidget";
+    m_WidgetTypeName = "UIWidget";
 }
 
 CUIWidget::CUIWidget(const CUIWidget& Widget)   :

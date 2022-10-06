@@ -25,7 +25,10 @@ public:
 	bool CreateFontCollection(const std::string& Name, const TCHAR* FileName,
 		const std::string& PathName = FONT_PATH);
 	bool LoadFont(const std::string& Name, const TCHAR* FontName,
-		int Weight, float FontSize, const TCHAR* LocalName, int Stretch);
+		int Weight, float FontSize, const TCHAR* LocalName, int Stretch = 5);
+
+	const TCHAR* GetFontFaceName(const std::string& CollectionName);
+	const char* GetFontFaceNameMultibyte(const std::string& CollectionName);
 
 	bool CreateFontColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 	bool CreateFontColor(float r, float g, float b, float a);
@@ -43,5 +46,7 @@ public:
 
 	CFont* FindFont(const std::string& Name);
 	CFontCollection* FindFontCollection(const std::string& Name);
+	void ReleaseFont(const std::string& Name);
+	void ReleaseFontCollection(const std::string& Name);
 };
 

@@ -77,12 +77,12 @@ protected:
     Vector4 m_Tint;
     CSharedPtr<class CShader>   m_Shader;
     CSharedPtr<class CMesh>     m_Mesh;
-    std::string		m_WiwdgetTypeName;
+    std::string		m_WidgetTypeName;
 
 public:
     const std::string& GetWidgetTypeName()	const
     {
-        return m_WiwdgetTypeName;
+        return m_WidgetTypeName;
     }
 
 
@@ -139,12 +139,12 @@ public:
         m_Pos.y = y;
     }
 
-    void SetSize(const Vector2& Size)
+    virtual void SetSize(const Vector2& Size)
     {
         m_Size = Size;
     }
 
-    void SetSize(float x, float y)
+    virtual void SetSize(float x, float y)
     {
         m_Size.x = x;
         m_Size.y = y;

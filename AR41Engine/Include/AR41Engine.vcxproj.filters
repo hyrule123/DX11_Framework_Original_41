@@ -537,6 +537,9 @@
     <ClInclude Include="Resource\Font\FontCollection.h">
       <Filter>02. Resource\07. Font</Filter>
     </ClInclude>
+    <ClInclude Include="UI\UIText.h">
+      <Filter>09. UI\02. Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -829,6 +832,9 @@
     </ClCompile>
     <ClCompile Include="Resource\Font\FontCollection.cpp">
       <Filter>02. Resource\07. Font</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UIText.cpp">
+      <Filter>09. UI\02. Widget</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

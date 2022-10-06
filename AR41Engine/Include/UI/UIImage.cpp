@@ -7,7 +7,7 @@
 
 CUIImage::CUIImage()
 {
-    m_WiwdgetTypeName = "UIImage";
+    m_WidgetTypeName = "UIImage";
 }
 
 CUIImage::CUIImage(const CUIImage& Button) :
