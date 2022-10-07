@@ -315,3 +315,10 @@ struct UICBuffer
 	float	UIOpacity;
 	Vector2	UIEmpty;
 };
+
+struct ProgressBarCBuffer
+{
+	int		BarDir;
+	float	Percent;
+	Vector2	Empty;
+};

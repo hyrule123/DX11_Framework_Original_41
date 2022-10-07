@@ -128,6 +128,7 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="UI\UIButton.h" />
     <ClInclude Include="UI\UIImage.h" />
+    <ClInclude Include="UI\UIProgressBar.h" />
     <ClInclude Include="UI\UIText.h" />
     <ClInclude Include="UI\UIWidget.h" />
     <ClInclude Include="UI\UIWindow.h" />
@@ -228,6 +229,7 @@
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="UI\UIButton.cpp" />
     <ClCompile Include="UI\UIImage.cpp" />
+    <ClCompile Include="UI\UIProgressBar.cpp" />
     <ClCompile Include="UI\UIText.cpp" />
     <ClCompile Include="UI\UIWidget.cpp" />
     <ClCompile Include="UI\UIWindow.cpp" />

@@ -156,7 +156,6 @@ public:
     void SetFontSize(float Size);
     void SetAlignH(Text_Align_H Align);
     void SetAlignV(Text_Align_V Align);
-    void SetColor(float r, float g, float b);
     void SetColor(unsigned char r, unsigned char g, unsigned char b);
     void SetColor(const Vector4& Color);
     void SetColor(unsigned int Color);
@@ -166,7 +165,6 @@ public:
     void SetShadowEnable(bool Enable);
     void SetShadowOffset(const Vector2& Offset);
     void SetShadowOffset(float x, float y);
-    void SetShadowColor(float r, float g, float b);
     void SetShadowColor(unsigned char r, unsigned char g, unsigned char b);
     void SetShadowColor(const Vector4& Color);
     void SetShadowColor(unsigned int Color);

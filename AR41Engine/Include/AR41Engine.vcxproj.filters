@@ -540,6 +540,9 @@
     <ClInclude Include="UI\UIText.h">
       <Filter>09. UI\02. Widget</Filter>
     </ClInclude>
+    <ClInclude Include="UI\UIProgressBar.h">
+      <Filter>09. UI\02. Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -834,6 +837,9 @@
       <Filter>02. Resource\07. Font</Filter>
     </ClCompile>
     <ClCompile Include="UI\UIText.cpp">
+      <Filter>09. UI\02. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UIProgressBar.cpp">
       <Filter>09. UI\02. Widget</Filter>
     </ClCompile>
   </ItemGroup>

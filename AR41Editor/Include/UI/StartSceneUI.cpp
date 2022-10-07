@@ -1,5 +1,6 @@
 #include "StartSceneUI.h"
 #include "UI/UIButton.h"
+#include "UI/UIText.h"
 
 CStartSceneUI::CStartSceneUI()
 {
@@ -39,6 +40,23 @@ bool CStartSceneUI::Init()
     m_Button->SetSound(EButtonEventState::Hovered, "UI", "ButtonHovered", false, "Demasia.mp3");
     m_Button->SetSound(EButtonEventState::Click, "UI", "ButtonClick", false, "TeemoSmile.mp3");
 
+    m_Title = CreateWidget<CUIText>("Title");
+
+    m_Title->SetSize(300.f, 100.f);
+    m_Title->SetPos(200.f, 500.f);
+
+    m_Title->SetFontSize(50.f);
+    m_Title->SetText(TEXT("TEXT TEST"));
+    m_Title->SetColor(255, 255, 0);
+    m_Title->SetTransparency(true);
+    m_Title->SetOpacity(1.f);
+
+    m_Title->SetShadowEnable(true);
+    m_Title->SetShadowOffset(5.f, 5.f);
+    m_Title->SetShadowColor(255, 255, 255);
+    m_Title->SetShadowTransparency(true);
+    m_Title->SetShadowOpacity(1.f);
+
     return true;
 }
 
@@ -72,4 +90,15 @@ void CStartSceneUI::Load(FILE* File)
     CUIWindow::Load(File);
 
     m_Button = FindWidget<CUIButton>("Button");
+    m_Title = FindWidget<CUIText>("Title");
+
+    m_Title->SetText(TEXT("망나니의 대모험"));
+    m_Title->SetColor(255, 255, 0);
+    m_Title->SetTransparency(true);
+    m_Title->SetOpacity(0.8f);
+
+    m_Title->SetShadowEnable(true);
+    m_Title->SetShadowColor(128, 128, 128);
+    m_Title->SetShadowTransparency(true);
+    m_Title->SetShadowOpacity(0.5f);
 }

@@ -15,6 +15,7 @@ protected:
 
 protected:
 	CSharedPtr<class CUIButton>	m_Button;
+	CSharedPtr<class CUIText>	m_Title;
 
 public:
 	virtual void Start();

@@ -10,10 +10,10 @@ CUIImage::CUIImage()
     m_WidgetTypeName = "UIImage";
 }
 
-CUIImage::CUIImage(const CUIImage& Button) :
-    CUIWidget(Button)
+CUIImage::CUIImage(const CUIImage& Image) :
+    CUIWidget(Image)
 {
-    m_TextureInfo = Button.m_TextureInfo;
+    m_TextureInfo = Image.m_TextureInfo;
 }
 
 CUIImage::~CUIImage()
