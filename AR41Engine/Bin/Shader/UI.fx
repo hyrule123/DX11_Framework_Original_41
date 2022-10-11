@@ -186,7 +186,7 @@ VS_OUTPUT_UV ProgressBarVS(VS_INPUT_UV input)
     }
     
     
-        // 왼쪽 -> 오른쪽
+    // 왼쪽 -> 오른쪽
     if (g_ProgressBarDir == ProgressBar_LeftToRight)
     {
         if (Pos.x == 0.f)
@@ -194,7 +194,7 @@ VS_OUTPUT_UV ProgressBarVS(VS_INPUT_UV input)
     }
     
     
-        // 위 -> 아래
+    // 위 -> 아래
     if (g_ProgressBarDir == ProgressBar_TopToBottom)
     {
         if (Pos.y == 1.f)
@@ -202,7 +202,7 @@ VS_OUTPUT_UV ProgressBarVS(VS_INPUT_UV input)
     }
     
     
-        // 아래 -> 위
+    // 아래 -> 위
     if (g_ProgressBarDir == ProgressBar_BottomToTop)
     {
         if (Pos.y == 0.f)

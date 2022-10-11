@@ -160,3 +160,18 @@ enum class EPixelCollision_Type
 	Alpha_Ignore,
 	Alpha_Confirm
 };
+
+enum class EProgressBarTextureType
+{
+	Back,
+	Bar,
+	Max
+};
+
+enum class EProgressBarDir
+{
+	RightToLeft,
+	LeftToRight,
+	TopToBottom,
+	BottomToTop
+};

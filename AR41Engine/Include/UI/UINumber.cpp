@@ -1,31 +1,31 @@
-#include "UIImage.h"
+#include "UINumber.h"
 #include "../Resource/ResourceManager.h"
 #include "../Scene/Scene.h"
 #include "../Scene/SceneResource.h"
 #include "../Resource/Sound/Sound.h"
 #include "../Input.h"
 
-CUIImage::CUIImage()
+CUINumber::CUINumber()
 {
-    m_WidgetTypeName = "UIImage";
+    m_WidgetTypeName = "UINumber";
 }
 
-CUIImage::CUIImage(const CUIImage& Image) :
-    CUIWidget(Image)
+CUINumber::CUINumber(const CUINumber& Number) :
+    CUIWidget(Number)
 {
-    m_TextureInfo = Image.m_TextureInfo;
+    m_TextureInfo = Number.m_TextureInfo;
 }
 
-CUIImage::~CUIImage()
+CUINumber::~CUINumber()
 {
 }
 
-void CUIImage::SetTexture(CTexture* Texture)
+void CUINumber::SetTexture(CTexture* Texture)
 {
     m_TextureInfo.Texture = Texture;
 }
 
-bool CUIImage::SetTexture(const std::string& Name, const TCHAR* FileName, const std::string& PathName)
+bool CUINumber::SetTexture(const std::string& Name, const TCHAR* FileName, const std::string& PathName)
 {
     if (m_Scene)
     {
@@ -46,7 +46,7 @@ bool CUIImage::SetTexture(const std::string& Name, const TCHAR* FileName, const 
     return true;
 }
 
-bool CUIImage::SetTextureFullPath(const std::string& Name, const TCHAR* FullPath)
+bool CUINumber::SetTextureFullPath(const std::string& Name, const TCHAR* FullPath)
 {
     if (m_Scene)
     {
@@ -67,7 +67,7 @@ bool CUIImage::SetTextureFullPath(const std::string& Name, const TCHAR* FullPath
     return true;
 }
 
-bool CUIImage::SetTexture(const std::string& Name, const std::vector<const TCHAR*>& vecFileName,
+bool CUINumber::SetTexture(const std::string& Name, const std::vector<const TCHAR*>& vecFileName,
     const std::string& PathName)
 {
     if (m_Scene)
@@ -89,7 +89,7 @@ bool CUIImage::SetTexture(const std::string& Name, const std::vector<const TCHAR
     return true;
 }
 
-bool CUIImage::SetTextureFullPath(const std::string& Name, const std::vector<const TCHAR*>& vecFullPath)
+bool CUINumber::SetTextureFullPath(const std::string& Name, const std::vector<const TCHAR*>& vecFullPath)
 {
     if (m_Scene)
     {
@@ -110,17 +110,17 @@ bool CUIImage::SetTextureFullPath(const std::string& Name, const std::vector<con
     return true;
 }
 
-void CUIImage::SetImageTint(const Vector4& Tint)
+void CUINumber::SetImageTint(const Vector4& Tint)
 {
     m_TextureInfo.Tint = Tint;
 }
 
-void CUIImage::SetImageTint(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+void CUINumber::SetImageTint(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 {
     m_TextureInfo.Tint = Vector4(r / 255.f, g / 255.f, b / 255.f, a / 255.f);
 }
 
-void CUIImage::AddFrameData(const Vector2& Start, const Vector2& End)
+void CUINumber::AddFrameData(const Vector2& Start, const Vector2& End)
 {
     Animation2DFrameData    Frame;
     Frame.Start = Start;
@@ -131,24 +131,24 @@ void CUIImage::AddFrameData(const Vector2& Start, const Vector2& End)
     m_TextureInfo.FrameTime = m_TextureInfo.vecFrameData.size() / m_TextureInfo.PlayTime;
 }
 
-void CUIImage::SetPlayTime(float PlayTime)
+void CUINumber::SetPlayTime(float PlayTime)
 {
     m_TextureInfo.PlayTime = PlayTime;
 
     m_TextureInfo.FrameTime = m_TextureInfo.vecFrameData.size() / m_TextureInfo.PlayTime;
 }
 
-void CUIImage::SetPlayScale(float PlayScale)
+void CUINumber::SetPlayScale(float PlayScale)
 {
     m_TextureInfo.PlayScale = PlayScale;
 }
 
-void CUIImage::Start()
+void CUINumber::Start()
 {
     CUIWidget::Start();
 }
 
-bool CUIImage::Init()
+bool CUINumber::Init()
 {
     if (!CUIWidget::Init())
         return false;
@@ -156,79 +156,99 @@ bool CUIImage::Init()
     return true;
 }
 
-void CUIImage::Update(float DeltaTime)
+void CUINumber::Update(float DeltaTime)
 {
     CUIWidget::Update(DeltaTime);
 
-    if (!m_TextureInfo.vecFrameData.empty())
+    if (m_Number == 0)
     {
-        m_TextureInfo.Time += DeltaTime;
-
-        if (m_TextureInfo.Time >= m_TextureInfo.FrameTime)
-        {
-            m_TextureInfo.Time -= m_TextureInfo.FrameTime;
-
-            ++m_TextureInfo.Frame;
-
-            if (m_TextureInfo.Frame == m_TextureInfo.vecFrameData.size())
-                m_TextureInfo.Frame = 0;
-        }
+        m_vecNumber.clear();
+        m_vecNumber.push_back(0);
     }
 
+    else
+    {
+        unsigned int Number = m_Number;
 
+        std::stack<int> NumberStack;
+
+        while (Number > 0)
+        {
+            NumberStack.push(Number % 10);
+            Number /= 10;
+        }
+
+        m_vecNumber.clear();
+
+        while (!NumberStack.empty())
+        {
+            m_vecNumber.push_back(NumberStack.top());
+            NumberStack.pop();
+        }
+    }
 }
 
-void CUIImage::PostUpdate(float DeltaTime)
+void CUINumber::PostUpdate(float DeltaTime)
 {
     CUIWidget::PostUpdate(DeltaTime);
 }
 
-void CUIImage::Render()
+void CUINumber::Render()
 {
-    // 상수버퍼를 채워준다.
-    bool TextureEnable = m_TextureInfo.Texture ? true : false;
+    size_t  Size = m_vecNumber.size();
 
-    m_CBuffer->SetTextureEnable(TextureEnable);
+    float   Space = 0.f;
 
-    if (TextureEnable)
+    for (size_t i = 0; i < Size; ++i)
     {
-        if (!m_TextureInfo.vecFrameData.empty())
+        // 상수버퍼를 채워준다.
+        bool TextureEnable = m_TextureInfo.Texture ? true : false;
+
+        m_CBuffer->SetTextureEnable(TextureEnable);
+
+        if (TextureEnable)
         {
-            int TextureFrame = 0;
+            if (!m_TextureInfo.vecFrameData.empty())
+            {
+                int TextureFrame = 0;
 
-            if (m_TextureInfo.Texture->GetImageType() == EImageType::Frame)
-                TextureFrame = m_TextureInfo.Frame;
+                if (m_TextureInfo.Texture->GetImageType() == EImageType::Frame)
+                    TextureFrame = (int)m_vecNumber[i];
 
-            m_TextureInfo.Texture->SetShader(0, (int)EShaderBufferType::Pixel, TextureFrame);
+                m_TextureInfo.Texture->SetShader(0, (int)EShaderBufferType::Pixel, TextureFrame);
 
-            m_AnimCBuffer->SetAnim2DEnable(true);
-            m_AnimCBuffer->SetFrame(m_TextureInfo.Frame);
-            m_AnimCBuffer->SetImageFrame(m_TextureInfo.vecFrameData[m_TextureInfo.Frame].Start,
-                m_TextureInfo.vecFrameData[m_TextureInfo.Frame].End);
-            m_AnimCBuffer->SetImageSize((float)m_TextureInfo.Texture->GetWidth(),
-                (float)m_TextureInfo.Texture->GetHeight());
-            m_AnimCBuffer->SetImageType((EAnimation2DType)m_TextureInfo.Texture->GetImageType());
+                m_AnimCBuffer->SetAnim2DEnable(true);
+                m_AnimCBuffer->SetFrame(m_vecNumber[i]);
+                m_AnimCBuffer->SetImageFrame(m_TextureInfo.vecFrameData[m_vecNumber[i]].Start,
+                    m_TextureInfo.vecFrameData[m_vecNumber[i]].End);
+                m_AnimCBuffer->SetImageSize((float)m_TextureInfo.Texture->GetWidth(),
+                    (float)m_TextureInfo.Texture->GetHeight());
+                m_AnimCBuffer->SetImageType((EAnimation2DType)m_TextureInfo.Texture->GetImageType());
+            }
+
+            else
+            {
+                m_TextureInfo.Texture->SetShader(0, (int)EShaderBufferType::Pixel, 0);
+                m_AnimCBuffer->SetAnim2DEnable(false);
+            }
         }
 
-        else
-        {
-            m_TextureInfo.Texture->SetShader(0, (int)EShaderBufferType::Pixel, 0);
-            m_AnimCBuffer->SetAnim2DEnable(false);
-        }
+        m_Tint = m_TextureInfo.Tint;
+
+        m_RenderPos.x += Space;
+
+        Space = m_Size.x + 5.f;
+
+        CUIWidget::Render();
     }
-
-    m_Tint = m_TextureInfo.Tint;
-
-
-    CUIWidget::Render();
 }
 
-CUIImage* CUIImage::Clone()
+CUINumber* CUINumber::Clone()
 {
-    return new CUIImage(*this);
+    return new CUINumber(*this);
 }
 
-void CUIImage::Save(FILE* File)
+void CUINumber::Save(FILE* File)
 {
     CUIWidget::Save(File);
 
@@ -245,9 +265,11 @@ void CUIImage::Save(FILE* File)
         fwrite(&m_TextureInfo.vecFrameData[0], sizeof(Animation2DFrameData), FrameCount, File);
 
     m_TextureInfo.Texture->Save(File);
+
+    fwrite(&m_Number, sizeof(unsigned int), 1, File);
 }
 
-void CUIImage::Load(FILE* File)
+void CUINumber::Load(FILE* File)
 {
     CUIWidget::Load(File);
 
@@ -336,5 +358,7 @@ void CUIImage::Load(FILE* File)
             SAFE_DELETE_ARRAY(vecFileName[i]);
         }
     }
+
+    fread(&m_Number, sizeof(unsigned int), 1, File);
 }
 

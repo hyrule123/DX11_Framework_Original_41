@@ -3,6 +3,8 @@
 #include "Mesh/MeshManager.h"
 #include "Texture/TextureManager.h"
 #include "../UI/UIWidget.h"
+#include "../UI/UIProgressBar.h"
+#include "Shader/UIProgressBarConstantBuffer.h"
 
 DEFINITION_SINGLE(CResourceManager)
 
@@ -12,6 +14,7 @@ CResourceManager::CResourceManager()
 
 CResourceManager::~CResourceManager()
 {
+	SAFE_DELETE(CUIProgressBar::m_ProgressBarCBuffer);
 	SAFE_DELETE(CUIWidget::m_CBuffer);
 	SAFE_DELETE(CUIWidget::m_AnimCBuffer);
 
@@ -37,6 +40,10 @@ bool CResourceManager::Init()
 	CUIWidget::m_AnimCBuffer = new CAnimation2DConstantBuffer;
 
 	CUIWidget::m_AnimCBuffer->Init();
+
+	CUIProgressBar::m_ProgressBarCBuffer = new CUIProgressBarConstantBuffer;
+
+	CUIProgressBar::m_ProgressBarCBuffer->Init();
 
 	m_TextureManager = new CTextureManager;
 

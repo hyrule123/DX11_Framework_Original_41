@@ -543,6 +543,15 @@
     <ClInclude Include="UI\UIProgressBar.h">
       <Filter>09. UI\02. Widget</Filter>
     </ClInclude>
+    <ClInclude Include="Resource\Shader\UIProgressBarShader.h">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\03. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\Shader\UIProgressBarConstantBuffer.h">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UINumber.h">
+      <Filter>09. UI\02. Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -840,6 +849,15 @@
       <Filter>09. UI\02. Widget</Filter>
     </ClCompile>
     <ClCompile Include="UI\UIProgressBar.cpp">
+      <Filter>09. UI\02. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\UIProgressBarShader.cpp">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\03. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\UIProgressBarConstantBuffer.cpp">
+      <Filter>02. Resource\02. Shader\03. ConstantBuffer\05. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UINumber.cpp">
       <Filter>09. UI\02. Widget</Filter>
     </ClCompile>
   </ItemGroup>

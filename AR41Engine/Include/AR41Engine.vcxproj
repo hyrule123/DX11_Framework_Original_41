@@ -109,6 +109,8 @@
     <ClInclude Include="Resource\Shader\SpriteShader.h" />
     <ClInclude Include="Resource\Shader\TransformConstantBuffer.h" />
     <ClInclude Include="Resource\Shader\UIConstantBuffer.h" />
+    <ClInclude Include="Resource\Shader\UIProgressBarConstantBuffer.h" />
+    <ClInclude Include="Resource\Shader\UIProgressBarShader.h" />
     <ClInclude Include="Resource\Shader\UIShader.h" />
     <ClInclude Include="Resource\Sound\Sound.h" />
     <ClInclude Include="Resource\Sound\SoundManager.h" />
@@ -128,6 +130,7 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="UI\UIButton.h" />
     <ClInclude Include="UI\UIImage.h" />
+    <ClInclude Include="UI\UINumber.h" />
     <ClInclude Include="UI\UIProgressBar.h" />
     <ClInclude Include="UI\UIText.h" />
     <ClInclude Include="UI\UIWidget.h" />
@@ -212,6 +215,8 @@
     <ClCompile Include="Resource\Shader\SpriteShader.cpp" />
     <ClCompile Include="Resource\Shader\TransformConstantBuffer.cpp" />
     <ClCompile Include="Resource\Shader\UIConstantBuffer.cpp" />
+    <ClCompile Include="Resource\Shader\UIProgressBarConstantBuffer.cpp" />
+    <ClCompile Include="Resource\Shader\UIProgressBarShader.cpp" />
     <ClCompile Include="Resource\Shader\UIShader.cpp" />
     <ClCompile Include="Resource\Sound\Sound.cpp" />
     <ClCompile Include="Resource\Sound\SoundManager.cpp" />
@@ -229,6 +234,7 @@
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="UI\UIButton.cpp" />
     <ClCompile Include="UI\UIImage.cpp" />
+    <ClCompile Include="UI\UINumber.cpp" />
     <ClCompile Include="UI\UIProgressBar.cpp" />
     <ClCompile Include="UI\UIText.cpp" />
     <ClCompile Include="UI\UIWidget.cpp" />

@@ -1,26 +1,13 @@
 #pragma once
 
 #include "UIWidget.h"
-
-enum class EProgressBarTextureType
-{
-    Back,
-    Bar,
-    Max
-};
-
-enum class EProgressBarDir
-{
-    RightToLeft,
-    LeftToRight,
-    TopToBottom,
-    BottomToTop
-};
+#include "../Resource/Shader/UIProgressBarConstantBuffer.h"
 
 class CUIProgressBar :
     public CUIWidget
 {
     friend class CUIWindow;
+    friend class CResourceManager;
     friend class CScene;
 
 protected:
@@ -29,11 +16,13 @@ protected:
     virtual ~CUIProgressBar();
 
 protected:
+    static CUIProgressBarConstantBuffer* m_ProgressBarCBuffer;
     UIWidgetImageInfo   m_TextureInfo[(int)EProgressBarTextureType::Max];
     EProgressBarDir     m_BarDir;
     float               m_Min;
     float               m_Max;
     float               m_Value;
+    CSharedPtr<class CShader>   m_BarShader;
 
 public:
     float GetValue()    const
@@ -58,6 +47,10 @@ public:
     void SetProgressBarMax(float Max);
     void SetValue(float Value);
     void AddValue(float Value);
+    void SetBarDir(EProgressBarDir Dir)
+    {
+        m_BarDir = Dir;
+    }
 
 public:
     virtual void Start();

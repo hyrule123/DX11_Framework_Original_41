@@ -316,7 +316,7 @@ struct UICBuffer
 	Vector2	UIEmpty;
 };
 
-struct ProgressBarCBuffer
+struct UIProgressBarCBuffer
 {
 	int		BarDir;
 	float	Percent;
