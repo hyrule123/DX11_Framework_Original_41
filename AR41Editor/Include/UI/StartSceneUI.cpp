@@ -79,7 +79,7 @@ bool CStartSceneUI::Init()
     m_Number->SetPos(200.f, 400.f);
     m_Number->SetSize(20.f, 30.f);
 
-    m_Number->SetNumber(1234);
+    m_Number->SetNumber(2392);
 
     m_Number->SetTexture("Number", TEXT("Number.png"));
 

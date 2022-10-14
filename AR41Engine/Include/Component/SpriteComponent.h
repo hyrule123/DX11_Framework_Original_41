@@ -29,6 +29,8 @@ public:
 
     class CTexture* GetTexture(int Index = 0)    const;
 
+    void ClearAnimation();
+
 public:
     virtual void Start();
     virtual bool Init();

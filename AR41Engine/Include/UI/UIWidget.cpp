@@ -18,7 +18,8 @@ CUIWidget::CUIWidget()  :
     m_Angle(0.f),
     m_Opacity(1.f),
     m_Start(false),
-    m_Tint(1.f, 1.f, 1.f, 1.f)
+    m_Tint(1.f, 1.f, 1.f, 1.f),
+    m_MouseHovered(false)
 {
     m_WidgetTypeName = "UIWidget";
 }
@@ -36,6 +37,7 @@ CUIWidget::CUIWidget(const CUIWidget& Widget)   :
     m_Shader = Widget.m_Shader;
     m_Tint = Widget.m_Tint;
     m_MeshSize = Widget.m_MeshSize;
+    m_MouseHovered = false;
 }
 
 CUIWidget::~CUIWidget()
@@ -210,4 +212,23 @@ void CUIWidget::Load(FILE* File)
         m_Mesh = CResourceManager::GetInst()->FindMesh(MeshName);
         m_Shader = CResourceManager::GetInst()->FindShader(ShaderName);
     }
+}
+
+bool CUIWidget::CollisionMouse(const Vector2& MousePos)
+{
+    Vector2 Pos = m_Owner->GetPos() + m_Pos - m_Pivot * m_Size;
+
+    if (Pos.x > MousePos.x)
+        return false;
+
+    else if (Pos.x + m_Size.x < MousePos.x)
+        return false;
+
+    else if (Pos.y > MousePos.y)
+        return false;
+
+    else if (Pos.y + m_Size.y < MousePos.y)
+        return false;
+
+    return true;
 }

@@ -1,18 +1,21 @@
 #include "UIWindow.h"
+#include "../Device.h"
 
 std::unordered_map<std::string, CUIWindow*> CUIWindow::m_mapUIWindowCDO;
 
 CUIWindow::CUIWindow()  :
-    m_ZOrder(0),
+	m_ZOrder(0),
 	m_Start(false)
 {
 	m_WindowTypeName = "UIWindow";
+	m_Size = Vector2((float)CDevice::GetInst()->GetResolution().Width,
+		CDevice::GetInst()->GetResolution().Height);
 }
 
 CUIWindow::CUIWindow(const CUIWindow& Window)	:
 	CRef(Window)
 {
-    m_ZOrder = Window.m_ZOrder;
+	m_ZOrder = Window.m_ZOrder;
 	m_Size = Window.m_Size;
 	m_Start = false;
 	m_WindowTypeName = Window.m_WindowTypeName;
@@ -47,7 +50,7 @@ void CUIWindow::Start()
 
 bool CUIWindow::Init()
 {
-    return true;
+	return true;
 }
 
 void CUIWindow::Update(float DeltaTime)
@@ -102,7 +105,8 @@ void CUIWindow::PostUpdate(float DeltaTime)
 
 void CUIWindow::Render()
 {
-	std::sort(m_vecWidget.begin(), m_vecWidget.end(), CUIWindow::SortWidget);
+	if (m_vecWidget.size() >= 2)
+		std::sort(m_vecWidget.begin(), m_vecWidget.end(), CUIWindow::SortWidget);
 
 	auto	iter = m_vecWidget.begin();
 	auto	iterEnd = m_vecWidget.end();
@@ -129,7 +133,7 @@ void CUIWindow::Render()
 
 CUIWindow* CUIWindow::Clone()
 {
-    return new CUIWindow(*this);
+	return new CUIWindow(*this);
 }
 
 void CUIWindow::Save(FILE* File)
@@ -204,7 +208,50 @@ void CUIWindow::Load(FILE* File)
 	}
 }
 
+CUIWidget* CUIWindow::CollisionMouse(const Vector2& MousePos)
+{
+	if (m_Pos.x > MousePos.x)
+		return nullptr;
+
+	else if (m_Pos.x + m_Size.x < MousePos.x)
+		return nullptr;
+
+	else if (m_Pos.y > MousePos.y)
+		return nullptr;
+
+	else if (m_Pos.y + m_Size.y < MousePos.y)
+		return nullptr;
+
+	if (m_vecWidget.size() >= 2)
+		std::sort(m_vecWidget.begin(), m_vecWidget.end(), CUIWindow::SortWidgetInv);
+
+	auto	iter = m_vecWidget.begin();
+	auto	iterEnd = m_vecWidget.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		if (!(*iter)->GetEnable())
+			continue;
+
+		if ((*iter)->CollisionMouse(MousePos))
+		{
+			(*iter)->m_MouseHovered = true;
+			return *iter;
+		}
+
+		else
+			(*iter)->m_MouseHovered = false;
+	}
+
+	return nullptr;
+}
+
 bool CUIWindow::SortWidget(CSharedPtr<CUIWidget> Src, CSharedPtr<CUIWidget> Dest)
 {
 	return Src->GetZOrder() > Dest->GetZOrder();
+}
+
+bool CUIWindow::SortWidgetInv(CSharedPtr<CUIWidget> Src, CSharedPtr<CUIWidget> Dest)
+{
+	return Src->GetZOrder() < Dest->GetZOrder();
 }

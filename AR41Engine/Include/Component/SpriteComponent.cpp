@@ -89,6 +89,12 @@ CTexture* CSpriteComponent::GetTexture(int Index) const
 	return m_vecMaterial[0]->GetTexture(Index);
 }
 
+void CSpriteComponent::ClearAnimation()
+{
+	m_Animation = nullptr;
+	SetTextureFrameIndex(0);
+}
+
 void CSpriteComponent::Start()
 {
 	CPrimitiveComponent::Start();

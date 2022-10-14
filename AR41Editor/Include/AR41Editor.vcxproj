@@ -186,10 +186,12 @@
     <ClCompile Include="Setting\DefaultSetting.cpp" />
     <ClCompile Include="Setting\EngineShareSetting.cpp" />
     <ClCompile Include="UI\StartSceneUI.cpp" />
+    <ClCompile Include="Window\Animation2DWindow.cpp" />
     <ClCompile Include="Window\ClassWindow.cpp" />
     <ClCompile Include="Window\ComponentWindow.cpp" />
     <ClCompile Include="Window\DetailWindow.cpp" />
     <ClCompile Include="Window\ObjectWindow.cpp" />
+    <ClCompile Include="Window\ResourceWindow.cpp" />
     <ClCompile Include="Window\SceneWindow.cpp" />
     <ClCompile Include="Window\TestWindow.cpp" />
     <ClCompile Include="Window\TransformWindow.cpp" />
@@ -205,10 +207,12 @@
     <ClInclude Include="Setting\DefaultSetting.h" />
     <ClInclude Include="Setting\EngineShareSetting.h" />
     <ClInclude Include="UI\StartSceneUI.h" />
+    <ClInclude Include="Window\Animation2DWindow.h" />
     <ClInclude Include="Window\ClassWindow.h" />
     <ClInclude Include="Window\ComponentWindow.h" />
     <ClInclude Include="Window\DetailWindow.h" />
     <ClInclude Include="Window\ObjectWindow.h" />
+    <ClInclude Include="Window\ResourceWindow.h" />
     <ClInclude Include="Window\SceneWindow.h" />
     <ClInclude Include="Window\TestWindow.h" />
     <ClInclude Include="Window\TransformWindow.h" />

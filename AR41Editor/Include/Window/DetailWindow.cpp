@@ -236,6 +236,9 @@ void CDetailWindow::LoadButtonClick()
 			if (m_SelectComponent)
 			{
 				((CSpriteComponent*)m_SelectComponent.Get())->SetTextureFullPath(TexName, FullPath);
+
+				// Animation을 제거한다.
+				((CSpriteComponent*)m_SelectComponent.Get())->ClearAnimation();
 			}
 		}
 	}

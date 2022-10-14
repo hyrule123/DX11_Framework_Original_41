@@ -20,6 +20,8 @@
 #include "CollisionManager.h"
 #include "Setting/EngineShareSetting.h"
 #include "Scene/EditorDefaultScene.h"
+#include "Window/Animation2DWindow.h"
+#include "Window/ResourceWindow.h"
 
 CEditorManager::CEditorManager()
 {
@@ -55,6 +57,8 @@ bool CEditorManager::Init(HINSTANCE hInst)
     CEditorGUIManager::GetInst()->CreateEditorWindow<CTransformWindow>("TransformWindow");
     CEditorGUIManager::GetInst()->CreateEditorWindow<CSceneWindow>("SceneWindow");
     CEditorGUIManager::GetInst()->CreateEditorWindow<CDetailWindow>("DetailWindow");
+    CEditorGUIManager::GetInst()->CreateEditorWindow<CAnimation2DWindow>("Animation2DWindow");
+    CEditorGUIManager::GetInst()->CreateEditorWindow<CResourceWindow>("ResourceWindow");
 
     // SceneInfo »ý¼º
     CSceneManager::GetInst()->CreateSceneInfo<CEditorDefaultScene>();

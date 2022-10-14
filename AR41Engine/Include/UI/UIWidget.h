@@ -35,6 +35,7 @@ class CUIWidget :
     friend class CResourceManager;
     friend class CScene;
     friend class CSceneManager;
+    friend class CSceneViewport;
 
 protected:
     CUIWidget();
@@ -74,6 +75,7 @@ protected:
     float   m_Angle;
     float   m_Opacity;
     bool	m_Start;
+    bool    m_MouseHovered;
     Vector4 m_Tint;
     CSharedPtr<class CShader>   m_Shader;
     CSharedPtr<class CMesh>     m_Mesh;
@@ -194,5 +196,6 @@ public:
     virtual CUIWidget* Clone();
     virtual void Save(FILE* File);
     virtual void Load(FILE* File);
+    virtual bool CollisionMouse(const Vector2& MousePos);
 };
 
