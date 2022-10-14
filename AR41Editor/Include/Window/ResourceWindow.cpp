@@ -81,32 +81,19 @@ void CResourceWindow::LoadTextureList()
 	// Editor의 GameObject폴더에 있는 파일을 읽어온다.
 	strcat_s(Directory, "Texture/");
 
+	int DirLen = (int)strlen(Directory);
+
 	const char* TextureExtArray[5] = { ".BMP", ".JPG", ".PNG", ".TGA", ".DDS" };
 
 	for (const auto& file : std::filesystem::recursive_directory_iterator(Directory))
 	{
-		char	Name[256] = {};
+		char	Name[MAX_PATH] = {};
 		char	FullPath[MAX_PATH] = {};
 		char	Ext[_MAX_EXT] = {};
-		char	FolderName[10] = {};
 
 		strcpy_s(FullPath, file.path().generic_string().c_str());
 
-		int	Length = (int)strlen(FullPath);
-
-		if (Length >= 9)
-		{
-			for (int i = Length - 10; i >= 0; --i)
-			{
-				memcpy(FolderName, &FullPath[i], 9);
-
-				if (strcmp(FolderName, "/Texture/") == 0)
-				{
-					strcpy_s(Name, &FullPath[i + 9]);
-					break;
-				}
-			}
-		}
+		strcpy_s(Name, MAX_PATH, &FullPath[DirLen]);
 
 		_splitpath_s(FullPath, nullptr, 0, nullptr, 0, nullptr, 0, Ext, _MAX_EXT);
 
@@ -130,7 +117,7 @@ void CResourceWindow::LoadTextureList()
 
 		TCHAR	FileName[MAX_PATH] = {};
 
-		Length = (int)MultiByteToWideChar(CP_ACP, 0, Name, -1, 0, 0);
+		int Length = (int)MultiByteToWideChar(CP_ACP, 0, Name, -1, 0, 0);
 		MultiByteToWideChar(CP_ACP, 0, Name, -1, FileName, Length);
 
 		CResourceManager::GetInst()->LoadTexture(Name, FileName);
