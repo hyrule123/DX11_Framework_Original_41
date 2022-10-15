@@ -40,6 +40,7 @@
     <ClInclude Include="Device.h" />
     <ClInclude Include="Editor\EditorButton.h" />
     <ClInclude Include="Editor\EditorComboBox.h" />
+    <ClInclude Include="Editor\EditorGroup.h" />
     <ClInclude Include="Editor\EditorGUIManager.h" />
     <ClInclude Include="Editor\EditorImage.h" />
     <ClInclude Include="Editor\EditorInfo.h" />
@@ -161,6 +162,7 @@
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="Editor\EditorButton.cpp" />
     <ClCompile Include="Editor\EditorComboBox.cpp" />
+    <ClCompile Include="Editor\EditorGroup.cpp" />
     <ClCompile Include="Editor\EditorGUIManager.cpp" />
     <ClCompile Include="Editor\EditorImage.cpp" />
     <ClCompile Include="Editor\EditorInput.cpp" />

@@ -24,12 +24,18 @@ void CEditorImage::SetTexture(const std::string& Name, const TCHAR* FileName,
 
 	m_Texture = CResourceManager::GetInst()->FindTexture(Name);
 
+	if (!m_Texture)
+		m_Texture = CResourceManager::GetInst()->FindTexture("DefaultUI");
+
 	SetImageEnd((float)m_Texture->GetWidth(), (float)m_Texture->GetHeight());
 }
 
 void CEditorImage::SetTexture(const std::string& Name)
 {
 	m_Texture = CResourceManager::GetInst()->FindTexture(Name);
+
+	if (!m_Texture)
+		m_Texture = CResourceManager::GetInst()->FindTexture("DefaultUI");
 
 	SetImageEnd((float)m_Texture->GetWidth(), (float)m_Texture->GetHeight());
 }
@@ -40,12 +46,20 @@ void CEditorImage::SetTextureFullPath(const std::string& Name, const TCHAR* Full
 
 	m_Texture = CResourceManager::GetInst()->FindTexture(Name);
 
+	if (!m_Texture)
+		m_Texture = CResourceManager::GetInst()->FindTexture("DefaultUI");
+
 	SetImageEnd((float)m_Texture->GetWidth(), (float)m_Texture->GetHeight());
 }
 
 void CEditorImage::SetTexture(CTexture* Texture)
 {
 	m_Texture = Texture;
+
+	if (!m_Texture)
+	{
+		m_Texture = CResourceManager::GetInst()->FindTexture("DefaultUI");
+	}
 
 	SetImageEnd((float)m_Texture->GetWidth(), (float)m_Texture->GetHeight());
 }

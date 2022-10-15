@@ -17,8 +17,13 @@ private:
 	class CEditorListBox* m_FontList;
 
 	class CEditorImage* m_TextureImageBox;
+	CSharedPtr<class CTexture>	m_SelectTexture;
 
 public:
+	class CTexture* GetSelectTexture()	const
+	{
+		return m_SelectTexture;
+	}
 
 public:
 	virtual bool Init();

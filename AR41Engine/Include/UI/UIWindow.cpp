@@ -4,7 +4,7 @@
 std::unordered_map<std::string, CUIWindow*> CUIWindow::m_mapUIWindowCDO;
 
 CUIWindow::CUIWindow()  :
-	m_ZOrder(0),
+    m_ZOrder(0),
 	m_Start(false)
 {
 	m_WindowTypeName = "UIWindow";
@@ -15,7 +15,7 @@ CUIWindow::CUIWindow()  :
 CUIWindow::CUIWindow(const CUIWindow& Window)	:
 	CRef(Window)
 {
-	m_ZOrder = Window.m_ZOrder;
+    m_ZOrder = Window.m_ZOrder;
 	m_Size = Window.m_Size;
 	m_Start = false;
 	m_WindowTypeName = Window.m_WindowTypeName;
@@ -50,7 +50,7 @@ void CUIWindow::Start()
 
 bool CUIWindow::Init()
 {
-	return true;
+    return true;
 }
 
 void CUIWindow::Update(float DeltaTime)
@@ -133,7 +133,7 @@ void CUIWindow::Render()
 
 CUIWindow* CUIWindow::Clone()
 {
-	return new CUIWindow(*this);
+    return new CUIWindow(*this);
 }
 
 void CUIWindow::Save(FILE* File)

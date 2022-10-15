@@ -84,16 +84,18 @@ void CSceneViewport::PostUpdate(float DeltaTime)
 
 void CSceneViewport::Render()
 {
+	if (m_vecWindow.size() >= 2)
+		std::sort(m_vecWindow.begin(), m_vecWindow.end(), CSceneViewport::SortWindow);
 
-	auto	iter = m_vecWindow.rbegin();
-	auto	iterEnd = m_vecWindow.rend();
+	auto	iter = m_vecWindow.begin();
+	auto	iterEnd = m_vecWindow.end();
 
 	for (; iter != iterEnd;)
 	{
 		if (!(*iter)->GetActive())
 		{
-			m_vecWindow.erase((++iter).base());
-			iterEnd = m_vecWindow.rend();
+			iter = m_vecWindow.erase(iter);
+			iterEnd = m_vecWindow.end();
 			continue;
 		}
 
@@ -159,7 +161,7 @@ void CSceneViewport::Load(FILE* File)
 bool CSceneViewport::CollisionMouse()
 {
 	if (m_vecWindow.size() >= 2)
-		std::sort(m_vecWindow.begin(), m_vecWindow.end(), CSceneViewport::SortWindow);
+		std::sort(m_vecWindow.begin(), m_vecWindow.end(), CSceneViewport::SortWindowInv);
 
 	if (m_CollisionWidget && !m_CollisionWidget->GetActive())
 		m_CollisionWidget = nullptr;
