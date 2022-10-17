@@ -27,7 +27,7 @@ public:
     inline void SetChecked(const bool& B);
 
     template <typename T>
-    void SetCheckCallbackFunc(T* Obj, void(T::* func)(bool&));
+    inline void SetCheckCallbackFunc(T* Obj, void(T::* func)(bool&));
 };
 
 
