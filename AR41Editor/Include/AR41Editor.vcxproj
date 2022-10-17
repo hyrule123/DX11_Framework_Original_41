@@ -190,6 +190,12 @@
     <ClCompile Include="Window\ClassWindow.cpp" />
     <ClCompile Include="Window\ComponentWindow.cpp" />
     <ClCompile Include="Window\DetailWindow.cpp" />
+    <ClCompile Include="Window\DetailWindow\CameraWidgetList.cpp" />
+    <ClCompile Include="Window\DetailWindow\ComponentWidgetList.cpp" />
+    <ClCompile Include="Window\DetailWindow\PrimitiveWidgetList.cpp" />
+    <ClCompile Include="Window\DetailWindow\SceneComponentWidgetList.cpp" />
+    <ClCompile Include="Window\DetailWindow\SpriteComponentWidgetList.cpp" />
+    <ClCompile Include="Window\DetailWindow\TargetArmWidgetList.cpp" />
     <ClCompile Include="Window\ObjectWindow.cpp" />
     <ClCompile Include="Window\ResourceWindow.cpp" />
     <ClCompile Include="Window\SceneWindow.cpp" />
@@ -211,6 +217,12 @@
     <ClInclude Include="Window\ClassWindow.h" />
     <ClInclude Include="Window\ComponentWindow.h" />
     <ClInclude Include="Window\DetailWindow.h" />
+    <ClInclude Include="Window\DetailWindow\CameraWidgetList.h" />
+    <ClInclude Include="Window\DetailWindow\ComponentWidgetList.h" />
+    <ClInclude Include="Window\DetailWindow\PrimitiveWidgetList.h" />
+    <ClInclude Include="Window\DetailWindow\SceneComponentWidgetList.h" />
+    <ClInclude Include="Window\DetailWindow\SpriteComponentWidgetList.h" />
+    <ClInclude Include="Window\DetailWindow\TargetArmWidgetList.h" />
     <ClInclude Include="Window\ObjectWindow.h" />
     <ClInclude Include="Window\ResourceWindow.h" />
     <ClInclude Include="Window\SceneWindow.h" />

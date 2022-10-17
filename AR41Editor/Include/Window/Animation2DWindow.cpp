@@ -488,8 +488,10 @@ void CAnimation2DWindow::AddAllFrameClick()
 	}
 }
 
-void CAnimation2DWindow::Animation2DSelectCallback(int Index, const std::string& Item)
+void CAnimation2DWindow::Animation2DSelectCallback(int Index, 
+	const std::string& Item)
 {
+	m_Animation2DSelectName = Item;
 }
 
 void CAnimation2DWindow::SequenceSelectCallback(int Index, const std::string& Item)

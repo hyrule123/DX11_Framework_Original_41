@@ -24,7 +24,13 @@ private:
 	class CEditorInput* m_Count;
 	std::vector<Animation2DFrameData>	m_vecFrame;
 
+	std::string		m_Animation2DSelectName;
+
 public:
+	const std::string& GetAnimation2DSelectName()	const
+	{
+		return m_Animation2DSelectName;
+	}
 
 public:
 	virtual bool Init();
