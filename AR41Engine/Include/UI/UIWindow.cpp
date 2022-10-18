@@ -202,8 +202,7 @@ void CUIWindow::Load(FILE* File)
 			m_vecWidget[i]->m_Owner = this;
 			m_vecWidget[i]->m_Scene = m_Scene;
 
-			m_vecWidget[i]->Init();
-			m_vecWidget[i]->Load(File);
+			m_vecWidget[i]->Init();			m_vecWidget[i]->Load(File);
 		}
 	}
 }

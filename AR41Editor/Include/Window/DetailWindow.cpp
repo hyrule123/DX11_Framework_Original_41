@@ -18,6 +18,8 @@
 #include "DetailWindow/SpriteComponentWidgetList.h"
 #include "DetailWindow/SceneComponentWidgetList.h"
 #include "DetailWindow/PrimitiveWidgetList.h"
+#include "Animation2DWindow.h"
+#include "Editor/EditorGUIManager.h"
 
 CDetailWindow::CDetailWindow()
 {
@@ -33,6 +35,20 @@ CDetailWindow::~CDetailWindow()
 	{
 		AddWidget(m_vecComponentWidgetList[i]);
 	}
+}
+
+CComponentWidgetList* CDetailWindow::GetComponentWidgetList(
+	const std::string& Name)
+{
+	size_t	Size = m_vecComponentWidgetList.size();
+
+	for (size_t i = 0; i < Size; ++i)
+	{
+		if (m_vecComponentWidgetList[i]->GetName() == Name)
+			return m_vecComponentWidgetList[i];
+	}
+
+	return nullptr;
 }
 
 void CDetailWindow::SetSelectComponent(CSceneComponent* Component)
@@ -89,7 +105,12 @@ void CDetailWindow::ChangeWidget(CSceneComponent* Component)
 	{
 		AddWidget(m_vecComponentWidgetList[(int)ESceneComponentType::Sprite]);
 
-		((CSpriteComponentWidgetList*)m_vecComponentWidgetList[(int)ESceneComponentType::Sprite])->SetSpriteContent((CSpriteComponent*)Component);
+		CSpriteComponentWidgetList* SpriteWidget = (CSpriteComponentWidgetList*)m_vecComponentWidgetList[(int)ESceneComponentType::Sprite];
+
+		CAnimation2DWindow* Anim2DWindow = CEditorGUIManager::GetInst()->FindEditorWindow<CAnimation2DWindow>("Animation2DWindow");
+
+		SpriteWidget->SetSelectAnimationSequence2DName(Anim2DWindow->GetAnimation2DSequenceSelectName());
+		SpriteWidget->SetSpriteContent((CSpriteComponent*)Component);
 	}
 
 	else if (Component->GetComponentTypeName() == "CameraComponent")

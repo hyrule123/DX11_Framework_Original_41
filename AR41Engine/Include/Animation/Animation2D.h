@@ -79,7 +79,7 @@ public:
 	virtual CAnimation2D* Clone();
 	void SetShader();
 
-protected:
+public:
 	CAnimation2DData* FindAnimation(const std::string& Name);
 
 public:

@@ -555,6 +555,9 @@
     <ClInclude Include="Editor\EditorGroup.h">
       <Filter>07. Editor\03. Widget</Filter>
     </ClInclude>
+    <ClInclude Include="Editor\EditorCheckBox.h">
+      <Filter>07. Editor\03. Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -864,6 +867,9 @@
       <Filter>09. UI\02. Widget</Filter>
     </ClCompile>
     <ClCompile Include="Editor\EditorGroup.cpp">
+      <Filter>07. Editor\03. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\EditorCheckBox.cpp">
       <Filter>07. Editor\03. Widget</Filter>
     </ClCompile>
   </ItemGroup>

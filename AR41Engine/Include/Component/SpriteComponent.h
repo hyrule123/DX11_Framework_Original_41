@@ -26,6 +26,13 @@ public:
         return m_Animation->GetAnimationClassName();
     }
 
+    CAnimation2D* GetAnimation()    const
+    {
+        return m_Animation;
+    }
+
+    void GetAnimationNames(std::vector<std::string>& vecNames);
+
 public:
     bool SetTexture(class CTexture* Texture);
     bool SetTexture(const std::string& Name, const TCHAR* FileName,

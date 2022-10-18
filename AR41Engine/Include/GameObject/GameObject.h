@@ -61,6 +61,7 @@ protected:
 	std::list<CSceneComponent*> m_SceneComponentList;
 	std::vector<CSharedPtr<CObjectComponent>>   m_vecObjectComponent;
 	float       m_LifeTime;
+	bool		m_Start;
 
 public:
 	void SetLifeTime(float LifeTime)
@@ -176,6 +177,9 @@ public:
 		Component->SetSerialNumber(m_ComponentSerialNumber);
 
 		++m_ComponentSerialNumber;
+
+		if (m_Start)
+			Component->Start();
 
 		return Component;
 	}

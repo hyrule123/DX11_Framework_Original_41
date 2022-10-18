@@ -22,6 +22,12 @@ CSpriteComponent::~CSpriteComponent()
 {
 }
 
+void CSpriteComponent::GetAnimationNames(std::vector<std::string>& vecNames)
+{
+	if (m_Animation)
+		m_Animation->GetAnimationNames(vecNames);
+}
+
 bool CSpriteComponent::SetTexture(CTexture* Texture)
 {
 	if (m_vecMaterial.empty())
