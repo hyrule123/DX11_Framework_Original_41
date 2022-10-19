@@ -193,6 +193,9 @@
     <Filter Include="02. Resource\07. Font">
       <UniqueIdentifier>{f6e36326-7e28-4cc2-99b5-af0673bb857e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Manager\10. Thread">
+      <UniqueIdentifier>{dace6ab4-c87d-4c79-b4ef-78bbe7d4aee9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -558,6 +561,12 @@
     <ClInclude Include="Editor\EditorCheckBox.h">
       <Filter>07. Editor\03. Widget</Filter>
     </ClInclude>
+    <ClInclude Include="Thread\Thread.h">
+      <Filter>01. Manager\10. Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="Thread\ThreadManager.h">
+      <Filter>01. Manager\10. Thread</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -871,6 +880,12 @@
     </ClCompile>
     <ClCompile Include="Editor\EditorCheckBox.cpp">
       <Filter>07. Editor\03. Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Thread\Thread.cpp">
+      <Filter>01. Manager\10. Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="Thread\ThreadManager.cpp">
+      <Filter>01. Manager\10. Thread</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

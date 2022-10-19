@@ -8,6 +8,7 @@
 #include "Input.h"
 #include "Editor/EditorGUIManager.h"
 #include "CollisionManager.h"
+#include "Thread/ThreadManager.h"
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
@@ -43,6 +44,8 @@ CEngine::~CEngine()
 	CRenderManager::DestroyInst();
 
 	CInput::DestroyInst();
+
+	CThreadManager::DestroyInst();
 
 	CPathManager::DestroyInst();
 	CResourceManager::DestroyInst();
@@ -103,6 +106,10 @@ bool CEngine::Init(HINSTANCE hInst, const TCHAR* Title,
 	
 	// 렌더링 관리자 초기화
 	if (!CRenderManager::GetInst()->Init())
+		return false;
+
+	// 스레드 관리자 초기화
+	if (!CThreadManager::GetInst()->Init())
 		return false;
 
 

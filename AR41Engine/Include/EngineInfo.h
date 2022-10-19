@@ -19,6 +19,7 @@
 #include <filesystem>
 #include <dwrite_3.h>
 #include <d2d1.h>
+#include <process.h>
 
 #pragma comment(lib, "dwrite.lib")
 #pragma comment(lib, "d2d1.lib")

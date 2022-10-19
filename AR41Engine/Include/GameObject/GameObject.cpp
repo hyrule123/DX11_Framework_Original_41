@@ -21,6 +21,7 @@ CGameObject::CGameObject(const CGameObject& Obj)    :
 	m_ComponentSerialNumber = Obj.m_ComponentSerialNumber;
 	m_Start = false;
 
+	if (Obj.m_RootComponent)
 	{
 		m_RootComponent = Obj.m_RootComponent->Clone();
 

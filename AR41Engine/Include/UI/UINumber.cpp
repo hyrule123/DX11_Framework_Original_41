@@ -316,6 +316,10 @@ void CUINumber::Load(FILE* File)
         fread(&Length, sizeof(int), 1, File);
         fread(TexName, 1, Length, File);
 
+        EImageType  ImageType;
+
+        fread(&ImageType, sizeof(EImageType), 1, File);
+
         int	TextureSRVCount = 0;
 
         fread(&TextureSRVCount, sizeof(int), 1, File);
