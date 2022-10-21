@@ -12,13 +12,27 @@ protected:
 
 protected:
 	HANDLE	m_Thread;
+	HANDLE	m_StartEvent;
+	bool	m_Loop;
 
 public:
-	virtual bool Init(bool Suspend);
+	void SetLoop(bool Loop)
+	{
+		m_Loop = Loop;
+	}
+
+public:
+	void Suspend();
+	void Resume();
+	void ReStart();
+	void Stop();
+	void Start();
+
+public:
+	virtual bool Init();
 	virtual void Run() = 0;
 
 private:
 	static unsigned int __stdcall ThreadFunction(void* Arg);
-
 };
 

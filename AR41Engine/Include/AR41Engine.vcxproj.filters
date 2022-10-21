@@ -567,6 +567,12 @@
     <ClInclude Include="Thread\ThreadManager.h">
       <Filter>01. Manager\10. Thread</Filter>
     </ClInclude>
+    <ClInclude Include="Thread\LoadingThread.h">
+      <Filter>01. Manager\10. Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="Thread\Sync.h">
+      <Filter>01. Manager\10. Thread</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -885,6 +891,9 @@
       <Filter>01. Manager\10. Thread</Filter>
     </ClCompile>
     <ClCompile Include="Thread\ThreadManager.cpp">
+      <Filter>01. Manager\10. Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="Thread\LoadingThread.cpp">
       <Filter>01. Manager\10. Thread</Filter>
     </ClCompile>
   </ItemGroup>

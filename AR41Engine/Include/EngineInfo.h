@@ -42,6 +42,7 @@ extern float g_DeltaTime;
 #define	SOUND_PATH		"Sound"
 #define	FONT_PATH		"Font"
 #define	ANIMATION2D_PATH		"Animation2D"
+#define	SCENE_PATH		"Scene"
 
 #define	DECLARE_SINGLE(Type)	\
 private:\

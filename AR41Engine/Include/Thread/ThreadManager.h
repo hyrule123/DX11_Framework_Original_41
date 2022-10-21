@@ -6,14 +6,18 @@ class CThreadManager
 {
 private:
 	std::unordered_map<std::string, CThread*>	m_mapThread;
+	std::unordered_map<std::string, CRITICAL_SECTION*>	m_mapCriticalSection;
 
 public:
 	bool Init();
 	CThread* FindThread(const std::string& Name);
 
+	bool CreateCriticalSection(const std::string& Name);
+	CRITICAL_SECTION* FindCriticalSection(const std::string& Name);
+
 public:
 	template <typename T>
-	T* Create(const std::string& Name, bool Suspend = false)
+	T* Create(const std::string& Name)
 	{
 		T* Thread = (T*)FindThread(Name);
 
@@ -22,7 +26,7 @@ public:
 
 		Thread = new T;
 
-		if (!Thread->Init(Suspend))
+		if (!Thread->Init())
 		{
 			SAFE_DELETE(Thread);
 			return nullptr;
