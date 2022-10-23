@@ -3,6 +3,9 @@
 #include "UI/UIText.h"
 #include "UI/UIProgressBar.h"
 #include "UI/UINumber.h"
+#include "Scene/SceneManager.h"
+#include "Scene/Scene.h"
+#include "../Scene/LoadingSceneInfo.h"
 
 CStartSceneUI::CStartSceneUI()
 {
@@ -41,6 +44,9 @@ bool CStartSceneUI::Init()
 
     m_Button->SetSound(EButtonEventState::Hovered, "UI", "ButtonHovered", false, "Demasia.mp3");
     m_Button->SetSound(EButtonEventState::Click, "UI", "ButtonClick", false, "TeemoSmile.mp3");
+
+    m_Button->SetCallback<CStartSceneUI>(EButtonEventState::Click,
+        this, &CStartSceneUI::StartButtonClick);
 
     m_Title = CreateWidget<CUIText>("Title");
 
@@ -122,4 +128,12 @@ void CStartSceneUI::Load(FILE* File)
 
     m_Button = FindWidget<CUIButton>("Button");
     m_Title = FindWidget<CUIText>("Title");
+}
+
+void CStartSceneUI::StartButtonClick()
+{
+    // 로딩 Scene을 생성한다.
+    CSceneManager::GetInst()->CreateNextScene(true);
+
+    CSceneManager::GetInst()->CreateSceneInfo<CLoadingSceneInfo>(false);
 }

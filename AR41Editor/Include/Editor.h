@@ -3,7 +3,6 @@
 #include "Engine.h"
 #include "resource.h"
 
-
 #ifdef _DEBUG
 
 #pragma comment(lib, "AR41Engine_Debug.lib")

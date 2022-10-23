@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Thread.h"
+#include "ThreadQueue.h"
 
 class CLoadingThread :
     public CThread
@@ -15,6 +16,19 @@ protected:
 	std::string		m_FileName;
 	std::string		m_PathName;
 	std::string		m_FullPath;
+	bool			m_LoadComplete;
+	CThreadQueue	m_Queue;
+
+public:
+	CThreadQueue* GetQueue()
+	{
+		return &m_Queue;
+	}
+
+	bool IsLoadComplete()	const
+	{
+		return m_LoadComplete;
+	}
 
 public:
 	void SetLoadingSceneFileName(const std::string& FileName)

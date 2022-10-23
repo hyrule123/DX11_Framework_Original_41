@@ -325,3 +325,10 @@ struct UIProgressBarCBuffer
 	float	Percent;
 	Vector2	Empty;
 };
+
+struct ThreadSyncData
+{
+	int	Header;
+	int	Size;
+	unsigned char Data[1024];
+};

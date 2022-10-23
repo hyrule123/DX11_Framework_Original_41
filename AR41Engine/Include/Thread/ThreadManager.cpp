@@ -37,6 +37,9 @@ CThreadManager::~CThreadManager()
 
 bool CThreadManager::Init()
 {
+	// 로딩용 크리티컬 섹션 생성
+	CreateCriticalSection("Loading");
+
 	return true;
 }
 

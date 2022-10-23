@@ -170,9 +170,11 @@
     <ClCompile Include="GameObject\Monster.cpp" />
     <ClCompile Include="GameObject\Player2D.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Scene\LoadingSceneInfo.cpp" />
     <ClCompile Include="Scene\MainSceneInfo.cpp" />
     <ClCompile Include="Setting\DefaultSetting.cpp" />
     <ClCompile Include="Setting\EngineShareSetting.cpp" />
+    <ClCompile Include="UI\LoadingUI.cpp" />
     <ClCompile Include="UI\StartSceneUI.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -182,9 +184,11 @@
     <ClInclude Include="GameObject\Monster.h" />
     <ClInclude Include="GameObject\Player2D.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Scene\LoadingSceneInfo.h" />
     <ClInclude Include="Scene\MainSceneInfo.h" />
     <ClInclude Include="Setting\DefaultSetting.h" />
     <ClInclude Include="Setting\EngineShareSetting.h" />
+    <ClInclude Include="UI\LoadingUI.h" />
     <ClInclude Include="UI\StartSceneUI.h" />
   </ItemGroup>
   <ItemGroup>

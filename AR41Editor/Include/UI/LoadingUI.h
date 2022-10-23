@@ -2,22 +2,20 @@
 
 #include "UI\UIWindow.h"
 
-class CStartSceneUI :
+class CLoadingUI :
     public CUIWindow
 {
 	friend class CSceneViewport;
 	friend class CScene;
 
 protected:
-	CStartSceneUI();
-	CStartSceneUI(const CStartSceneUI& Window);
-	virtual ~CStartSceneUI();
+	CLoadingUI();
+	CLoadingUI(const CLoadingUI& Window);
+	virtual ~CLoadingUI();
 
 protected:
-	CSharedPtr<class CUIButton>	m_Button;
-	CSharedPtr<class CUIText>	m_Title;
-	CSharedPtr<class CUIProgressBar>	m_ProgressBar;
-	CSharedPtr<class CUINumber>	m_Number;
+	CSharedPtr<class CUIImage>	m_Back;
+	CSharedPtr<class CUIProgressBar>	m_LoadingBar;
 
 public:
 	virtual void Start();
@@ -25,11 +23,8 @@ public:
 	virtual void Update(float DeltaTime);
 	virtual void PostUpdate(float DeltaTime);
 	virtual void Render();
-	virtual CStartSceneUI* Clone();
+	virtual CLoadingUI* Clone();
 	virtual void Save(FILE* File);
 	virtual void Load(FILE* File);
-
-private:
-	void StartButtonClick();
 };
 

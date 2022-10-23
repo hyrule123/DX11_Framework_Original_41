@@ -183,8 +183,10 @@
     <ClCompile Include="GameObject\Player2D.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Scene\EditorDefaultScene.cpp" />
+    <ClCompile Include="Scene\LoadingSceneInfo.cpp" />
     <ClCompile Include="Setting\DefaultSetting.cpp" />
     <ClCompile Include="Setting\EngineShareSetting.cpp" />
+    <ClCompile Include="UI\LoadingUI.cpp" />
     <ClCompile Include="UI\StartSceneUI.cpp" />
     <ClCompile Include="Window\Animation2DWindow.cpp" />
     <ClCompile Include="Window\ClassWindow.cpp" />
@@ -210,8 +212,10 @@
     <ClInclude Include="GameObject\Player2D.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene\EditorDefaultScene.h" />
+    <ClInclude Include="Scene\LoadingSceneInfo.h" />
     <ClInclude Include="Setting\DefaultSetting.h" />
     <ClInclude Include="Setting\EngineShareSetting.h" />
+    <ClInclude Include="UI\LoadingUI.h" />
     <ClInclude Include="UI\StartSceneUI.h" />
     <ClInclude Include="Window\Animation2DWindow.h" />
     <ClInclude Include="Window\ClassWindow.h" />
