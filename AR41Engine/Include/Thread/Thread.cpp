@@ -7,6 +7,7 @@ CThread::CThread()  :
 
 CThread::~CThread()
 {
+    Stop();
 }
 
 void CThread::Suspend()

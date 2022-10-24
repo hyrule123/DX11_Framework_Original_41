@@ -18,7 +18,7 @@ CLoadingSceneInfo::~CLoadingSceneInfo()
 
 bool CLoadingSceneInfo::Init()
 {
-	m_Owner->GetViewport()->CreateUIWindow<CLoadingUI>("LoadingUI");
+	m_LoadingUI = m_Owner->GetViewport()->CreateUIWindow<CLoadingUI>("LoadingUI");
 
     return true;
 }
@@ -37,11 +37,19 @@ void CLoadingSceneInfo::Update(float DeltaTime)
 
 		CDataStream	stream;
 		stream.SetBuffer(Data);
+
+		float	Rate = 0.f;
+
+		stream.GetData<float>(&Rate, 4);
+
+		m_LoadingUI->SetLoadingPercent(Rate);
 	}
 
 	if (m_LoadingThread->IsLoadComplete())
 	{
 		CSceneManager::GetInst()->ChangeNextScene();
+
+		CThreadManager::GetInst()->Delete("Loading");
 	}
 }
 

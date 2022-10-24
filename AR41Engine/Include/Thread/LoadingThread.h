@@ -3,6 +3,11 @@
 #include "Thread.h"
 #include "ThreadQueue.h"
 
+enum class ELoadingHeader
+{
+	LoadingRate
+};
+
 class CLoadingThread :
     public CThread
 {
@@ -30,6 +35,7 @@ public:
 		return m_LoadComplete;
 	}
 
+
 public:
 	void SetLoadingSceneFileName(const std::string& FileName)
 	{
@@ -48,5 +54,8 @@ public:
 
 public:
 	virtual void Run();
+
+private:
+	void LoadingCallback(float Rate);
 };
 

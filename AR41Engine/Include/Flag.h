@@ -190,5 +190,6 @@ enum class ESceneComponentType
 	Sphere2D,
 	Pixel,
 	Collider3D,
+	TileMap,
 	Max
 };

@@ -196,6 +196,12 @@
     <Filter Include="01. Manager\10. Thread">
       <UniqueIdentifier>{dace6ab4-c87d-4c79-b4ef-78bbe7d4aee9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05. Component\01. SceneComponent\01. Primitive\01. 2D">
+      <UniqueIdentifier>{6bb13f38-abf6-4dfd-954b-a661870c754f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Component\01. SceneComponent\01. Primitive\02. 3D">
+      <UniqueIdentifier>{15252881-846e-4361-850d-742143afb39b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -283,9 +289,6 @@
       <Filter>05. Component\02. ObjectComponent</Filter>
     </ClInclude>
     <ClInclude Include="Component\PrimitiveComponent.h">
-      <Filter>05. Component\01. SceneComponent\01. Primitive</Filter>
-    </ClInclude>
-    <ClInclude Include="Component\SpriteComponent.h">
       <Filter>05. Component\01. SceneComponent\01. Primitive</Filter>
     </ClInclude>
     <ClInclude Include="Component\Transform.h">
@@ -579,6 +582,15 @@
     <ClInclude Include="Thread\ThreadQueue.h">
       <Filter>01. Manager\10. Thread</Filter>
     </ClInclude>
+    <ClInclude Include="Component\SpriteComponent.h">
+      <Filter>05. Component\01. SceneComponent\01. Primitive\01. 2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\Tile.h">
+      <Filter>05. Component\01. SceneComponent\01. Primitive\01. 2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\TileMapComponent.h">
+      <Filter>05. Component\01. SceneComponent\01. Primitive\01. 2D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -654,9 +666,6 @@
       <Filter>05. Component\02. ObjectComponent</Filter>
     </ClCompile>
     <ClCompile Include="Component\PrimitiveComponent.cpp">
-      <Filter>05. Component\01. SceneComponent\01. Primitive</Filter>
-    </ClCompile>
-    <ClCompile Include="Component\SpriteComponent.cpp">
       <Filter>05. Component\01. SceneComponent\01. Primitive</Filter>
     </ClCompile>
     <ClCompile Include="Component\Transform.cpp">
@@ -907,6 +916,15 @@
     </ClCompile>
     <ClCompile Include="Thread\ThreadQueue.cpp">
       <Filter>01. Manager\10. Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\SpriteComponent.cpp">
+      <Filter>05. Component\01. SceneComponent\01. Primitive\01. 2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\TileMapComponent.cpp">
+      <Filter>05. Component\01. SceneComponent\01. Primitive\01. 2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\Tile.cpp">
+      <Filter>05. Component\01. SceneComponent\01. Primitive\01. 2D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
