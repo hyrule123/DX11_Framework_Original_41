@@ -193,3 +193,16 @@ enum class ESceneComponentType
 	TileMap,
 	Max
 };
+
+enum class ETileShape
+{
+	Rect,
+	Isometric
+};
+
+enum class ETileOption
+{
+	None,
+	Wall,
+	End
+};

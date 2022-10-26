@@ -16,9 +16,21 @@ protected:
 
 protected:
     std::vector<CTile*> m_vecTile;
-    //CSharedPtr<class CTexture>  m_Texture;
+    CSharedPtr<class CMesh> m_TileMesh;
+    CSharedPtr<class CMaterial>  m_TileMaterial;
+    ETileShape      m_Shape;
+    int     m_CountX;
+    int     m_CountY;
+    int     m_Count;
+    int     m_RenderCount;
+    Vector2 m_TileSize;
+    Vector4 m_TileTypeColor[(int)ETileOption::End];
 
 public:
+    void SetTileMaterial(const std::string& Name);
+    void SetTileMaterial(class CMaterial* Material);
+    void CreateTile(ETileShape Shape, int CountX, int CountY,
+        const Vector2& TileSize);
 
 public:
     virtual void Start();

@@ -11,6 +11,7 @@ struct TextureResourceInfo
 	TCHAR* FileName;
 	char* PathName;
 
+
 	TextureResourceInfo()	:
 		Image(nullptr),
 		SRV(nullptr),
@@ -87,9 +88,13 @@ public:
 	bool LoadTexture(const std::string& Name, const std::vector<const TCHAR*>& vecFileName,
 		const std::string& PathName = TEXTURE_PATH);
 	bool LoadTextureFullPath(const std::string& Name, const std::vector<const TCHAR*>& vecFullPath);
+	bool LoadTextureArray(const std::string& Name, const std::vector<const TCHAR*>& vecFileName,
+		const std::string& PathName = TEXTURE_PATH);
+	bool LoadTextureArrayFullPath(const std::string& Name, const std::vector<const TCHAR*>& vecFullPath);
 
 private:
 	bool CreateResource(int Index);
+	bool CreateResourceArray();
 
 public:
 	void SetShader(int Register, int ShaderBufferType, int Index);

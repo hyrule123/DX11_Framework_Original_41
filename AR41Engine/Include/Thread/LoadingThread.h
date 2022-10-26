@@ -35,7 +35,6 @@ public:
 		return m_LoadComplete;
 	}
 
-
 public:
 	void SetLoadingSceneFileName(const std::string& FileName)
 	{
