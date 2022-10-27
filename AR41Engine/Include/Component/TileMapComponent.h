@@ -9,14 +9,18 @@ class CTileMapComponent :
     friend class CGameObject;
     friend class CScene;
 
+
 protected:
     CTileMapComponent();
     CTileMapComponent(const CTileMapComponent& component);
     virtual ~CTileMapComponent();
 
+
 protected:
     class CTileMapConstantBuffer* m_TileMapCBuffer;
+    class CStructuredBuffer* m_TileInfoBuffer;
     std::vector<CTile*> m_vecTile;
+    std::vector<TileInfo>   m_vecTileInfo;
     CSharedPtr<class CMesh> m_TileMesh;
     CSharedPtr<class CMaterial>  m_TileMaterial;
     ETileShape      m_Shape;
@@ -26,6 +30,33 @@ protected:
     int     m_RenderCount;
     Vector2 m_TileSize;
     Vector4 m_TileTypeColor[(int)ETileOption::End];
+
+public:
+    int GetCountX() const
+    {
+        return m_CountX;
+    }
+
+    int GetCountY() const
+    {
+        return m_CountY;
+    }
+
+    int GetCount() const
+    {
+        return m_Count;
+    }
+
+    ETileShape GetShape()   const
+    {
+        return m_Shape;
+    }
+
+    const Vector2& GetTileSize()    const
+    {
+        return m_TileSize;
+    }
+
 
 public:
     void SetTileMaterial(const std::string& Name);
@@ -40,6 +71,19 @@ public:
     void SetTileBaseColor(const Vector4& Color);
     void CreateTile(ETileShape Shape, int CountX, int CountY,
         const Vector2& TileSize);
+
+public:
+    int GetTileIndexX(const Vector2& Pos);
+    int GetTileIndexX(const Vector3& Pos);
+    int GetTileIndexY(const Vector2& Pos);
+    int GetTileIndexY(const Vector3& Pos);
+    int GetTileIndex(const Vector2& Pos);
+    int GetTileIndex(const Vector3& Pos);
+
+    CTile* GetTile(const Vector2& Pos);
+    CTile* GetTile(const Vector3& Pos);
+    CTile* GetTile(int X, int Y);
+    CTile* GetTile(int Index);
 
 public:
     virtual void Start();

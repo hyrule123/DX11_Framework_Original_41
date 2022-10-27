@@ -6,13 +6,16 @@
 #include "../Scene/Scene.h"
 #include "../Scene/SceneResource.h"
 #include "../Resource/Shader/TileMapConstantBuffer.h"
+#include "../Device.h"
+#include "../Resource/Shader/StructuredBuffer.h"
 
 CTileMapComponent::CTileMapComponent()	:
 	m_CountX(0),
 	m_CountY(0),
 	m_Count(0),
 	m_RenderCount(0),
-	m_TileMapCBuffer(nullptr)
+	m_TileMapCBuffer(nullptr),
+	m_TileInfoBuffer(nullptr)
 {
 	SetTypeID<CTileMapComponent>();
 
@@ -25,11 +28,47 @@ CTileMapComponent::CTileMapComponent()	:
 CTileMapComponent::CTileMapComponent(const CTileMapComponent& component) :
 	CPrimitiveComponent(component)
 {
+	m_TileMesh = component.m_TileMesh;
+
+	if (component.m_TileMaterial)
+		m_TileMaterial = component.m_TileMaterial->Clone();
+
+	if (component.m_TileMapCBuffer)
+		m_TileMapCBuffer = component.m_TileMapCBuffer->Clone();
+
+	if (component.m_TileInfoBuffer)
+		m_TileInfoBuffer = component.m_TileInfoBuffer->Clone();
+
+
+	m_Shape = component.m_Shape;
+	m_CountX = component.m_CountX;
+	m_CountY = component.m_CountY;
+	m_Count = component.m_Count;
+	m_RenderCount = component.m_RenderCount;
+	m_TileSize = component.m_TileSize;
+	m_TileTypeColor[(int)ETileOption::None] = component.m_TileTypeColor[(int)ETileOption::None];
+	m_TileTypeColor[(int)ETileOption::Wall] = component.m_TileTypeColor[(int)ETileOption::Wall];
+
+	m_vecTile.clear();
+
+	size_t	Size = component.m_vecTile.size();
+
+	for (size_t i = 0; i < Size; ++i)
+	{
+		CTile* Tile = component.m_vecTile[i]->Clone();
+
+		Tile->m_Owner = this;
+
+		m_vecTile.push_back(Tile);
+	}
+
+	m_vecTileInfo.resize(m_vecTile.size());
 }
 
 CTileMapComponent::~CTileMapComponent()
 {
 	SAFE_DELETE(m_TileMapCBuffer);
+	SAFE_DELETE(m_TileInfoBuffer);
 
 	auto	iter = m_vecTile.begin();
 	auto	iterEnd = m_vecTile.end();
@@ -141,9 +180,16 @@ void CTileMapComponent::CreateTile(ETileShape Shape, int CountX,
 		}
 	}
 
+	int	RenderCountX = 0, RenderCountY = 0;
+
 	switch (m_Shape)
 	{
 	case ETileShape::Rect:
+		RenderCountX = (int)(CDevice::GetInst()->GetResolution().Width /
+			m_TileSize.x) + 2;
+		RenderCountY = (int)(CDevice::GetInst()->GetResolution().Height /
+			m_TileSize.y) + 2;
+
 		for (int i = 0; i < m_CountY; ++i)
 		{
 			for (int j = 0; j < m_CountX; ++j)
@@ -157,6 +203,11 @@ void CTileMapComponent::CreateTile(ETileShape Shape, int CountX,
 		break;
 	case ETileShape::Isometric:
 	{
+		RenderCountX = (int)(CDevice::GetInst()->GetResolution().Width /
+			m_TileSize.x) + 2;
+		RenderCountY = (int)(CDevice::GetInst()->GetResolution().Height /
+			m_TileSize.y) * 2 + 2;
+
 		float	StartX = 0.f;
 
 		for (int i = 0; i < m_CountY; ++i)
@@ -180,6 +231,154 @@ void CTileMapComponent::CreateTile(ETileShape Shape, int CountX,
 	}
 
 	m_TileMapCBuffer->SetTileSize(m_TileSize);
+
+	// 구조화 버퍼를 생성한다. 구조화버퍼에는 출력할 타일정보가 들어가야
+	// 하기 때문에 출력되는 최대 타일 개수를 이용해서 생성한다.
+	SAFE_DELETE(m_TileInfoBuffer);
+
+	m_TileInfoBuffer = new CStructuredBuffer;
+
+	m_TileInfoBuffer->Init("TileInfo", sizeof(TileInfo),
+		RenderCountX * RenderCountY, 40, true, 
+		(int)EShaderBufferType::Vertex);
+
+	m_vecTileInfo.resize((size_t)m_Count);
+
+	for (int i = 0; i < m_Count; ++i)
+	{
+		m_vecTileInfo[i].TypeColor = Vector4(1.f, 1.f, 1.f, 1.f);
+		m_vecTileInfo[i].Opacity = 1.f;
+	}
+}
+
+int CTileMapComponent::GetTileIndexX(const Vector2& Pos)
+{
+	if (m_Shape == ETileShape::Rect)
+	{
+		float ConvertX = Pos.x - GetWorldPos().x;
+
+		int	IndexX = (int)(ConvertX / m_TileSize.x);
+
+		if (IndexX < 0 || IndexX >= m_CountX)
+			return -1;
+
+		return IndexX;
+	}
+
+	return 0;
+}
+
+int CTileMapComponent::GetTileIndexX(const Vector3& Pos)
+{
+	if (m_Shape == ETileShape::Rect)
+	{
+		float ConvertX = Pos.x - GetWorldPos().x;
+
+		int	IndexX = (int)(ConvertX / m_TileSize.x);
+
+		if (IndexX < 0 || IndexX >= m_CountX)
+			return -1;
+
+		return IndexX;
+	}
+
+	return 0;
+}
+
+int CTileMapComponent::GetTileIndexY(const Vector2& Pos)
+{
+	if (m_Shape == ETileShape::Rect)
+	{
+		float ConvertY = Pos.y - GetWorldPos().y;
+
+		int	IndexY = (int)(ConvertY / m_TileSize.y);
+
+		if (IndexY < 0 || IndexY >= m_CountY)
+			return -1;
+
+		return IndexY;
+	}
+
+
+
+	return 0;
+}
+
+int CTileMapComponent::GetTileIndexY(const Vector3& Pos)
+{
+	if (m_Shape == ETileShape::Rect)
+	{
+		float ConvertY = Pos.y - GetWorldPos().y;
+
+		int	IndexY = (int)(ConvertY / m_TileSize.y);
+
+		if (IndexY < 0 || IndexY >= m_CountY)
+			return -1;
+
+		return IndexY;
+	}
+
+	return 0;
+}
+
+int CTileMapComponent::GetTileIndex(const Vector2& Pos)
+{
+	if (m_Shape == ETileShape::Rect)
+	{
+		int	IndexX = GetTileIndexX(Pos);
+
+		if (IndexX == -1)
+			return -1;
+
+		int	IndexY = GetTileIndexY(Pos);
+
+		if (IndexY == -1)
+			return -1;
+
+		return IndexY * m_CountX + IndexX;
+	}
+
+	return 0;
+}
+
+int CTileMapComponent::GetTileIndex(const Vector3& Pos)
+{
+	if (m_Shape == ETileShape::Rect)
+	{
+		int	IndexX = GetTileIndexX(Pos);
+
+		if (IndexX == -1)
+			return -1;
+
+		int	IndexY = GetTileIndexY(Pos);
+
+		if (IndexY == -1)
+			return -1;
+
+		return IndexY * m_CountX + IndexX;
+	}
+
+	return 0;
+}
+
+CTile* CTileMapComponent::GetTile(const Vector2& Pos)
+{
+	return nullptr;
+}
+
+CTile* CTileMapComponent::GetTile(const Vector3& Pos)
+{
+	return nullptr;
+}
+
+CTile* CTileMapComponent::GetTile(int X, int Y)
+{
+	return nullptr;
+}
+
+CTile* CTileMapComponent::GetTile(int Index)
+{
+	return nullptr;
 }
 
 void CTileMapComponent::Start()

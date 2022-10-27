@@ -33,3 +33,8 @@ CTile::~CTile()
 void CTile::Update(float DeltaTime)
 {
 }
+
+CTile* CTile::Clone()
+{
+	return new CTile(*this);
+}

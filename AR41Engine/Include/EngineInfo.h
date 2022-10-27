@@ -343,3 +343,15 @@ struct TileMapCBuffer
 	int		Frame;
 	Vector3	Empty;
 };
+
+struct TileInfo
+{
+	Matrix	matWVP;
+	Vector2	Start;
+	Vector2	End;
+	Vector4	TypeColor;
+	float	Opacity;
+	int		AnimationType;
+	int		Frame;
+	float	Empty;
+};

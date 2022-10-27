@@ -81,5 +81,6 @@ public:
 
 public:
 	void Update(float DeltaTime);
+	CTile* Clone();
 };
 

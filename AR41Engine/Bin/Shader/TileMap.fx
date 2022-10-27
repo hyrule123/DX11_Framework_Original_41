@@ -5,12 +5,16 @@ struct VS_INPUT_UV
 {
     float3 Pos : POSITION;
     float2 UV : TEXCOORD;
+    uint InstanceID : SV_InstanceID;
 };
 
 struct VS_OUTPUT_UV
 {
     float4 Pos : SV_POSITION;
     float2 UV : TEXCOORD;
+    float2 OriginUV : TEXCOORD1;
+    float4 Color : COLOR;
+    float Opacity : TEXCOORD2;
 };
 
 cbuffer TileMapCBuffer : register(b10)
@@ -23,6 +27,22 @@ cbuffer TileMapCBuffer : register(b10)
     int    g_TileFrame;
     float3 g_TileEmpty;
 };
+
+
+struct TileInfo
+{
+    matrix matWVP;
+    float2 Start;
+    float2 End;
+    float4 TypeColor;
+    float Opacity;
+    int AnimationType;
+    int Frame;
+    float Empty;
+};
+
+StructuredBuffer<TileInfo> g_TileInfoArray : register(t40);
+
 
 
 VS_OUTPUT_UV TileMapVS(VS_INPUT_UV input)
