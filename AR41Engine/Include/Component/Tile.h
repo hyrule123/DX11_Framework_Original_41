@@ -78,5 +78,8 @@ public:
 	{
 		return m_Index;
 	}
+
+public:
+	void Update(float DeltaTime);
 };
 

@@ -11,7 +11,6 @@ struct TextureResourceInfo
 	TCHAR* FileName;
 	char* PathName;
 
-
 	TextureResourceInfo()	:
 		Image(nullptr),
 		SRV(nullptr),

@@ -7,6 +7,7 @@ CBullet::CBullet()
 {
 	SetTypeID<CBullet>();
 
+
 	m_ObjectTypeName = "Bullet";
 }
 

@@ -22,6 +22,12 @@ bool CMaterialManager::Init()
 	Material->AddTexture(0, (int)EShaderBufferType::Pixel, "DefaultTexture",
 		TEXT("teemo.png"));
 
+	Material = CreateMaterial<CMaterial>("TileMap");
+
+	Material->SetShader("TileMapShader");
+	Material->AddTexture(0, (int)EShaderBufferType::Pixel, "DefaultTile",
+		TEXT("Floors.png"));
+
 	return true;
 }
 

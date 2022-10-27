@@ -8,6 +8,8 @@
 #include "ColliderConstantBuffer.h"
 #include "UIShader.h"
 #include "UIProgressBarShader.h"
+#include "TileMapShader.h"
+#include "TileMapConstantBuffer.h"
 
 CShaderManager::CShaderManager()
 {
@@ -38,6 +40,9 @@ bool CShaderManager::Init()
 	CreateShader<CUIProgressBarShader>("UIProgressBarShader");
 
 
+	CreateShader<CTileMapShader>("TileMapShader");
+
+
 
 	CreateConstantBuffer("Transform", sizeof(TransformCBuffer), 0);
 	CreateConstantBuffer("Material", sizeof(MaterialCBuffer), 1);
@@ -45,6 +50,7 @@ bool CShaderManager::Init()
 	CreateConstantBuffer("Collider", sizeof(ColliderCBuffer), 10);
 	CreateConstantBuffer("UI", sizeof(UICBuffer), 10);
 	CreateConstantBuffer("UIProgressBar", sizeof(UIProgressBarCBuffer), 11);
+	CreateConstantBuffer("TileMap", sizeof(TileMapCBuffer), 10);
 
 	m_ColliderCBuffer = new CColliderConstantBuffer;
 

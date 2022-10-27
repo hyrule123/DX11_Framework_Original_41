@@ -99,6 +99,11 @@ public:
         const std::string& PathName = TEXTURE_PATH);
     void SetTextureFullPath(int Index, int Register, int ShaderBufferType,
         const std::string& Name, const std::vector<const TCHAR*>& vecFullPath);
+    void SetTextureArray(int Index, int Register, int ShaderBufferType, const std::string& Name,
+        const std::vector<const TCHAR*>& vecFileName,
+        const std::string& PathName = TEXTURE_PATH);
+    void SetTextureArrayFullPath(int Index, int Register, int ShaderBufferType,
+        const std::string& Name, const std::vector<const TCHAR*>& vecFullPath);
 
     void SetTextureSamplerType(int Index, ESamplerType Type);
 

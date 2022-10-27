@@ -29,3 +29,7 @@ CTile::CTile(const CTile& Tile)
 CTile::~CTile()
 {
 }
+
+void CTile::Update(float DeltaTime)
+{
+}

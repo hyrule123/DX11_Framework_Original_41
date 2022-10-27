@@ -332,3 +332,14 @@ struct ThreadSyncData
 	int	Size;
 	unsigned char Data[1024];
 };
+
+struct TileMapCBuffer
+{
+	Vector2	ImageSize;
+	Vector2	Start;
+	Vector2	End;
+	Vector2	TileSize;
+	Matrix	matWVP;
+	int		Frame;
+	Vector3	Empty;
+};
