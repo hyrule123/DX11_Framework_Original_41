@@ -90,6 +90,9 @@ void CTileMapComponent::SetTileMaterial(const std::string& Name)
 
 	else
 		m_TileMaterial = CResourceManager::GetInst()->FindMaterial(Name);
+
+	m_TileMapCBuffer->SetImageSize(Vector2((float)m_TileMaterial->GetTexture(0)->GetWidth(),
+		(float)m_TileMaterial->GetTexture(0)->GetHeight()));
 }
 
 void CTileMapComponent::SetTileMaterial(CMaterial* Material)
@@ -662,17 +665,19 @@ bool CTileMapComponent::Init()
 
 	m_Shape = ETileShape::Rect;
 
-	SetTileMaterial("TileMap");
-
 	m_TileMapCBuffer = new CTileMapConstantBuffer;
 
 	m_TileMapCBuffer->Init();
 
-	m_TileMapCBuffer->SetImageSize(Vector2(64.f, 320.f));
-
 	m_TileMapCBuffer->SetStart(Vector2(0.f, 0.f));
 	m_TileMapCBuffer->SetEnd(Vector2(64.f, 64.f));
 	m_TileMapCBuffer->SetFrame(0);
+
+	SetTileMaterial("TileMap");
+
+	m_vecMaterial.clear();
+
+	CreateTile(ETileShape::Rect, 100, 100, Vector2(64.f, 64.f));
 
 	return true;
 }
@@ -741,11 +746,22 @@ void CTileMapComponent::PostUpdate(float DeltaTime)
 
 				m_vecTile[Index]->UpdateTransform(DeltaTime);
 
-				m_vecTileInfo[m_RenderCount].matWVP = m_vecTile[Index]->m_matWorld;
+				m_vecTileInfo[m_RenderCount].matWVP = m_vecTile[Index]->m_matWorld *
+					matView * matProj;
 				m_vecTileInfo[m_RenderCount].matWVP.Transpose();
 
-				m_vecTileInfo[m_RenderCount].Start = m_vecTile[Index]->GetFrameData().Start;
-				m_vecTileInfo[m_RenderCount].End = m_vecTile[Index]->GetFrameData().End;
+				if (!m_vecTile[Index]->FrameEmpty())
+				{
+					m_vecTileInfo[m_RenderCount].Start = m_vecTile[Index]->GetFrameData().Start;
+					m_vecTileInfo[m_RenderCount].End = m_vecTile[Index]->GetFrameData().End;
+				}
+
+				else
+				{
+					m_vecTileInfo[m_RenderCount].Start = m_TileMapCBuffer->GetStartFrame();
+					m_vecTileInfo[m_RenderCount].End = m_TileMapCBuffer->GetEndFrame();
+				}
+
 				m_vecTileInfo[m_RenderCount].Opacity = m_vecTile[Index]->m_Opacity;
 				m_vecTileInfo[m_RenderCount].AnimationType = (int)m_vecTile[Index]->m_Anim2DType;
 				m_vecTileInfo[m_RenderCount].Frame = m_vecTile[Index]->m_Frame;
@@ -764,6 +780,28 @@ void CTileMapComponent::PostUpdate(float DeltaTime)
 void CTileMapComponent::Render()
 {
 	CPrimitiveComponent::Render();
+
+	if (m_RenderCount > 0 && m_TileMaterial)
+	{
+		// 구조화버퍼의 내용을 Shader로 보내준다.
+		m_TileInfoBuffer->SetShader();
+
+		// TileMap 상수버퍼를 Shader로 보내준다.
+		m_TileMapCBuffer->UpdateBuffer();
+
+		// 재질 지정
+		m_TileMaterial->SetMaterial();
+
+
+		m_TileMesh->RenderInstancing(m_RenderCount);
+
+
+
+		m_TileMaterial->ResetMaterial();
+
+
+		m_TileInfoBuffer->ResetShader();
+	}
 }
 
 CTileMapComponent* CTileMapComponent::Clone() const

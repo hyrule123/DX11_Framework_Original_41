@@ -17,6 +17,17 @@ public:
 	virtual CTileMapConstantBuffer* Clone();
 
 public:
+	const Vector2& GetStartFrame()	const
+	{
+		return m_BufferData.Start;
+	}
+
+	const Vector2& GetEndFrame()	const
+	{
+		return m_BufferData.End;
+	}
+
+public:
 	void SetImageSize(const Vector2& Size)
 	{
 		m_BufferData.ImageSize = Size;

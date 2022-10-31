@@ -22,6 +22,7 @@
 #include "Component/SpriteComponent.h"
 #include "Component/CameraComponent.h"
 #include "Component/TargetArm.h"
+#include "Component/TileMapComponent.h"
 
 CClassWindow::CClassWindow()
 {
@@ -198,6 +199,12 @@ void CClassWindow::ComponentCreateCallback()
 		NewComponent = (CSceneComponent*)SelectObject->CreateComponent<CCameraComponent>("CameraComponent");
 	}
 
+	else if (m_SelectComponentItem == "TileMapComponent")
+	{
+		Name = "TileMapComponent(TileMapComponent)";
+		NewComponent = (CSceneComponent*)SelectObject->CreateComponent<CTileMapComponent>("TileMapComponent");
+	}
+
 	if (SelectComponent)
 	{
 		std::string	ParentName = SelectComponent->GetName() + "(" + SelectComponent->GetComponentTypeName() + ")";
@@ -371,7 +378,8 @@ void CClassWindow::LoadComponentName()
 			strcmp(Name, "Transform2D") == 0 ||
 			strcmp(Name, "Component") == 0 || 
 			strcmp(Name, "PrimitiveComponent") == 0 || 
-			strcmp(Name, "ObjectComponent") == 0)
+			strcmp(Name, "ObjectComponent") == 0 ||
+			strcmp(Name, "Tile") == 0)
 			continue;
 
 		m_ComponentList->AddItem(Name);

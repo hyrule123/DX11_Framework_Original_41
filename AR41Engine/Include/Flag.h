@@ -87,8 +87,9 @@ enum class ERenderStateType : unsigned char
 	End
 };
 
-enum class EAnimation2DType : unsigned int
+enum class EAnimation2DType : int
 {
+	None = -1,
 	Atlas,
 	Frame,
 	Array

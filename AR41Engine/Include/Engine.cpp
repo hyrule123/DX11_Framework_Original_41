@@ -57,6 +57,11 @@ CEngine::~CEngine()
 	CDevice::DestroyInst();
 }
 
+float CEngine::GetFPS() const
+{
+	return m_Timer->GetFPS();
+}
+
 bool CEngine::Init(HINSTANCE hInst, const TCHAR* Title,
 	const TCHAR* ClassName, int IconID, int SmallIconID,
 	unsigned int WindowWidth, unsigned int WindowHeight,

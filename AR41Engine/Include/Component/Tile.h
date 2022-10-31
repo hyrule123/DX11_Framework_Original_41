@@ -39,6 +39,11 @@ public:
 		return m_vecFrameData[m_Frame];
 	}
 
+	bool FrameEmpty()	const
+	{
+		return m_vecFrameData.empty();
+	}
+
 	bool GetEnable()	const
 	{
 		return m_Enable;

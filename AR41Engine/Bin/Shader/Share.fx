@@ -34,7 +34,6 @@ SamplerState g_LinearSmp : register(s1);
 SamplerState g_AnisotropicSmp : register(s2);
 
 Texture2D g_BaseTexture : register(t0);
-Texture2DArray g_BaseTextureArray : register(t0);
 
 cbuffer Animation2D : register(b2)
 {
@@ -48,6 +47,7 @@ cbuffer Animation2D : register(b2)
     float3 g_Anim2DEmpty;
 };
 
+#define Anim2D_None -1
 #define Anim2D_Atlas 0
 #define Anim2D_Frame 1
 #define Anim2D_Array 2

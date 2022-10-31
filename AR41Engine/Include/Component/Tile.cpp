@@ -8,7 +8,7 @@ CTile::CTile()	:
 	m_IndexX(0),
 	m_IndexY(0),
 	m_Index(0),
-	m_Anim2DType(EAnimation2DType::Atlas),
+	m_Anim2DType(EAnimation2DType::None),
 	m_Frame(0),
 	m_Time(0.f),
 	m_FrameTime(0.f),
