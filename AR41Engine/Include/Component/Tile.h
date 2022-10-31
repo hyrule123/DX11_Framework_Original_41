@@ -34,6 +34,11 @@ private:
 	float				m_Opacity;
 
 public:
+	Animation2DFrameData GetFrameData()
+	{
+		return m_vecFrameData[m_Frame];
+	}
+
 	bool GetEnable()	const
 	{
 		return m_Enable;
@@ -81,6 +86,7 @@ public:
 
 public:
 	void Update(float DeltaTime);
+	void UpdateTransform(float DeltaTime);
 	CTile* Clone();
 };
 

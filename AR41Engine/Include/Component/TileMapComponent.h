@@ -9,12 +9,10 @@ class CTileMapComponent :
     friend class CGameObject;
     friend class CScene;
 
-
 protected:
     CTileMapComponent();
     CTileMapComponent(const CTileMapComponent& component);
     virtual ~CTileMapComponent();
-
 
 protected:
     class CTileMapConstantBuffer* m_TileMapCBuffer;
@@ -84,6 +82,11 @@ public:
     CTile* GetTile(const Vector3& Pos);
     CTile* GetTile(int X, int Y);
     CTile* GetTile(int Index);
+
+
+private:
+    int GetTileRenderIndexX(const Vector3& Pos);
+    int GetTileRenderIndexY(const Vector3& Pos);
 
 public:
     virtual void Start();

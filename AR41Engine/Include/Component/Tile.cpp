@@ -1,4 +1,5 @@
 #include "Tile.h"
+#include "TileMapComponent.h"
 
 CTile::CTile()	:
 	m_Owner(nullptr),
@@ -32,6 +33,22 @@ CTile::~CTile()
 
 void CTile::Update(float DeltaTime)
 {
+	// 애니메이션 연산
+}
+
+void CTile::UpdateTransform(float DeltaTime)
+{
+	// 트랜스폼 연산
+	Vector3	OwnerPos = m_Owner->GetWorldPos();
+
+	Vector3	Pos = OwnerPos + m_Pos;
+
+	Matrix	matScale, matTranslate;
+
+	matScale.Scaling(m_Size.x, m_Size.y, 1.f);
+	matTranslate.Translation(Pos);
+
+	m_matWorld = matScale * matTranslate;
 }
 
 CTile* CTile::Clone()

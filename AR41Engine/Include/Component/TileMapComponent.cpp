@@ -8,6 +8,8 @@
 #include "../Resource/Shader/TileMapConstantBuffer.h"
 #include "../Device.h"
 #include "../Resource/Shader/StructuredBuffer.h"
+#include "CameraComponent.h"
+#include "../Scene/CameraManager.h"
 
 CTileMapComponent::CTileMapComponent()	:
 	m_CountX(0),
@@ -206,7 +208,7 @@ void CTileMapComponent::CreateTile(ETileShape Shape, int CountX,
 		RenderCountX = (int)(CDevice::GetInst()->GetResolution().Width /
 			m_TileSize.x) + 2;
 		RenderCountY = (int)(CDevice::GetInst()->GetResolution().Height /
-			m_TileSize.y) * 2 + 2;
+			m_TileSize.y) * 2 + 3;
 
 		float	StartX = 0.f;
 
@@ -265,24 +267,30 @@ int CTileMapComponent::GetTileIndexX(const Vector2& Pos)
 		return IndexX;
 	}
 
-	return 0;
+	int	IndexY = GetTileIndexY(Pos);
+
+	if (IndexY < 0 || IndexY >= m_CountY)
+		return -1;
+
+	int	IndexX = -1;
+
+	float	ConvertX = Pos.x - GetWorldPos().x;
+
+	if (IndexY % 2 == 0)
+		IndexX = (int)(ConvertX / m_TileSize.x);
+
+	else
+		IndexX = (int)((ConvertX - m_TileSize.x * 0.5f) / m_TileSize.x);
+
+	if (IndexX < 0 || IndexX >= m_CountX)
+		return -1;
+
+	return IndexX;
 }
 
 int CTileMapComponent::GetTileIndexX(const Vector3& Pos)
 {
-	if (m_Shape == ETileShape::Rect)
-	{
-		float ConvertX = Pos.x - GetWorldPos().x;
-
-		int	IndexX = (int)(ConvertX / m_TileSize.x);
-
-		if (IndexX < 0 || IndexX >= m_CountX)
-			return -1;
-
-		return IndexX;
-	}
-
-	return 0;
+	return GetTileIndexX(Vector2(Pos.x, Pos.y));
 }
 
 int CTileMapComponent::GetTileIndexY(const Vector2& Pos)
@@ -299,12 +307,205 @@ int CTileMapComponent::GetTileIndexY(const Vector2& Pos)
 		return IndexY;
 	}
 
+	Vector2	TileMapPos(GetWorldPos().x, GetWorldPos().y);
 
+	Vector2	ConvertPos = Pos - TileMapPos;
 
-	return 0;
+	float RatioX = ConvertPos.x / m_TileSize.x;
+	float RatioY = ConvertPos.y / m_TileSize.y;
+
+	int	IndexX = (int)RatioX;
+	int	IndexY = (int)RatioY;
+
+	if (IndexX < 0 || IndexX > m_CountX)
+		return -1;
+
+	// 정수 부분을 제거하여 소수점 부분만 남겨준다.
+	// 소수점 부분을 이용하여 사각형의 어느 지점에 있는지를
+	// 판단하기 위해서이다.
+	RatioX -= (int)RatioX;
+	RatioY -= (int)RatioY;
+	
+	// 사각형의 아래쪽 부분일 경우
+	if (RatioY < 0.5f)
+	{
+		// 좌 하단 사각형의 좌 하단 삼각형일 경우가 된다.
+		// RatioX가 0.5보다 크면 오른쪽 하단 사각형이 되는데
+		// 이경우 0.5에서 빼면 음수가 나오므로 RatioY는 절대 이 값
+		// 보다 작아질 수 없다.
+		// 이 경우 우측 상단의 삼각형 안에 존재하는 점은 RatioY가
+		// 절대 이 값보다 작을 수 없다. 좌측 하단의 삼각형을
+		// 구하는 식이다.
+		if (RatioY < 0.5f - RatioX)
+		{
+			// Y인덱스가 0이면 가장 아래쪽 줄이라서 좌 하단 삼각형은
+			// 없다.
+			if (IndexY == 0)
+				return -1;
+
+			else if (IndexX == 0)
+				return -1;
+
+			else
+				return IndexY * 2 - 1;
+		}
+
+		// 오른쪽 사각형 안에서 우 하단 삼각형일 경우
+		else if (RatioY < RatioX - 0.5f)
+		{
+			if (IndexY == 0)
+				return -1;
+
+			else
+				return IndexY * 2 - 1;
+		}
+
+		else
+			return IndexY * 2;
+	}
+
+	// 사각형의 위쪽 부분일 경우
+	else if (RatioY > 0.5f)
+	{
+		// 좌 상단 사각형의 좌 상단 삼각형일 경우
+		if (RatioY - 0.5f > RatioX)
+		{
+			if (IndexX == 0)
+				return -1;
+
+			else if (IndexY * 2 + 1 >= m_CountY)
+				return -1;
+
+			else
+				return IndexY * 2 + 1;
+		}
+
+		// 우 상단 사각형의 우 상단 삼각형일 경우
+		else if (RatioY - 0.5f > 1.f - RatioX)
+		{
+			if (IndexX >= m_CountX)
+				return -1;
+
+			else if (IndexY * 2 + 1 >= m_CountY)
+				return -1;
+
+			else
+				return IndexY * 2 + 1;
+		}
+
+		else
+			return IndexY * 2;
+	}
+
+	// 가운데
+	else
+		return IndexY * 2;
+
+	return -1;
 }
 
 int CTileMapComponent::GetTileIndexY(const Vector3& Pos)
+{
+	return GetTileIndexY(Vector2(Pos.x, Pos.y));
+}
+
+int CTileMapComponent::GetTileIndex(const Vector2& Pos)
+{
+	int	IndexX = GetTileIndexX(Pos);
+	int	IndexY = GetTileIndexY(Pos);
+
+	if (IndexX == -1 || IndexY == -1)
+		return -1;
+
+	return IndexY * m_CountX + IndexX;
+}
+
+int CTileMapComponent::GetTileIndex(const Vector3& Pos)
+{
+	return GetTileIndex(Vector2(Pos.x, Pos.y));
+}
+
+CTile* CTileMapComponent::GetTile(const Vector2& Pos)
+{
+	int	Index = GetTileIndex(Pos);
+
+	if (Index == -1)
+		return nullptr;
+
+	return m_vecTile[Index];
+}
+
+CTile* CTileMapComponent::GetTile(const Vector3& Pos)
+{
+	int	Index = GetTileIndex(Pos);
+
+	if (Index == -1)
+		return nullptr;
+
+	return m_vecTile[Index];
+}
+
+CTile* CTileMapComponent::GetTile(int X, int Y)
+{
+	if (X < 0 || X >= m_CountX || Y < 0 || Y >= m_CountY)
+		return nullptr;
+
+	return m_vecTile[Y * m_CountX + X];
+}
+
+CTile* CTileMapComponent::GetTile(int Index)
+{
+	if (Index < 0 || Index >= m_Count)
+		return nullptr;
+
+	return m_vecTile[Index];
+}
+
+int CTileMapComponent::GetTileRenderIndexX(const Vector3& Pos)
+{
+	if (m_Shape == ETileShape::Rect)
+	{
+		float ConvertX = Pos.x - GetWorldPos().x;
+
+		int	IndexX = (int)(ConvertX / m_TileSize.x);
+
+		if (IndexX < 0)
+			return 0;
+
+		else if (IndexX >= m_CountX)
+			return m_CountX - 1;
+
+		return IndexX;
+	}
+
+	int	IndexY = GetTileIndexY(Pos);
+
+	if (IndexY < 0)
+		IndexY = 0;
+
+	else if (IndexY >= m_CountY)
+		IndexY = m_CountY - 1;
+
+	int	IndexX = -1;
+
+	float	ConvertX = Pos.x - GetWorldPos().x;
+
+	if (IndexY % 2 == 0)
+		IndexX = (int)(ConvertX / m_TileSize.x);
+
+	else
+		IndexX = (int)((ConvertX - m_TileSize.x * 0.5f) / m_TileSize.x);
+
+	if (IndexX < 0)
+		return 0;
+
+	else if (IndexX >= m_CountX)
+		return m_CountX - 1;
+
+	return IndexX;
+}
+
+int CTileMapComponent::GetTileRenderIndexY(const Vector3& Pos)
 {
 	if (m_Shape == ETileShape::Rect)
 	{
@@ -312,73 +513,134 @@ int CTileMapComponent::GetTileIndexY(const Vector3& Pos)
 
 		int	IndexY = (int)(ConvertY / m_TileSize.y);
 
-		if (IndexY < 0 || IndexY >= m_CountY)
-			return -1;
+		if (IndexY < 0)
+			return 0;
+
+		else if (IndexY >= m_CountY)
+			return m_CountY - 1;
 
 		return IndexY;
 	}
 
-	return 0;
-}
+	Vector2	TileMapPos(GetWorldPos().x, GetWorldPos().y);
 
-int CTileMapComponent::GetTileIndex(const Vector2& Pos)
-{
-	if (m_Shape == ETileShape::Rect)
+	Vector2	ConvertPos = Vector2(Pos.x, Pos.y) - TileMapPos;
+
+	float RatioX = ConvertPos.x / m_TileSize.x;
+	float RatioY = ConvertPos.y / m_TileSize.y;
+
+	int	IndexX = (int)RatioX;
+	int	IndexY = (int)RatioY;
+
+	if (IndexX < 0)
+		IndexX = 0;
+
+	else if (IndexX > m_CountX)
+		IndexX = m_CountX - 1;
+
+	// 정수 부분을 제거하여 소수점 부분만 남겨준다.
+	// 소수점 부분을 이용하여 사각형의 어느 지점에 있는지를
+	// 판단하기 위해서이다.
+	RatioX -= (int)RatioX;
+	RatioY -= (int)RatioY;
+
+	// 사각형의 아래쪽 부분일 경우
+	if (RatioY < 0.5f)
 	{
-		int	IndexX = GetTileIndexX(Pos);
+		// 좌 하단 사각형의 좌 하단 삼각형일 경우가 된다.
+		// RatioX가 0.5보다 크면 오른쪽 하단 사각형이 되는데
+		// 이경우 0.5에서 빼면 음수가 나오므로 RatioY는 절대 이 값
+		// 보다 작아질 수 없다.
+		// 이 경우 우측 상단의 삼각형 안에 존재하는 점은 RatioY가
+		// 절대 이 값보다 작을 수 없다. 좌측 하단의 삼각형을
+		// 구하는 식이다.
+		if (RatioY < 0.5f - RatioX)
+		{
+			// Y인덱스가 0이면 가장 아래쪽 줄이라서 좌 하단 삼각형은
+			// 없다.
+			if (IndexY == 0)
+				return 0;
 
-		if (IndexX == -1)
-			return -1;
+			else if (IndexX == 0)
+			{
+				if (IndexY < 0)
+					return 0;
 
-		int	IndexY = GetTileIndexY(Pos);
+				else if (IndexY >= m_CountY)
+					return 0;
+					
+				else
+					return IndexY * 2 + 1;
+			}
 
-		if (IndexY == -1)
-			return -1;
+			else
+				return IndexY * 2 - 1;
+		}
 
-		return IndexY * m_CountX + IndexX;
+		// 오른쪽 사각형 안에서 우 하단 삼각형일 경우
+		else if (RatioY < RatioX - 0.5f)
+		{
+			if (IndexY == 0)
+				return 0;
+
+			else
+				return IndexY * 2 - 1;
+		}
+
+		else
+			return IndexY * 2;
 	}
 
-	return 0;
-}
-
-int CTileMapComponent::GetTileIndex(const Vector3& Pos)
-{
-	if (m_Shape == ETileShape::Rect)
+	// 사각형의 위쪽 부분일 경우
+	else if (RatioY > 0.5f)
 	{
-		int	IndexX = GetTileIndexX(Pos);
+		// 좌 상단 사각형의 좌 상단 삼각형일 경우
+		if (RatioY - 0.5f > RatioX)
+		{
+			if (IndexX == 0)
+			{
+				if (IndexY < 0)
+					return 0;
 
-		if (IndexX == -1)
-			return -1;
+				else if (IndexY >= m_CountY)
+					return m_CountY - 1;
+			}
 
-		int	IndexY = GetTileIndexY(Pos);
+			else if (IndexY * 2 + 1 >= m_CountY)
+				return m_CountY - 1;
 
-		if (IndexY == -1)
-			return -1;
+			else
+				return IndexY * 2 + 1;
+		}
 
-		return IndexY * m_CountX + IndexX;
+		// 우 상단 사각형의 우 상단 삼각형일 경우
+		else if (RatioY - 0.5f > 1.f - RatioX)
+		{
+			if (IndexX >= m_CountX)
+			{
+				if (IndexY < 0)
+					return 0;
+
+				else if (IndexY >= m_CountY)
+					return m_CountY - 1;
+			}
+
+			else if (IndexY * 2 + 1 >= m_CountY)
+				return  m_CountY - 1;
+
+			else
+				return IndexY * 2 + 1;
+		}
+
+		else
+			return IndexY * 2;
 	}
 
-	return 0;
-}
+	// 가운데
+	else
+		return IndexY * 2;
 
-CTile* CTileMapComponent::GetTile(const Vector2& Pos)
-{
-	return nullptr;
-}
-
-CTile* CTileMapComponent::GetTile(const Vector3& Pos)
-{
-	return nullptr;
-}
-
-CTile* CTileMapComponent::GetTile(int X, int Y)
-{
-	return nullptr;
-}
-
-CTile* CTileMapComponent::GetTile(int Index)
-{
-	return nullptr;
+	return -1;
 }
 
 void CTileMapComponent::Start()
@@ -430,6 +692,73 @@ void CTileMapComponent::Update(float DeltaTime)
 void CTileMapComponent::PostUpdate(float DeltaTime)
 {
 	CPrimitiveComponent::PostUpdate(DeltaTime);
+
+	if (!m_vecTile.empty())
+	{
+		CCameraComponent* Camera = m_Scene->GetCameraManager()->GetCurrentCamera();
+
+		Resolution	RS = CDevice::GetInst()->GetResolution();
+
+		Vector3	LB = Camera->GetWorldPos();
+		Vector3	RT = LB + Vector3((float)RS.Width, (float)RS.Height, 0.f);
+
+		int	StartX, StartY, EndX, EndY;
+
+		StartX = GetTileRenderIndexX(LB);
+		StartY = GetTileRenderIndexY(LB);
+
+		EndX = GetTileRenderIndexX(RT);
+		EndY = GetTileRenderIndexY(RT);
+
+		if (m_Shape == ETileShape::Isometric)
+		{
+			--StartX;
+			--StartY;
+			--StartY;
+
+			++EndX;
+			++EndY;
+			++EndY;
+
+			StartX = StartX < 0 ? 0 : StartX;
+			StartY = StartY < 0 ? 0 : StartY;
+
+			EndX = EndX >= m_CountX ? m_CountX - 1 : EndX;
+			EndY = EndY >= m_CountY ? m_CountY - 1 : EndY;
+		}
+
+		Matrix	matView, matProj;
+		matView = Camera->GetViewMatrix();
+		matProj = Camera->GetProjMatrix();
+
+		m_RenderCount = 0;
+
+		for (int i = StartY; i <= EndY; ++i)
+		{
+			for (int j = StartX; j <= EndX; ++j)
+			{
+				int	Index = i * m_CountX + j;
+
+				m_vecTile[Index]->UpdateTransform(DeltaTime);
+
+				m_vecTileInfo[m_RenderCount].matWVP = m_vecTile[Index]->m_matWorld;
+				m_vecTileInfo[m_RenderCount].matWVP.Transpose();
+
+				m_vecTileInfo[m_RenderCount].Start = m_vecTile[Index]->GetFrameData().Start;
+				m_vecTileInfo[m_RenderCount].End = m_vecTile[Index]->GetFrameData().End;
+				m_vecTileInfo[m_RenderCount].Opacity = m_vecTile[Index]->m_Opacity;
+				m_vecTileInfo[m_RenderCount].AnimationType = (int)m_vecTile[Index]->m_Anim2DType;
+				m_vecTileInfo[m_RenderCount].Frame = m_vecTile[Index]->m_Frame;
+				m_vecTileInfo[m_RenderCount].TypeColor = m_TileTypeColor[(int)m_vecTile[Index]->m_TileOption];
+
+				++m_RenderCount;
+			}
+		}
+
+		// 위에서 만들어준 타일 정보를 구조화 버퍼에 갱신해준다.
+		m_TileInfoBuffer->UpdateBuffer(&m_vecTileInfo[0],
+			m_RenderCount);
+	}
 }
 
 void CTileMapComponent::Render()
