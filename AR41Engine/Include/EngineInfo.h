@@ -177,7 +177,9 @@ struct MaterialCBuffer
 	Vector4 SpecularColor;
 	Vector4 EmissiveColor;
 	float Opacity;
-	Vector3 Empty;
+	int	TextureType;
+	float TextureWidth;
+	float TextureHeight;
 };
 
 struct HierarchyName

@@ -112,6 +112,7 @@
     <ClInclude Include="Resource\Shader\SpriteColorShader.h" />
     <ClInclude Include="Resource\Shader\SpriteShader.h" />
     <ClInclude Include="Resource\Shader\StructuredBuffer.h" />
+    <ClInclude Include="Resource\Shader\TileMapBackShader.h" />
     <ClInclude Include="Resource\Shader\TileMapConstantBuffer.h" />
     <ClInclude Include="Resource\Shader\TileMapShader.h" />
     <ClInclude Include="Resource\Shader\TransformConstantBuffer.h" />
@@ -231,6 +232,7 @@
     <ClCompile Include="Resource\Shader\SpriteColorShader.cpp" />
     <ClCompile Include="Resource\Shader\SpriteShader.cpp" />
     <ClCompile Include="Resource\Shader\StructuredBuffer.cpp" />
+    <ClCompile Include="Resource\Shader\TileMapBackShader.cpp" />
     <ClCompile Include="Resource\Shader\TileMapConstantBuffer.cpp" />
     <ClCompile Include="Resource\Shader\TileMapShader.cpp" />
     <ClCompile Include="Resource\Shader\TransformConstantBuffer.cpp" />

@@ -89,6 +89,10 @@ bool CEngine::Init(HINSTANCE hInst, const TCHAR* Title,
 		return false;
 
 
+	// 렌더링 관리자 초기화
+	if (!CRenderManager::GetInst()->Init())
+		return false;
+
 	// Resource 관리자 초기화
 	if (!CResourceManager::GetInst()->Init())
 		return false;
@@ -109,10 +113,6 @@ bool CEngine::Init(HINSTANCE hInst, const TCHAR* Title,
 	}
 
 	
-	// 렌더링 관리자 초기화
-	if (!CRenderManager::GetInst()->Init())
-		return false;
-
 	// 스레드 관리자 초기화
 	if (!CThreadManager::GetInst()->Init())
 		return false;

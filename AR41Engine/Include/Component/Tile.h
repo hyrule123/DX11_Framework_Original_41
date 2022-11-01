@@ -22,6 +22,8 @@ private:
 	int				m_IndexX;
 	int				m_IndexY;
 	int				m_Index;
+	Vector2			m_TileStart;
+	Vector2			m_TileEnd;
 	std::vector<Animation2DFrameData>   m_vecFrameData;
 	EAnimation2DType    m_Anim2DType;
 	int					m_Frame;
@@ -87,6 +89,16 @@ public:
 	int GetIndex()	const
 	{
 		return m_Index;
+	}
+
+	const Vector2& GetTileStart()	const
+	{
+		return m_TileStart;
+	}
+
+	const Vector2& GetTileEnd()	const
+	{
+		return m_TileEnd;
 	}
 
 public:

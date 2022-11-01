@@ -295,6 +295,63 @@ void CMaterial::AddTextureFullPath(int Register, int ShaderBufferType,
 	m_vecTextureInfo.push_back(Info);
 }
 
+void CMaterial::AddTextureArray(int Register, int ShaderBufferType, 
+	const std::string& Name, const std::vector<const TCHAR*>& vecFileName, 
+	const std::string& PathName)
+{
+	MaterialTextureInfo* Info = new MaterialTextureInfo;
+
+	Info->Register = Register;
+	Info->ShaderBufferType = ShaderBufferType;
+	Info->Name = Name;
+
+	if (m_Scene)
+	{
+		if (!m_Scene->GetResource()->LoadTextureArray(Name, vecFileName, PathName))
+			return;
+
+		Info->Texture = m_Scene->GetResource()->FindTexture(Name);
+	}
+
+	else
+	{
+		if (!CResourceManager::GetInst()->LoadTextureArray(Name, vecFileName, PathName))
+			return;
+
+		Info->Texture = CResourceManager::GetInst()->FindTexture(Name);
+	}
+
+	m_vecTextureInfo.push_back(Info);
+}
+
+void CMaterial::AddTextureArrayFullPath(int Register, int ShaderBufferType,
+	const std::string& Name, const std::vector<const TCHAR*>& vecFullPath)
+{
+	MaterialTextureInfo* Info = new MaterialTextureInfo;
+
+	Info->Register = Register;
+	Info->ShaderBufferType = ShaderBufferType;
+	Info->Name = Name;
+
+	if (m_Scene)
+	{
+		if (!m_Scene->GetResource()->LoadTextureArrayFullPath(Name, vecFullPath))
+			return;
+
+		Info->Texture = m_Scene->GetResource()->FindTexture(Name);
+	}
+
+	else
+	{
+		if (!CResourceManager::GetInst()->LoadTextureArrayFullPath(Name, vecFullPath))
+			return;
+
+		Info->Texture = CResourceManager::GetInst()->FindTexture(Name);
+	}
+
+	m_vecTextureInfo.push_back(Info);
+}
+
 void CMaterial::SetTexture(int Index, int Register, int ShaderBufferType,
 	const std::string& Name, CTexture* Texture)
 {
@@ -543,6 +600,15 @@ void CMaterial::SetMaterial()
 		if (m_RenderState[i])
 			m_RenderState[i]->SetState();
 	}
+
+	if (!m_vecTextureInfo.empty())
+	{
+		m_CBuffer->SetImageType(m_vecTextureInfo[0]->Texture->GetImageType());
+
+		m_CBuffer->SetTextureWidth((float)m_vecTextureInfo[0]->Texture->GetWidth());
+		m_CBuffer->SetTextureHeight((float)m_vecTextureInfo[0]->Texture->GetHeight());
+	}
+
 
 	m_CBuffer->UpdateBuffer();
 

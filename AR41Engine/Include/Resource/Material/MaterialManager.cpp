@@ -27,6 +27,37 @@ bool CMaterialManager::Init()
 	Material->SetShader("TileMapShader");
 	Material->AddTexture(0, (int)EShaderBufferType::Pixel, "DefaultTile",
 		TEXT("Floors.png"));
+	Material->SetRenderState("DepthLessEqual");
+
+	Material = CreateMaterial<CMaterial>("TileMapIsometric");
+
+	std::vector<const TCHAR*>	vecFileNames;
+
+	for (int i = 0; i <= 379; ++i)
+	{
+		TCHAR* FileName = new TCHAR[MAX_PATH];
+
+		memset(FileName, 0, sizeof(TCHAR) * MAX_PATH);
+
+		wsprintf(FileName, TEXT("Diablos_Lair_Floor_TRS/Diablos_Lair_Floor_%d.png"), i);
+
+		vecFileNames.push_back(FileName);
+	}
+
+	Material->SetShader("TileMapShader");
+	Material->AddTextureArray(10, (int)EShaderBufferType::Pixel, "DefaultTileIsometric",
+		vecFileNames);
+	Material->SetRenderState("DepthLessEqual");
+
+	for (int i = 0; i <= 379; ++i)
+	{
+		SAFE_DELETE_ARRAY(vecFileNames[i]);
+	}
+
+	Material = CreateMaterial<CMaterial>("DefaultTileMapBack");
+
+	Material->SetShader("TileMapBackShader");
+	Material->SetRenderState("DepthLessEqual");
 
 	return true;
 }

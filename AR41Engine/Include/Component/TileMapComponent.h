@@ -21,6 +21,7 @@ protected:
     std::vector<TileInfo>   m_vecTileInfo;
     CSharedPtr<class CMesh> m_TileMesh;
     CSharedPtr<class CMaterial>  m_TileMaterial;
+    CSharedPtr<class CTexture>  m_TileBackTexture;
     ETileShape      m_Shape;
     int     m_CountX;
     int     m_CountY;
@@ -28,6 +29,8 @@ protected:
     int     m_RenderCount;
     Vector2 m_TileSize;
     Vector4 m_TileTypeColor[(int)ETileOption::End];
+    Vector2 m_TileStartFrame;
+    Vector2 m_TileEndFrame;
 
 public:
     int GetCountX() const
@@ -66,6 +69,16 @@ public:
     void SetTileTextureArray(const std::string& Name, const std::vector<const TCHAR*>& vecFileName,
         const std::string& PathName = TEXTURE_PATH);
     void SetTileTextureArrayFullPath(const std::string& Name, const std::vector<const TCHAR*>& vecFullPath);
+
+
+    void SetTileBackTexture(class CTexture* Texture);
+    void SetTileBackTexture(const std::string& Name, const TCHAR* FileName,
+        const std::string& PathName = TEXTURE_PATH);
+    void SetTileBackTextureFullPath(const std::string& Name, const TCHAR* FullPath);
+    void SetTileBackTextureArray(const std::string& Name, const std::vector<const TCHAR*>& vecFileName,
+        const std::string& PathName = TEXTURE_PATH);
+    void SetTileBackTextureArrayFullPath(const std::string& Name, const std::vector<const TCHAR*>& vecFullPath);
+
     void SetTileBaseColor(const Vector4& Color);
     void CreateTile(ETileShape Shape, int CountX, int CountY,
         const Vector2& TileSize);

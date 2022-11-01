@@ -11,6 +11,7 @@
 #include "CameraComponent.h"
 #include "../Scene/CameraManager.h"
 
+
 CTileMapComponent::CTileMapComponent()	:
 	m_CountX(0),
 	m_CountY(0),
@@ -136,6 +137,146 @@ void CTileMapComponent::SetTileTextureArrayFullPath(
 		Name, vecFullPath);
 }
 
+void CTileMapComponent::SetTileBackTexture(CTexture* Texture)
+{
+	m_TileBackTexture = Texture;
+
+	if (m_TileBackTexture)
+	{
+		if (m_TileBackTexture->GetImageType() != EImageType::Array)
+		{
+			m_vecMaterial[0]->SetTexture(0, 0, (int)EShaderBufferType::Pixel,
+				Texture->GetName(), Texture);
+		}
+
+		else
+		{
+			m_vecMaterial[0]->SetTexture(10, 0, (int)EShaderBufferType::Pixel,
+				Texture->GetName(), Texture);
+		}
+	}
+}
+
+void CTileMapComponent::SetTileBackTexture(const std::string& Name, 
+	const TCHAR* FileName, const std::string& PathName)
+{
+	CTexture* Texture = nullptr;
+
+	if (m_Scene)
+	{
+		if (!m_Scene->GetResource()->LoadTexture(Name, FileName, PathName))
+			return;
+
+		Texture = m_Scene->GetResource()->FindTexture(Name);
+	}
+
+	else
+	{
+		if (!CResourceManager::GetInst()->LoadTexture(Name, FileName, PathName))
+			return;
+
+		Texture = CResourceManager::GetInst()->FindTexture(Name);
+	}
+
+	m_TileBackTexture = Texture;
+
+	if (m_TileBackTexture)
+	{
+		m_vecMaterial[0]->SetTexture(0, 0, (int)EShaderBufferType::Pixel,
+			Texture->GetName(), Texture);
+	}
+}
+
+void CTileMapComponent::SetTileBackTextureFullPath(const std::string& Name,
+	const TCHAR* FullPath)
+{
+	CTexture* Texture = nullptr;
+
+	if (m_Scene)
+	{
+		if (!m_Scene->GetResource()->LoadTextureFullPath(Name, FullPath))
+			return;
+
+		Texture = m_Scene->GetResource()->FindTexture(Name);
+	}
+
+	else
+	{
+		if (!CResourceManager::GetInst()->LoadTextureFullPath(Name, FullPath))
+			return;
+
+		Texture = CResourceManager::GetInst()->FindTexture(Name);
+	}
+
+	m_TileBackTexture = Texture;
+
+	if (m_TileBackTexture)
+	{
+		m_vecMaterial[0]->SetTexture(0, 0, (int)EShaderBufferType::Pixel,
+			Texture->GetName(), Texture);
+	}
+}
+
+void CTileMapComponent::SetTileBackTextureArray(const std::string& Name, 
+	const std::vector<const TCHAR*>& vecFileName, const std::string& PathName)
+{
+	CTexture* Texture = nullptr;
+
+	if (m_Scene)
+	{
+		if (!m_Scene->GetResource()->LoadTextureArray(Name, vecFileName, PathName))
+			return;
+
+		Texture = m_Scene->GetResource()->FindTexture(Name);
+	}
+
+	else
+	{
+		if (!CResourceManager::GetInst()->LoadTextureArray(Name, vecFileName, PathName))
+			return;
+
+		Texture = CResourceManager::GetInst()->FindTexture(Name);
+	}
+
+	m_TileBackTexture = Texture;
+
+	if (m_TileBackTexture)
+	{
+		m_vecMaterial[0]->SetTexture(0, 10, (int)EShaderBufferType::Pixel,
+			Texture->GetName(), Texture);
+	}
+}
+
+void CTileMapComponent::SetTileBackTextureArrayFullPath(const std::string& Name,
+	const std::vector<const TCHAR*>& vecFullPath)
+{
+	CTexture* Texture = nullptr;
+
+	if (m_Scene)
+	{
+		if (!m_Scene->GetResource()->LoadTextureArrayFullPath(Name, vecFullPath))
+			return;
+
+		Texture = m_Scene->GetResource()->FindTexture(Name);
+	}
+
+	else
+	{
+		if (!CResourceManager::GetInst()->LoadTextureArrayFullPath(Name, vecFullPath))
+			return;
+
+		Texture = CResourceManager::GetInst()->FindTexture(Name);
+	}
+
+	m_TileBackTexture = Texture;
+
+	if (m_TileBackTexture)
+	{
+		m_vecMaterial[0]->SetTexture(0, 10, (int)EShaderBufferType::Pixel,
+			Texture->GetName(), Texture);
+	}
+}
+
 void CTileMapComponent::SetTileBaseColor(const Vector4& Color)
 {
 	m_TileMaterial->SetBaseColor(Color);
@@ -180,6 +321,11 @@ void CTileMapComponent::CreateTile(ETileShape Shape, int CountX,
 
 			Tile->m_Size.x = m_TileSize.x;
 			Tile->m_Size.y = m_TileSize.y;
+
+			Tile->m_TileStart = m_TileStartFrame;
+			Tile->m_TileEnd = m_TileEndFrame;
+
+			Tile->m_Frame = 3;
 
 			m_vecTile[Index] = Tile;
 		}
@@ -670,14 +816,19 @@ bool CTileMapComponent::Init()
 	m_TileMapCBuffer->Init();
 
 	m_TileMapCBuffer->SetStart(Vector2(0.f, 0.f));
-	m_TileMapCBuffer->SetEnd(Vector2(64.f, 64.f));
+	m_TileMapCBuffer->SetEnd(Vector2(160.f, 80.f));
 	m_TileMapCBuffer->SetFrame(0);
 
-	SetTileMaterial("TileMap");
+	SetTileMaterial("TileMapIsometric");
+
+	m_TileStartFrame = Vector2(0.f, 0.f);
+	m_TileEndFrame = Vector2(160.f, 80.f);
 
 	m_vecMaterial.clear();
 
-	CreateTile(ETileShape::Rect, 100, 100, Vector2(64.f, 64.f));
+	AddMaterial("DefaultTileMapBack");
+
+	CreateTile(ETileShape::Isometric, 100, 100, Vector2(160.f, 80.f));
 
 	return true;
 }
@@ -758,8 +909,8 @@ void CTileMapComponent::PostUpdate(float DeltaTime)
 
 				else
 				{
-					m_vecTileInfo[m_RenderCount].Start = m_TileMapCBuffer->GetStartFrame();
-					m_vecTileInfo[m_RenderCount].End = m_TileMapCBuffer->GetEndFrame();
+					m_vecTileInfo[m_RenderCount].Start = m_vecTile[Index]->m_TileStart;
+					m_vecTileInfo[m_RenderCount].End = m_vecTile[Index]->m_TileEnd;
 				}
 
 				m_vecTileInfo[m_RenderCount].Opacity = m_vecTile[Index]->m_Opacity;
@@ -779,7 +930,18 @@ void CTileMapComponent::PostUpdate(float DeltaTime)
 
 void CTileMapComponent::Render()
 {
-	CPrimitiveComponent::Render();
+	//CPrimitiveComponent::Render();
+	CSceneComponent::Render();
+
+	if (m_TileBackTexture)
+	{
+		m_vecMaterial[0]->SetMaterial();
+
+		m_Mesh->Render();
+
+		m_vecMaterial[0]->ResetMaterial();
+	}
+
 
 	if (m_RenderCount > 0 && m_TileMaterial)
 	{

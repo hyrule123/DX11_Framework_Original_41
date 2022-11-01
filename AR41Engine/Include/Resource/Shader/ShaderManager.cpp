@@ -10,6 +10,7 @@
 #include "UIProgressBarShader.h"
 #include "TileMapShader.h"
 #include "TileMapConstantBuffer.h"
+#include "TileMapBackShader.h"
 
 CShaderManager::CShaderManager()
 {
@@ -41,6 +42,9 @@ bool CShaderManager::Init()
 
 
 	CreateShader<CTileMapShader>("TileMapShader");
+
+
+	CreateShader<CTileMapBackShader>("TileMapBackShader");
 
 
 

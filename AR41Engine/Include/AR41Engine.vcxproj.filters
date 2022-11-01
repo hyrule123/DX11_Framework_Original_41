@@ -609,6 +609,9 @@
     <ClInclude Include="Resource\Shader\StructuredBuffer.h">
       <Filter>02. Resource\02. Shader\04. StructuredBuffer</Filter>
     </ClInclude>
+    <ClInclude Include="Resource\Shader\TileMapBackShader.h">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\04. TileMap</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -952,6 +955,9 @@
     </ClCompile>
     <ClCompile Include="Resource\Shader\StructuredBuffer.cpp">
       <Filter>02. Resource\02. Shader\04. StructuredBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\Shader\TileMapBackShader.cpp">
+      <Filter>02. Resource\02. Shader\02. ShaderClass\04. TileMap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

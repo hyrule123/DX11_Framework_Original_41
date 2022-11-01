@@ -1,19 +1,19 @@
-#include "TileMapShader.h"
+#include "TileMapBackShader.h"
 
-CTileMapShader::CTileMapShader()
+CTileMapBackShader::CTileMapBackShader()
 {
 }
 
-CTileMapShader::~CTileMapShader()
+CTileMapBackShader::~CTileMapBackShader()
 {
 }
 
-bool CTileMapShader::Init()
+bool CTileMapBackShader::Init()
 {
-	if (!LoadVertexShader("TileMapVS", TEXT("TileMap.fx"), SHADER_PATH))
+	if (!LoadVertexShader("BackVS", TEXT("TileMap.fx"), SHADER_PATH))
 		return false;
 
-	if (!LoadPixelShader("TileMapPS", TEXT("TileMap.fx"), SHADER_PATH))
+	if (!LoadPixelShader("BackPS", TEXT("TileMap.fx"), SHADER_PATH))
 		return false;
 
 	AddInputDesc("POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0);
@@ -24,4 +24,5 @@ bool CTileMapShader::Init()
 
 	return true;
 }
+
 
