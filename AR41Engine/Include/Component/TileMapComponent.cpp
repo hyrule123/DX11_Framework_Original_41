@@ -11,14 +11,14 @@
 #include "CameraComponent.h"
 #include "../Scene/CameraManager.h"
 
-
 CTileMapComponent::CTileMapComponent()	:
 	m_CountX(0),
 	m_CountY(0),
 	m_Count(0),
 	m_RenderCount(0),
 	m_TileMapCBuffer(nullptr),
-	m_TileInfoBuffer(nullptr)
+	m_TileInfoBuffer(nullptr),
+	m_EditorMouseOnTile(nullptr)
 {
 	SetTypeID<CTileMapComponent>();
 
@@ -82,6 +82,15 @@ CTileMapComponent::~CTileMapComponent()
 	}
 
 	m_vecTile.clear();
+}
+
+void CTileMapComponent::SetEditorMouseOnTile(int Index)
+{
+	if (Index < 0 || Index >= m_Count)
+		m_EditorMouseOnTile = nullptr;
+
+	else
+		m_EditorMouseOnTile = m_vecTile[Index];
 }
 
 void CTileMapComponent::SetTileMaterial(const std::string& Name)
@@ -355,9 +364,9 @@ void CTileMapComponent::CreateTile(ETileShape Shape, int CountX,
 	case ETileShape::Isometric:
 	{
 		RenderCountX = (int)(CDevice::GetInst()->GetResolution().Width /
-			m_TileSize.x) + 2;
+			m_TileSize.x) + 3;
 		RenderCountY = (int)(CDevice::GetInst()->GetResolution().Height /
-			m_TileSize.y) * 2 + 3;
+			m_TileSize.y) * 2 + 5;
 
 		float	StartX = 0.f;
 
@@ -627,7 +636,7 @@ int CTileMapComponent::GetTileRenderIndexX(const Vector3& Pos)
 		return IndexX;
 	}
 
-	int	IndexY = GetTileIndexY(Pos);
+	int	IndexY = GetTileRenderIndexY(Pos);
 
 	if (IndexY < 0)
 		IndexY = 0;
@@ -716,7 +725,7 @@ int CTileMapComponent::GetTileRenderIndexY(const Vector3& Pos)
 					return 0;
 
 				else if (IndexY >= m_CountY)
-					return 0;
+					return m_CountY - 1;
 					
 				else
 					return IndexY * 2 + 1;
@@ -755,7 +764,7 @@ int CTileMapComponent::GetTileRenderIndexY(const Vector3& Pos)
 					return m_CountY - 1;
 			}
 
-			else if (IndexY * 2 + 1 >= m_CountY)
+			if (IndexY * 2 + 1 >= m_CountY)
 				return m_CountY - 1;
 
 			else
@@ -774,7 +783,7 @@ int CTileMapComponent::GetTileRenderIndexY(const Vector3& Pos)
 					return m_CountY - 1;
 			}
 
-			else if (IndexY * 2 + 1 >= m_CountY)
+			if (IndexY * 2 + 1 >= m_CountY)
 				return  m_CountY - 1;
 
 			else
@@ -828,7 +837,7 @@ bool CTileMapComponent::Init()
 
 	AddMaterial("DefaultTileMapBack");
 
-	CreateTile(ETileShape::Isometric, 100, 100, Vector2(160.f, 80.f));
+	//CreateTile(ETileShape::Isometric, 100, 100, Vector2(160.f, 80.f));
 
 	return true;
 }
@@ -917,6 +926,9 @@ void CTileMapComponent::PostUpdate(float DeltaTime)
 				m_vecTileInfo[m_RenderCount].AnimationType = (int)m_vecTile[Index]->m_Anim2DType;
 				m_vecTileInfo[m_RenderCount].Frame = m_vecTile[Index]->m_Frame;
 				m_vecTileInfo[m_RenderCount].TypeColor = m_TileTypeColor[(int)m_vecTile[Index]->m_TileOption];
+
+				if (m_EditorMouseOnTile == m_vecTile[Index])
+					m_vecTileInfo[m_RenderCount].TypeColor = Vector4(0.f, 1.f, 0.f, 1.f);
 
 				++m_RenderCount;
 			}

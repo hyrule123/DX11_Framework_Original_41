@@ -114,6 +114,9 @@
     <ClCompile Include="UI\LoadingUI.cpp">
       <Filter>05. UI</Filter>
     </ClCompile>
+    <ClCompile Include="Window\DetailWindow\TileMapWidgetList.cpp">
+      <Filter>03. Window\01. DetailWindow</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -196,6 +199,9 @@
     </ClInclude>
     <ClInclude Include="UI\LoadingUI.h">
       <Filter>05. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Window\DetailWindow\TileMapWidgetList.h">
+      <Filter>03. Window\01. DetailWindow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

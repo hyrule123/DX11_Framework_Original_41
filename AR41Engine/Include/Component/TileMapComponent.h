@@ -31,6 +31,7 @@ protected:
     Vector4 m_TileTypeColor[(int)ETileOption::End];
     Vector2 m_TileStartFrame;
     Vector2 m_TileEndFrame;
+    class CTile* m_EditorMouseOnTile;
 
 public:
     int GetCountX() const
@@ -60,6 +61,7 @@ public:
 
 
 public:
+    void SetEditorMouseOnTile(int Index);
     void SetTileMaterial(const std::string& Name);
     void SetTileMaterial(class CMaterial* Material);
     void SetTileTexture(class CTexture* Texture);

@@ -73,7 +73,7 @@ void CComponentWindow::TreeCallback(CEditorTreeItem<class CComponent*>* Node, co
 
 	CTransformWindow* TransformWindow = CEditorGUIManager::GetInst()->FindEditorWindow<CTransformWindow>("TransformWindow");
 	CDetailWindow* DetailWindow = CEditorGUIManager::GetInst()->FindEditorWindow<CDetailWindow>("DetailWindow");
-
+	 
 	DetailWindow->SetSelectComponent((CSceneComponent*)m_SelectComponent.Get());
 
 	if (m_SelectComponent)
