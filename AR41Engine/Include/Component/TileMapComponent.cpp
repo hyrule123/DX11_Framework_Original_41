@@ -801,6 +801,29 @@ int CTileMapComponent::GetTileRenderIndexY(const Vector3& Pos)
 	return -1;
 }
 
+void CTileMapComponent::ChangeTileFrame(const Vector2& Pos, int Frame)
+{
+	CTile* Tile = GetTile(Pos);
+
+	if (!Tile)
+		return;
+
+	Tile->m_TileStart = m_vecTileFrame[Frame].Start;
+	Tile->m_TileEnd = m_vecTileFrame[Frame].End;
+
+	Tile->m_Frame = Frame;
+}
+
+void CTileMapComponent::ChangeTileOption(const Vector2& Pos, ETileOption Option)
+{
+	CTile* Tile = GetTile(Pos);
+
+	if (!Tile)
+		return;
+
+	Tile->m_TileOption = Option;
+}
+
 void CTileMapComponent::Start()
 {
 	CPrimitiveComponent::Start();
@@ -828,7 +851,17 @@ bool CTileMapComponent::Init()
 	m_TileMapCBuffer->SetEnd(Vector2(160.f, 80.f));
 	m_TileMapCBuffer->SetFrame(0);
 
-	SetTileMaterial("TileMapIsometric");
+	SetTileMaterial("TileMap");
+
+	for (int i = 0; i <= 379; ++i)
+	{
+		Animation2DFrameData	Data;
+
+		Data.Start = Vector2(0.f, 0.f);
+		Data.End = Vector2(160.f, 80.f);
+
+		m_vecTileFrame.push_back(Data);
+	}
 
 	m_TileStartFrame = Vector2(0.f, 0.f);
 	m_TileEndFrame = Vector2(160.f, 80.f);

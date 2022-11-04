@@ -32,6 +32,7 @@ protected:
     Vector2 m_TileStartFrame;
     Vector2 m_TileEndFrame;
     class CTile* m_EditorMouseOnTile;
+    std::vector<Animation2DFrameData>   m_vecTileFrame;
 
 public:
     int GetCountX() const
@@ -57,6 +58,11 @@ public:
     const Vector2& GetTileSize()    const
     {
         return m_TileSize;
+    }
+
+    class CMaterial* GetTileMaterial()  const
+    {
+        return m_TileMaterial;
     }
 
 
@@ -102,6 +108,11 @@ public:
 private:
     int GetTileRenderIndexX(const Vector3& Pos);
     int GetTileRenderIndexY(const Vector3& Pos);
+
+
+public:
+    void ChangeTileFrame(const Vector2& Pos, int Frame);
+    void ChangeTileOption(const Vector2& Pos, ETileOption Option);
 
 public:
     virtual void Start();

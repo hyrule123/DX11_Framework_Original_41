@@ -20,7 +20,9 @@ private:
 
 
 	class CEditorComboBox* m_TileEditCombo;
+	class CEditorComboBox* m_TileOptionCombo;
 	class CEditorListBox* m_TileFrameList;
+	class CEditorImage* m_TileFrameImage;
 
 
 

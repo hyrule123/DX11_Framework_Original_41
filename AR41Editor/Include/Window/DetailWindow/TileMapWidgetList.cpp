@@ -57,6 +57,9 @@ bool CTileMapWidgetList::Init()
 	m_ShapeCombo->AddItem("사각형");
 	m_ShapeCombo->AddItem("마름모");
 	m_ShapeCombo->Sort(false);
+	m_ShapeCombo->SetSelectPrevViewName(true);
+	m_ShapeCombo->SetSelect(1);
+	m_ShapeCombo->SetPrevViewName("마름모");
 
 	m_ShapeCombo->SetSelectCallback<CTileMapWidgetList>(this, &CTileMapWidgetList::SetShapeCallback);
 
@@ -99,11 +102,29 @@ bool CTileMapWidgetList::Init()
 	m_TileEditCombo->AddItem("이미지");
 	m_TileEditCombo->AddItem("옵션");
 	m_TileEditCombo->Sort(false);
+	m_TileEditCombo->SetSelectPrevViewName(true);
+	m_TileEditCombo->SetSelect(1);
+	m_TileEditCombo->SetPrevViewName("옵션");
 
 	m_TileEditCombo->SetSelectCallback<CTileMapWidgetList>(this, &CTileMapWidgetList::SetEditModeCallback);
 
+	EditGroup->CreateWidget<CEditorSameLine>("Line");
+
+	m_TileOptionCombo = EditGroup->CreateWidget<CEditorComboBox>("TileOption",
+		120.f, 30.f);
+	m_TileOptionCombo->SetHideName("TileOption");
+	m_TileOptionCombo->AddItem("일반");
+	m_TileOptionCombo->AddItem("이동불가");
+	m_TileOptionCombo->Sort(false);
+	m_TileOptionCombo->SetSelectPrevViewName(true);
+	m_TileOptionCombo->SetSelect(1);
+	m_TileOptionCombo->SetPrevViewName("이동불가");
+
+	//m_TileEditCombo->SetSelectCallback<CTileMapWidgetList>(this, &CTileMapWidgetList::SetEditModeCallback);
+
 	m_TileFrameList = EditGroup->CreateWidget<CEditorListBox>("FrameList",
-		200.f, 300.f);
+		150.f, 400.f);
+	m_TileFrameList->SetPageItemCount(10);
 	m_TileFrameList->SetHideName("FrameList");
 
 	for (int i = 0; i <= 379; ++i)
@@ -117,6 +138,8 @@ bool CTileMapWidgetList::Init()
 	m_TileFrameList->Sort(false);
 
 	m_TileFrameList->SetSelectCallback<CTileMapWidgetList>(this, &CTileMapWidgetList::SetFrameListCallback);
+
+	m_TileFrameImage = EditGroup->CreateWidget<CEditorImage>("TileFrameImage");
 
 
 	return true;
@@ -161,15 +184,18 @@ void CTileMapWidgetList::Render()
 
 	m_TileMap->SetEditorMouseOnTile(Index);
 
-	switch ((ETileEditMode)m_TileEditCombo->GetSelectIndex())
+	if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
 	{
-	case ETileEditMode::Image:
-		break;
-	case ETileEditMode::Option:
-		break;
+		switch ((ETileEditMode)m_TileEditCombo->GetSelectIndex())
+		{
+		case ETileEditMode::Image:
+			m_TileMap->ChangeTileFrame(Pos, m_TileFrameList->GetSelectIndex());
+			break;
+		case ETileEditMode::Option:
+			m_TileMap->ChangeTileOption(Pos, (ETileOption)m_TileOptionCombo->GetSelectIndex());
+			break;
+		}
 	}
-
-	CTile* Tile = m_TileMap->GetTile(Pos);
 }
 
 void CTileMapWidgetList::CreateTileMapClick()
@@ -177,6 +203,13 @@ void CTileMapWidgetList::CreateTileMapClick()
 	m_TileMap->CreateTile((ETileShape)m_ShapeCombo->GetSelectIndex(),
 		m_CountX->GetInt(), m_CountY->GetInt(),
 		Vector2(m_TileSizeX->GetFloat(), m_TileSizeY->GetFloat()));
+
+	CTexture* Texture = m_TileMap->GetTileMaterial()->GetTexture(0);
+
+	m_TileFrameImage->SetTexture(Texture);
+
+	m_TileFrameImage->SetImageStart(0.f, 0.f);
+	m_TileFrameImage->SetImageEnd(160.f, 80.f);
 }
 
 void CTileMapWidgetList::SetShapeCallback(int Index, const std::string& Item)
@@ -189,4 +222,5 @@ void CTileMapWidgetList::SetEditModeCallback(int Index, const std::string& Item)
 
 void CTileMapWidgetList::SetFrameListCallback(int Index, const std::string& Item)
 {
+	m_TileFrameImage->SetImageIndex(Index);
 }

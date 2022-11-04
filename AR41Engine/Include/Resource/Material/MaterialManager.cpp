@@ -24,13 +24,6 @@ bool CMaterialManager::Init()
 
 	Material = CreateMaterial<CMaterial>("TileMap");
 
-	Material->SetShader("TileMapShader");
-	Material->AddTexture(0, (int)EShaderBufferType::Pixel, "DefaultTile",
-		TEXT("Floors.png"));
-	Material->SetRenderState("DepthLessEqual");
-
-	Material = CreateMaterial<CMaterial>("TileMapIsometric");
-
 	std::vector<const TCHAR*>	vecFileNames;
 
 	for (int i = 0; i <= 379; ++i)
@@ -48,6 +41,7 @@ bool CMaterialManager::Init()
 	Material->AddTextureArray(10, (int)EShaderBufferType::Pixel, "DefaultTileIsometric",
 		vecFileNames);
 	Material->SetRenderState("DepthLessEqual");
+	Material->SetRenderState("AlphaBlend");
 
 	for (int i = 0; i <= 379; ++i)
 	{

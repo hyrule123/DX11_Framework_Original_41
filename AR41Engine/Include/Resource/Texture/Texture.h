@@ -46,6 +46,7 @@ protected:
 	class CScene* m_Scene;
 	std::vector<TextureResourceInfo*>	m_vecTextureInfo;
 	EImageType	m_ImageType;
+	ID3D11ShaderResourceView* m_ArraySRV;
 
 public:
 	EImageType GetImageType()	const

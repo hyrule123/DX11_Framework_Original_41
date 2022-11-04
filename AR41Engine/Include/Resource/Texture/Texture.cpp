@@ -15,6 +15,7 @@
 
 CTexture::CTexture()	:
 	m_Scene(nullptr),
+	m_ArraySRV(nullptr),
 	m_ImageType(EImageType::Atlas)
 {
 	SetTypeID<CTexture>();
@@ -22,6 +23,8 @@ CTexture::CTexture()	:
 
 CTexture::~CTexture()
 {
+	SAFE_RELEASE(m_ArraySRV);
+
 	size_t	Size = m_vecTextureInfo.size();
 
 	for (size_t i = 0; i < Size; ++i)
@@ -439,6 +442,8 @@ bool CTexture::CreateResourceArray()
 
 			memcpy(Src->pixels, Dest->pixels, Src->slicePitch);
 		}
+
+		CreateResource((int)i);
 	}
 
 	ID3D11Texture2D* Texture = nullptr;
@@ -460,7 +465,7 @@ bool CTexture::CreateResourceArray()
 	Desc.Texture2DArray.ArraySize = (UINT)Count;
 
 	if(FAILED(CDevice::GetInst()->GetDevice()->CreateShaderResourceView(
-		Texture, &Desc, &m_vecTextureInfo[0]->SRV)))
+		Texture, &Desc, &m_ArraySRV)))
 		return false;
 
 	SAFE_DELETE(ImageArray);
@@ -496,22 +501,22 @@ void CTexture::SetShader(int Register, int ShaderBufferType, int Index)
 	else
 	{
 		if (ShaderBufferType & (int)EShaderBufferType::Vertex)
-			CDevice::GetInst()->GetContext()->VSSetShaderResources(Register, 1, &m_vecTextureInfo[0]->SRV);
+			CDevice::GetInst()->GetContext()->VSSetShaderResources(Register, 1, &m_ArraySRV);
 
 		if (ShaderBufferType & (int)EShaderBufferType::Pixel)
-			CDevice::GetInst()->GetContext()->PSSetShaderResources(Register, 1, &m_vecTextureInfo[0]->SRV);
+			CDevice::GetInst()->GetContext()->PSSetShaderResources(Register, 1, &m_ArraySRV);
 
 		if (ShaderBufferType & (int)EShaderBufferType::Hull)
-			CDevice::GetInst()->GetContext()->HSSetShaderResources(Register, 1, &m_vecTextureInfo[0]->SRV);
+			CDevice::GetInst()->GetContext()->HSSetShaderResources(Register, 1, &m_ArraySRV);
 
 		if (ShaderBufferType & (int)EShaderBufferType::Domain)
-			CDevice::GetInst()->GetContext()->DSSetShaderResources(Register, 1, &m_vecTextureInfo[0]->SRV);
+			CDevice::GetInst()->GetContext()->DSSetShaderResources(Register, 1, &m_ArraySRV);
 
 		if (ShaderBufferType & (int)EShaderBufferType::Geometry)
-			CDevice::GetInst()->GetContext()->GSSetShaderResources(Register, 1, &m_vecTextureInfo[0]->SRV);
+			CDevice::GetInst()->GetContext()->GSSetShaderResources(Register, 1, &m_ArraySRV);
 
 		if (ShaderBufferType & (int)EShaderBufferType::Compute)
-			CDevice::GetInst()->GetContext()->CSSetShaderResources(Register, 1, &m_vecTextureInfo[0]->SRV);
+			CDevice::GetInst()->GetContext()->CSSetShaderResources(Register, 1, &m_ArraySRV);
 	}
 }
 
