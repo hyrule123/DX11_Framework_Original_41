@@ -23,7 +23,6 @@
 #include "Animation2DWindow.h"
 #include "Editor/EditorGUIManager.h"
 
-
 CDetailWindow::CDetailWindow()
 {
 }

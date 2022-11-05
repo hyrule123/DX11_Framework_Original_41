@@ -1,4 +1,7 @@
 #include "ThreadManager.h"
+#include "../Component/TileMapComponent.h"
+#include "../Scene/Scene.h"
+#include "NavigationThread.h"
 
 DEFINITION_SINGLE(CThreadManager)
 
@@ -104,6 +107,63 @@ bool CThreadManager::Start(const std::string& Name)
 	Thread->Start();
 
 	return true;
+}
+
+void CThreadManager::CreateNavigationThread(CTileMapComponent* TileMap)
+{
+	CScene* Scene = TileMap->GetScene();
+
+	std::string	Name = Scene->GetName();
+	Name += "_";
+	Name += TileMap->GetName();
+	Name += "_";
+
+	SYSTEM_INFO	SysInfo = {};
+
+	GetSystemInfo(&SysInfo);
+
+	for (DWORD i = 0; i < SysInfo.dwNumberOfProcessors * 2; ++i)
+	{
+		char	ThreadName[256] = {};
+
+		sprintf_s(ThreadName, "%s%d", Name.c_str(), (int)i);
+
+		CNavigationThread* Thread = Create<CNavigationThread>(ThreadName);
+
+		Thread->SetTileMapComponent(TileMap);
+		Thread->SetLoop(true);
+
+		Thread->Start();
+
+		Thread->Suspend();
+	}
+}
+
+void CThreadManager::DeleteNavigationThread(CTileMapComponent* TileMap)
+{
+	CScene* Scene = TileMap->GetScene();
+
+	std::string	Name = Scene->GetName();
+	Name += "_";
+	Name += TileMap->GetName();
+	Name += "_";
+
+	SYSTEM_INFO	SysInfo = {};
+
+	GetSystemInfo(&SysInfo);
+
+	for (DWORD i = 0; i < SysInfo.dwNumberOfProcessors * 2; ++i)
+	{
+		char	ThreadName[256] = {};
+
+		sprintf_s(ThreadName, "%s%d", Name.c_str(), (int)i);
+
+		CThread* Thread = FindThread(ThreadName);
+
+		Thread->ReStart();
+
+		Delete(ThreadName);
+	}
 }
 
 CThread* CThreadManager::FindThread(const std::string& Name)

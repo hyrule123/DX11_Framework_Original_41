@@ -1,33 +1,50 @@
 #include "Thread.h"
+#include "Sync.h"
 
 CThread::CThread()  :
-    m_Loop(false)
+    m_Loop(false),
+    m_Suspend(false)
 {
 }
 
 CThread::~CThread()
 {
+    DeleteCriticalSection(&m_CRT);
+
     Stop();
 }
 
 void CThread::Suspend()
 {
+    CSync   sync(&m_CRT);
+
     SuspendThread(m_Thread);
+
+    m_Suspend = true;
 }
 
 void CThread::Resume()
 {
-    ResumeThread(m_Thread);
+    CSync   sync(&m_CRT);
+
+    DWORD Count = ResumeThread(m_Thread);
+
+    if (Count > 0)
+        m_Suspend = false;
 }
 
 void CThread::ReStart()
 {
+    CSync   sync(&m_CRT);
+
     DWORD   Count = 0;
 
     do
     {
         Count = ResumeThread(m_Thread);
     } while (Count > 0);
+
+    m_Suspend = false;
 }
 
 void CThread::Stop()
@@ -52,6 +69,8 @@ void CThread::Start()
 bool CThread::Init()
 {
     m_StartEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+
+    InitializeCriticalSection(&m_CRT);
 
     m_Thread = (HANDLE)_beginthreadex(nullptr, 0, CThread::ThreadFunction,
         (void*)this, 0, nullptr);

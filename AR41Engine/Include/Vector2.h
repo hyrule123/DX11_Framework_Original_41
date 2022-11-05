@@ -15,6 +15,7 @@ struct Vector2
 	Vector2& operator = (const Vector2& v);
 	Vector2& operator = (const DirectX::XMVECTOR& v);
 	Vector2& operator = (float f);
+	Vector2& operator = (const struct Vector3& v);
 
 	// operator ==, !=
 	bool operator == (const Vector2& v)	const;

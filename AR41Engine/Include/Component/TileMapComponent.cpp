@@ -409,6 +409,9 @@ void CTileMapComponent::CreateTile(ETileShape Shape, int CountX,
 		m_vecTileInfo[i].TypeColor = Vector4(1.f, 1.f, 1.f, 1.f);
 		m_vecTileInfo[i].Opacity = 1.f;
 	}
+
+	// 타일이 생성되었기 때문에 해당 타일맵의 길을 찾아줄 내비게이션 스레드를
+	// 생성해준다.
 }
 
 int CTileMapComponent::GetTileIndexX(const Vector2& Pos)

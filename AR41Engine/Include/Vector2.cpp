@@ -1,4 +1,5 @@
 #include "Vector2.h"
+#include "Vector3.h"
 
 Vector2::Vector2()  :
     x(0.f),
@@ -45,6 +46,14 @@ Vector2& Vector2::operator=(float f)
 {
     x = f;
     y = f;
+
+    return *this;
+}
+
+Vector2& Vector2::operator=(const Vector3& v)
+{
+    x = v.x;
+    y = v.y;
 
     return *this;
 }
