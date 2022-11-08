@@ -72,5 +72,36 @@ private:
 
 public:
 	void CreateNavigation(class CTileMapComponent* TileMap);
+	bool FindPath(const Vector2& Start, const Vector2& End,
+		std::list<Vector2>& PathList);
+
+private:
+	bool FindNode(NavNode* Node, NavNode* EndNode, const Vector2& End,
+		std::list<Vector2>& PathList);
+	NavNode* GetCorner(ENodeDir Dir, NavNode* Node, NavNode* EndNode,
+		const Vector2& End);
+
+	NavNode* GetCornerRectTop(NavNode* Node, NavNode* EndNode);
+	NavNode* GetCornerRectBottom(NavNode* Node, NavNode* EndNode);
+	NavNode* GetCornerRectLeft(NavNode* Node, NavNode* EndNode);
+	NavNode* GetCornerRectRight(NavNode* Node, NavNode* EndNode);
+	NavNode* GetCornerRectLT(NavNode* Node, NavNode* EndNode);
+	NavNode* GetCornerRectRT(NavNode* Node, NavNode* EndNode);
+	NavNode* GetCornerRectLB(NavNode* Node, NavNode* EndNode);
+	NavNode* GetCornerRectRB(NavNode* Node, NavNode* EndNode);
+
+	NavNode* GetCornerIsometricTop(NavNode* Node, NavNode* EndNode);
+	NavNode* GetCornerIsometricBottom(NavNode* Node, NavNode* EndNode);
+	NavNode* GetCornerIsometricLeft(NavNode* Node, NavNode* EndNode);
+	NavNode* GetCornerIsometricRight(NavNode* Node, NavNode* EndNode);
+	NavNode* GetCornerIsometricLT(NavNode* Node, NavNode* EndNode);
+	NavNode* GetCornerIsometricRT(NavNode* Node, NavNode* EndNode);
+	NavNode* GetCornerIsometricLB(NavNode* Node, NavNode* EndNode);
+	NavNode* GetCornerIsometricRB(NavNode* Node, NavNode* EndNode);
+
+
+
+private:
+	static bool SortNode(NavNode* Src, NavNode* Dest);
 };
 
