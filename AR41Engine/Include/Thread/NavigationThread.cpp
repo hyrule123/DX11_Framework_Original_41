@@ -67,6 +67,14 @@ void CNavigationThread::Run()
 
 		CNavigationAgent* Agent = (CNavigationAgent*)Address;
 
+		if (!Agent)
+		{
+			if (m_InputQueue.empty())
+				Suspend();
+
+			return;
+		}
+
 		Vector2	Start, End;
 
 		stream.GetData<Vector2>(&Start, 8);
@@ -74,11 +82,12 @@ void CNavigationThread::Run()
 
 
 		// 길을 찾아준다.
-
-
+		std::list<Vector2>	PathList;
+		m_Navigation->FindPath(Start, End, PathList);
 
 
 		// 길찾기가 끝나면 결과를 반환해준다.
+
 
 
 		if (m_InputQueue.empty())

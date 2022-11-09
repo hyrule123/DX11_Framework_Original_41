@@ -116,7 +116,9 @@ bool CNavigation::FindPath(const Vector2& Start, const Vector2& End,
 
 	}
 
-	return false;
+	m_vecOpen.clear();
+
+	return !PathList.empty();
 }
 
 bool CNavigation::FindNode(NavNode* Node, NavNode* EndNode, const Vector2& End, 
@@ -183,7 +185,23 @@ bool CNavigation::FindNode(NavNode* Node, NavNode* EndNode, const Vector2& End,
 				Corner->Parent = Node;
 
 				// 조사할 방향을 넣어준다.
+				AddDir(*iter, Corner);
 			}
+		}
+
+		else
+		{
+			Corner->NodeType = ENavNodeType::Open;
+			Corner->Parent = Node;
+			Corner->Cost = Cost;
+			Corner->Dist = Corner->Center.Distance(End);
+			Corner->Total = Corner->Cost + Corner->Dist;
+
+			m_vecOpen.push_back(Corner);
+
+			m_vecUseNode.push_back(Corner);
+
+			AddDir(*iter, Corner);
 		}
 	}
 
@@ -1236,6 +1254,121 @@ NavNode* CNavigation::GetCornerIsometricRB(NavNode* Node, NavNode* EndNode)
 	}
 
 	return nullptr;
+}
+
+void CNavigation::AddDir(ENodeDir Dir, NavNode* Node)
+{
+	Node->SearchDirList.clear();
+
+	switch (m_Shape)
+	{
+	case ETileShape::Rect:
+		switch (Dir)
+		{
+		case ENodeDir::T:
+			Node->SearchDirList.push_back(ENodeDir::T);
+			Node->SearchDirList.push_back(ENodeDir::LT);
+			Node->SearchDirList.push_back(ENodeDir::RT);
+			break;
+		case ENodeDir::RT:
+			Node->SearchDirList.push_back(ENodeDir::RT);
+			Node->SearchDirList.push_back(ENodeDir::T);
+			Node->SearchDirList.push_back(ENodeDir::R);
+			Node->SearchDirList.push_back(ENodeDir::LT);
+			Node->SearchDirList.push_back(ENodeDir::RB);
+			break;
+		case ENodeDir::R:
+			Node->SearchDirList.push_back(ENodeDir::R);
+			Node->SearchDirList.push_back(ENodeDir::RT);
+			Node->SearchDirList.push_back(ENodeDir::RB);
+			break;
+		case ENodeDir::RB:
+			Node->SearchDirList.push_back(ENodeDir::RB);
+			Node->SearchDirList.push_back(ENodeDir::R);
+			Node->SearchDirList.push_back(ENodeDir::B);
+			Node->SearchDirList.push_back(ENodeDir::RT);
+			Node->SearchDirList.push_back(ENodeDir::LB);
+			break;
+		case ENodeDir::B:
+			Node->SearchDirList.push_back(ENodeDir::B);
+			Node->SearchDirList.push_back(ENodeDir::LB);
+			Node->SearchDirList.push_back(ENodeDir::RB);
+			break;
+		case ENodeDir::LB:
+			Node->SearchDirList.push_back(ENodeDir::LB);
+			Node->SearchDirList.push_back(ENodeDir::L);
+			Node->SearchDirList.push_back(ENodeDir::B);
+			Node->SearchDirList.push_back(ENodeDir::LT);
+			Node->SearchDirList.push_back(ENodeDir::RB);
+			break;
+		case ENodeDir::L:
+			Node->SearchDirList.push_back(ENodeDir::L);
+			Node->SearchDirList.push_back(ENodeDir::LT);
+			Node->SearchDirList.push_back(ENodeDir::LB);
+			break;
+		case ENodeDir::LT:
+			Node->SearchDirList.push_back(ENodeDir::LT);
+			Node->SearchDirList.push_back(ENodeDir::T);
+			Node->SearchDirList.push_back(ENodeDir::L);
+			Node->SearchDirList.push_back(ENodeDir::RT);
+			Node->SearchDirList.push_back(ENodeDir::LB);
+			break;
+		}
+		break;
+	case ETileShape::Isometric:
+		switch (Dir)
+		{
+		case ENodeDir::T:
+			Node->SearchDirList.push_back(ENodeDir::T);
+			Node->SearchDirList.push_back(ENodeDir::RT);
+			Node->SearchDirList.push_back(ENodeDir::LT);
+			Node->SearchDirList.push_back(ENodeDir::R);
+			Node->SearchDirList.push_back(ENodeDir::L);
+			break;
+		case ENodeDir::RT:
+			Node->SearchDirList.push_back(ENodeDir::RT);
+			Node->SearchDirList.push_back(ENodeDir::T);
+			Node->SearchDirList.push_back(ENodeDir::R);
+			break;
+		case ENodeDir::R:
+			Node->SearchDirList.push_back(ENodeDir::R);
+			Node->SearchDirList.push_back(ENodeDir::RT);
+			Node->SearchDirList.push_back(ENodeDir::RB);
+			Node->SearchDirList.push_back(ENodeDir::T);
+			Node->SearchDirList.push_back(ENodeDir::B);
+			break;
+		case ENodeDir::RB:
+			Node->SearchDirList.push_back(ENodeDir::RB);
+			Node->SearchDirList.push_back(ENodeDir::R);
+			Node->SearchDirList.push_back(ENodeDir::B);
+			break;
+		case ENodeDir::B:
+			Node->SearchDirList.push_back(ENodeDir::B);
+			Node->SearchDirList.push_back(ENodeDir::RB);
+			Node->SearchDirList.push_back(ENodeDir::LB);
+			Node->SearchDirList.push_back(ENodeDir::R);
+			Node->SearchDirList.push_back(ENodeDir::L);
+			break;
+		case ENodeDir::LB:
+			Node->SearchDirList.push_back(ENodeDir::LB);
+			Node->SearchDirList.push_back(ENodeDir::L);
+			Node->SearchDirList.push_back(ENodeDir::B);
+			break;
+		case ENodeDir::L:
+			Node->SearchDirList.push_back(ENodeDir::L);
+			Node->SearchDirList.push_back(ENodeDir::LT);
+			Node->SearchDirList.push_back(ENodeDir::LB);
+			Node->SearchDirList.push_back(ENodeDir::T);
+			Node->SearchDirList.push_back(ENodeDir::B);
+			break;
+		case ENodeDir::LT:
+			Node->SearchDirList.push_back(ENodeDir::LT);
+			Node->SearchDirList.push_back(ENodeDir::L);
+			Node->SearchDirList.push_back(ENodeDir::T);
+			break;
+		}
+		break;
+	}
 }
 
 bool CNavigation::SortNode(NavNode* Src, NavNode* Dest)

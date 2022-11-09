@@ -9,6 +9,7 @@ struct Vector2
 	Vector2();
 	Vector2(float _x, float _y);
 	Vector2(const Vector2& v);
+	Vector2(const struct Vector3& v);
 	Vector2(const DirectX::XMVECTOR& v);
 
 	// operator =

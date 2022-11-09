@@ -113,10 +113,17 @@ void CThreadManager::CreateNavigationThread(CTileMapComponent* TileMap)
 {
 	CScene* Scene = TileMap->GetScene();
 
+	unsigned __int64	Address = (unsigned __int64)Scene;
+
+	char	SceneAddress[32] = {};
+
+	sprintf_s(SceneAddress, "%llu", Address);
+
 	std::string	Name = Scene->GetName();
 	Name += "_";
 	Name += TileMap->GetName();
 	Name += "_";
+	Name += SceneAddress;
 
 	SYSTEM_INFO	SysInfo = {};
 
@@ -129,6 +136,8 @@ void CThreadManager::CreateNavigationThread(CTileMapComponent* TileMap)
 		sprintf_s(ThreadName, "%s%d", Name.c_str(), (int)i);
 
 		CNavigationThread* Thread = Create<CNavigationThread>(ThreadName);
+
+		Scene->GetNavigationManager()->AddNavigationThread(Thread);
 
 		Thread->SetTileMapComponent(TileMap);
 		Thread->SetLoop(true);
@@ -143,10 +152,17 @@ void CThreadManager::DeleteNavigationThread(CTileMapComponent* TileMap)
 {
 	CScene* Scene = TileMap->GetScene();
 
+	unsigned __int64	Address = (unsigned __int64)Scene;
+
+	char	SceneAddress[32] = {};
+
+	sprintf_s(SceneAddress, "%llu", Address);
+
 	std::string	Name = Scene->GetName();
 	Name += "_";
 	Name += TileMap->GetName();
 	Name += "_";
+	Name += SceneAddress;
 
 	SYSTEM_INFO	SysInfo = {};
 

@@ -17,6 +17,8 @@ protected:
 private:
     CSharedPtr<class CSceneComponent> m_UpdateComponent;
     CThreadQueue	m_FindQueue;
+    std::list<Vector2>  m_PathList;
+    float           m_MoveSpeed;
 
 public:
     class CSceneComponent* GetUpdateComponent() const
@@ -26,6 +28,9 @@ public:
 
 public:
     void SetUpdateComponent(class CSceneComponent* Component);
+    void SetMoveSpeed(float Speed);
+    void AddPathList(const std::list<Vector2>& PathList);
+    bool Move(const Vector2& TargetPos);
 
 public:
     virtual void Destroy();

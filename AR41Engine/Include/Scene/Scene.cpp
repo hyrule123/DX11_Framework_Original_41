@@ -49,12 +49,19 @@ CScene::CScene()	:
 	m_Viewport->m_Owner = this;
 
 	m_Viewport->Init();
+
+	m_NavManager = new CNavigationManager;
+
+	m_NavManager->m_Owner = this;
+
+	m_NavManager->Init();
 }
 
 CScene::~CScene()
 {
 	CInput::GetInst()->ClearCallback(this);
 
+	SAFE_DELETE(m_NavManager);
 	SAFE_DELETE(m_Viewport);
 	SAFE_DELETE(m_CollisionManager);
 	SAFE_DELETE(m_CameraManager);

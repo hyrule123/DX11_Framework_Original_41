@@ -19,6 +19,12 @@ Vector2::Vector2(const Vector2& v)  :
 { 
 }
 
+Vector2::Vector2(const Vector3& v)  :
+    x(v.x),
+    y(v.y)
+{
+}
+
 Vector2::Vector2(const DirectX::XMVECTOR& v)
 {
     // XMVECTOR를 XMFLOAT2로 변환해준다.

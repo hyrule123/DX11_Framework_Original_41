@@ -220,6 +220,9 @@
     <Filter Include="01. Manager\10. Thread\02. Navigation">
       <UniqueIdentifier>{e7574821-5e85-4a69-baed-b7dc39de0c8b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. Scene\06. Navigation">
+      <UniqueIdentifier>{5bf64ff1-0228-446d-b593-a158b48d77af}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -630,6 +633,9 @@
     <ClInclude Include="Thread\NavigationThread.h">
       <Filter>01. Manager\10. Thread\02. Navigation</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\NavigationManager.h">
+      <Filter>03. Scene\06. Navigation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -985,6 +991,9 @@
     </ClCompile>
     <ClCompile Include="Thread\NavigationThread.cpp">
       <Filter>01. Manager\10. Thread\02. Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\NavigationManager.cpp">
+      <Filter>03. Scene\06. Navigation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

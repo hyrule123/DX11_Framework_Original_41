@@ -99,7 +99,7 @@ private:
 	NavNode* GetCornerIsometricLB(NavNode* Node, NavNode* EndNode);
 	NavNode* GetCornerIsometricRB(NavNode* Node, NavNode* EndNode);
 
-
+	void AddDir(ENodeDir Dir, NavNode* Node);
 
 private:
 	static bool SortNode(NavNode* Src, NavNode* Dest);

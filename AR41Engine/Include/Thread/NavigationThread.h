@@ -18,6 +18,12 @@ private:
 	CThreadQueue	m_InputQueue;
 
 public:
+	int GetWorkCount()
+	{
+		return m_InputQueue.size();
+	}
+
+public:
 	void SetTileMapComponent(class CTileMapComponent* TileMap);
 
 	void AddInputData(class CNavigationAgent* Agent, const Vector2& End);

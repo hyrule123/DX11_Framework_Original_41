@@ -26,6 +26,7 @@ protected:
     int     m_CountX;
     int     m_CountY;
     int     m_Count;
+    int     m_TileInfoCount;
     int     m_RenderCount;
     Vector2 m_TileSize;
     Vector4 m_TileTypeColor[(int)ETileOption::End];
