@@ -19,6 +19,7 @@ private:
 	CSharedPtr<class CCameraComponent>	m_Camera;
 	CSharedPtr<class CTargetArm>		m_Arm;
 	CSharedPtr<class CColliderOBB2D>	m_Body;
+	CSharedPtr<class CNavigationAgent>	m_NavAgent;
 
 public:
 	virtual void Start();
@@ -35,5 +36,6 @@ public:
 	void Rotation();
 	void RotationInv();
 	void Fire();
+	void MoveClick();
 };
 

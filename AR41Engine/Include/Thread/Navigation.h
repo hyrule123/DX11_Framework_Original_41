@@ -66,7 +66,7 @@ private:
 	int		m_CountX;
 	int		m_CountY;
 	Vector2	m_TileSize;
-	CSharedPtr<class CTileMapComponent>	m_TileMap;
+	class CTileMapComponent*		m_TileMap;
 	std::vector<NavNode*>			m_vecOpen;
 	std::vector<NavNode*>			m_vecUseNode;
 

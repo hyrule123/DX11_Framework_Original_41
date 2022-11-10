@@ -15,6 +15,7 @@ protected:
     virtual ~CTileMapComponent();
 
 protected:
+    std::string m_SceneName;
     class CTileMapConstantBuffer* m_TileMapCBuffer;
     class CStructuredBuffer* m_TileInfoBuffer;
     std::vector<CTile*> m_vecTile;
@@ -36,6 +37,11 @@ protected:
     std::vector<Animation2DFrameData>   m_vecTileFrame;
 
 public:
+    const std::string& GetSceneName()   const
+    {
+        return m_SceneName;
+    }
+
     int GetCountX() const
     {
         return m_CountX;

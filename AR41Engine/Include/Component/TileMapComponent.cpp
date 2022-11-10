@@ -418,6 +418,8 @@ void CTileMapComponent::CreateTile(ETileShape Shape, int CountX,
 		m_vecTileInfo[i].Opacity = 1.f;
 	}
 
+	m_SceneName = m_Scene->GetName();
+
 	// 타일이 생성되었기 때문에 해당 타일맵의 길을 찾아줄 내비게이션 스레드를
 	// 생성해준다.
 	CThreadManager::GetInst()->CreateNavigationThread(this);
@@ -1060,7 +1062,7 @@ void CTileMapComponent::Save(FILE* File)
 
 	if (BackTexture)
 	{
-		int	Length = m_TileBackTexture->GetName().length();
+		int	Length = (int)m_TileBackTexture->GetName().length();
 		fwrite(&Length, sizeof(int), 1, File);
 		fwrite(m_TileBackTexture->GetName().c_str(), sizeof(char), Length, File);
 	}
@@ -1189,5 +1191,11 @@ void CTileMapComponent::Load(FILE* File)
 		m_vecTileInfo[i].TypeColor = Vector4(1.f, 1.f, 1.f, 1.f);
 		m_vecTileInfo[i].Opacity = 1.f;
 	}
+
+	m_SceneName = m_Scene->GetName();
+
+	// 타일이 생성되었기 때문에 해당 타일맵의 길을 찾아줄 내비게이션 스레드를
+	// 생성해준다.
+	CThreadManager::GetInst()->CreateNavigationThread(this);
 }
 

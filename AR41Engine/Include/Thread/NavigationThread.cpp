@@ -12,6 +12,7 @@ CNavigationThread::CNavigationThread()	:
 
 CNavigationThread::~CNavigationThread()
 {
+	SAFE_DELETE(m_Navigation);
 }
 
 void CNavigationThread::SetTileMapComponent(CTileMapComponent* TileMap)
@@ -87,10 +88,10 @@ void CNavigationThread::Run()
 
 
 		// 길찾기가 끝나면 결과를 반환해준다.
+		Agent->AddPathList(PathList);
 
 
-
-		if (m_InputQueue.empty())
-			Suspend();
+		//if (m_InputQueue.empty() && m_Loop)
+		//	Suspend();
 	}
 }

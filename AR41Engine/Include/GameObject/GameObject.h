@@ -168,7 +168,7 @@ public:
 		{
 			if (!m_RootComponent)
 			{
-				m_RootComponent = Component;
+				m_RootComponent = (CSceneComponent*)Component;
 			}
 
 			m_SceneComponentList.push_back((CSceneComponent*)Component);

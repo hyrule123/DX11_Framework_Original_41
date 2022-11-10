@@ -58,8 +58,8 @@ bool CNavigation::FindPath(const Vector2& Start, const Vector2& End,
 	if (EndIndex == -1)
 		return false;
 
-	NavNode* StartNode = m_vecUseNode[StartIndex];
-	NavNode* EndNode = m_vecUseNode[EndIndex];
+	NavNode* StartNode = m_vecNode[StartIndex];
+	NavNode* EndNode = m_vecNode[EndIndex];
 
 	if (EndNode->TileOption == ETileOption::Wall)
 		return false;

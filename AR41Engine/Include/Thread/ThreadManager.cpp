@@ -17,6 +17,7 @@ CThreadManager::~CThreadManager()
 
 		for (; iter != iterEnd; ++iter)
 		{
+			iter->second->Stop();
 			SAFE_DELETE(iter->second);
 		}
 
@@ -90,6 +91,7 @@ bool CThreadManager::Delete(const std::string& Name)
 	if (iter == m_mapThread.end())
 		return false;
 
+	iter->second->Stop();
 	SAFE_DELETE(iter->second);
 
 	m_mapThread.erase(iter);
@@ -133,7 +135,7 @@ void CThreadManager::CreateNavigationThread(CTileMapComponent* TileMap)
 	{
 		char	ThreadName[256] = {};
 
-		sprintf_s(ThreadName, "%s%d", Name.c_str(), (int)i);
+		sprintf_s(ThreadName, "%s_%d", Name.c_str(), (int)i);
 
 		CNavigationThread* Thread = Create<CNavigationThread>(ThreadName);
 
@@ -152,13 +154,16 @@ void CThreadManager::DeleteNavigationThread(CTileMapComponent* TileMap)
 {
 	CScene* Scene = TileMap->GetScene();
 
+	if (!Scene)
+		return;
+
 	unsigned __int64	Address = (unsigned __int64)Scene;
 
 	char	SceneAddress[32] = {};
 
 	sprintf_s(SceneAddress, "%llu", Address);
 
-	std::string	Name = Scene->GetName();
+	std::string	Name = TileMap->GetSceneName();
 	Name += "_";
 	Name += TileMap->GetName();
 	Name += "_";
@@ -172,7 +177,7 @@ void CThreadManager::DeleteNavigationThread(CTileMapComponent* TileMap)
 	{
 		char	ThreadName[256] = {};
 
-		sprintf_s(ThreadName, "%s%d", Name.c_str(), (int)i);
+		sprintf_s(ThreadName, "%s_%d", Name.c_str(), (int)i);
 
 		CThread* Thread = FindThread(ThreadName);
 

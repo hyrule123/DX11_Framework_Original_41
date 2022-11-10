@@ -9,9 +9,9 @@ CThread::CThread()  :
 
 CThread::~CThread()
 {
-    DeleteCriticalSection(&m_CRT);
+    //Stop();
 
-    Stop();
+    DeleteCriticalSection(&m_CRT);
 }
 
 void CThread::Suspend()
@@ -53,6 +53,7 @@ void CThread::Stop()
     {
         m_Loop = false;
         Start();
+        ReStart();
 
         // 스레드가 종료될때까지 기다린다.
         WaitForSingleObject(m_Thread, INFINITE);

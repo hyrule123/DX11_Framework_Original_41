@@ -6,6 +6,7 @@
 #include "Component/ColliderBox2D.h"
 #include "Component/ColliderSphere2D.h"
 #include "Component/ColliderOBB2D.h"
+#include "Component/NavigationAgent.h"
 #include "Input.h"
 #include "Scene/Scene.h"
 #include "Scene/CameraManager.h"
@@ -30,6 +31,7 @@ CPlayer2D::CPlayer2D(const CPlayer2D& Obj)	:
 	m_Camera = (CCameraComponent*)FindComponent("Camera");
 	m_Arm = (CTargetArm*)FindComponent("Arm");
 	m_Body = (CColliderOBB2D*)FindComponent("Body");
+	m_NavAgent = (CNavigationAgent*)FindComponent("NavAgent");
 }
 
 CPlayer2D::~CPlayer2D()
@@ -53,6 +55,9 @@ void CPlayer2D::Start()
 	CInput::GetInst()->AddBindFunction<CPlayer2D>("MoveDown", Input_Type::Push,
 		this, &CPlayer2D::MoveDown, m_Scene);
 
+	CInput::GetInst()->AddBindFunction<CPlayer2D>("MoveClick", Input_Type::Down,
+		this, &CPlayer2D::MoveClick, m_Scene);
+
 	CInput::GetInst()->AddBindFunction<CPlayer2D>("Fire", Input_Type::Down,
 		this, &CPlayer2D::Fire, m_Scene);
 }
@@ -67,6 +72,7 @@ bool CPlayer2D::Init()
 	m_Camera = CreateComponent<CCameraComponent>("Camera");
 	m_Arm = CreateComponent<CTargetArm>("Arm");
 	m_Body = CreateComponent<CColliderOBB2D>("Body");
+	m_NavAgent = CreateComponent<CNavigationAgent>("NavAgent");
 
 	SetRootComponent(m_Body);
 
@@ -178,4 +184,12 @@ void CPlayer2D::Fire()
 	Bullet->SetWorldPosition(GetWorldPos());
 	Bullet->SetWorldRotation(GetWorldRot());
 	Bullet->SetCollisionProfileName("PlayerAttack");
+}
+
+void CPlayer2D::MoveClick()
+{
+	const Vector2&	MousePos = CInput::GetInst()->GetMouseWorldPos();
+
+	if (m_NavAgent)
+		m_NavAgent->Move(MousePos);
 }

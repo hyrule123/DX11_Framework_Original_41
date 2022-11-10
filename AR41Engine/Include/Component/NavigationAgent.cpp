@@ -12,7 +12,7 @@ CNavigationAgent::CNavigationAgent()
 
 	m_ComponentTypeName = "NavigationAgent";
 
-	m_MoveSpeed = 100.f;
+	m_MoveSpeed = 400.f;
 }
 
 CNavigationAgent::CNavigationAgent(const CNavigationAgent& Obj) :

@@ -31,12 +31,16 @@ CGameObject::CGameObject(const CGameObject& Obj)    :
 	}
 
 	{
+		m_vecObjectComponent.clear();
+
 		auto	iter = Obj.m_vecObjectComponent.begin();
 		auto	iterEnd = Obj.m_vecObjectComponent.end();
 
 		for (; iter != iterEnd; ++iter)
 		{
 			CObjectComponent* Component = (*iter)->Clone();
+
+			Component->SetOwner(this);
 
 			m_vecObjectComponent.push_back(Component);
 		}
@@ -53,6 +57,13 @@ void CGameObject::SetScene(CScene* Scene)
 
 	if (m_RootComponent)
 		m_RootComponent->SetScene(Scene);
+
+	size_t	Size = m_vecObjectComponent.size();
+
+	for (size_t i = 0; i < Size; ++i)
+	{
+		m_vecObjectComponent[i]->SetScene(Scene);
+	}
 }
 
 void CGameObject::Destroy()

@@ -7,6 +7,8 @@
 #include "../Component/TargetArm.h"
 #include "../Component/SceneComponent.h"
 #include "../Component/ColliderBox2D.h"
+#include "../Component/TileMapComponent.h"
+#include "../Component/NavigationAgent.h"
 #include "../Animation/Animation2D.h"
 #include "../UI/UIButton.h"
 #include "../UI/UIImage.h"
@@ -117,6 +119,18 @@ void CScene::CreateCDO()
 	ComCDO->Init();
 
 	CComponent::AddComponentCDO("Box2D", ComCDO);
+
+	ComCDO = new CTileMapComponent;
+
+	ComCDO->Init();
+
+	CComponent::AddComponentCDO("TileMapComponent", ComCDO);
+
+	ComCDO = new CNavigationAgent;
+
+	ComCDO->Init();
+
+	CComponent::AddComponentCDO("NavigationAgent", ComCDO);
 
 
 	// ==================== Animation ====================
