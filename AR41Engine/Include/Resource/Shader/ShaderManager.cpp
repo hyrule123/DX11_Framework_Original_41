@@ -23,28 +23,28 @@ CShaderManager::~CShaderManager()
 
 bool CShaderManager::Init()
 {
-	CreateShader<CSpriteColorShader>("SpriteColorShader");
+	CreateShader<CSpriteColorShader>("SpriteColorShader", true);
 
 
-	CreateShader<CSpriteShader>("SpriteShader");
+	CreateShader<CSpriteShader>("SpriteShader", true);
 
 
-	CreateShader<CColliderShader>("ColliderShader");
+	CreateShader<CColliderShader>("ColliderShader", true);
 
 
-	CreateShader<CColliderImageShader>("ColliderImageShader");
+	CreateShader<CColliderImageShader>("ColliderImageShader", true);
 
 
-	CreateShader<CUIShader>("UIShader");
+	CreateShader<CUIShader>("UIShader", true);
 
 
-	CreateShader<CUIProgressBarShader>("UIProgressBarShader");
+	CreateShader<CUIProgressBarShader>("UIProgressBarShader", true);
 
 
-	CreateShader<CTileMapShader>("TileMapShader");
+	CreateShader<CTileMapShader>("TileMapShader", true);
 
 
-	CreateShader<CTileMapBackShader>("TileMapBackShader");
+	CreateShader<CTileMapBackShader>("TileMapBackShader", true);
 
 
 

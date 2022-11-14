@@ -13,6 +13,7 @@
 #include "../UI/UIButton.h"
 #include "../UI/UIImage.h"
 #include "../UI/UIWindow.h"
+#include "../PathManager.h"
 
 std::unordered_map<std::string, CSceneInfo*> CScene::m_mapSceneInfoCDO;
 
@@ -344,6 +345,9 @@ void CScene::Load(const char* FullPath)
 
 	CSceneInfo* CDO = FindSceneInfoCDO(SceneInfoName);
 
+	if (!CDO)
+		CDO = FindSceneInfoCDO("SceneInfo");
+
 	m_SceneInfo = CDO->Clone();
 
 	m_SceneInfo->m_Owner = this;
@@ -366,6 +370,7 @@ void CScene::Load(const char* FullPath)
 
 	CurPos = NextPos;
 
+	m_CameraManager->m_Owner = this;
 	m_CameraManager->Load(File);
 
 	NextPos = (int)ftell(File);
@@ -382,6 +387,7 @@ void CScene::Load(const char* FullPath)
 
 	CurPos = NextPos;
 
+	m_CollisionManager->m_Owner = this;
 	m_CollisionManager->Load(File);
 
 	NextPos = (int)ftell(File);
@@ -398,6 +404,7 @@ void CScene::Load(const char* FullPath)
 
 	CurPos = NextPos;
 
+	m_Viewport->m_Owner = this;
 	m_Viewport->Load(File);
 
 	NextPos = (int)ftell(File);
@@ -473,6 +480,34 @@ void CScene::Load(const char* FullPath)
 	m_SceneInfo->LoadComplete();
 
 	fclose(File);
+}
+
+void CScene::Save(const char* FileName, const std::string& PathName)
+{
+	const PathInfo* Path = CPathManager::GetInst()->FindPath(PathName);
+
+	char	FullPath[MAX_PATH] = {};
+
+	if (Path)
+		strcpy_s(FullPath, Path->PathMultibyte);
+
+	strcat_s(FullPath, FileName);
+
+	Save(FullPath);
+}
+
+void CScene::Load(const char* FileName, const std::string& PathName)
+{
+	const PathInfo* Path = CPathManager::GetInst()->FindPath(PathName);
+
+	char	FullPath[MAX_PATH] = {};
+
+	if (Path)
+		strcpy_s(FullPath, Path->PathMultibyte);
+
+	strcat_s(FullPath, FileName);
+
+	Load(FullPath);
 }
 
 void CScene::GetAllGameObjectHierarchyName(std::vector<HierarchyObjectName>& vecName)

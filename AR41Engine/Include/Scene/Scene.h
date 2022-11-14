@@ -136,6 +136,8 @@ public:
 	void Collision(float DeltaTime);
 	void Save(const char* FullPath);
 	void Load(const char* FullPath);
+	void Save(const char* FileName, const std::string& PathName);
+	void Load(const char* FileName, const std::string& PathName);
 	void GetAllGameObjectHierarchyName(std::vector<HierarchyObjectName>& vecName);
 
 public:

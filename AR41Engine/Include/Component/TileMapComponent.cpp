@@ -372,7 +372,7 @@ void CTileMapComponent::CreateTile(ETileShape Shape, int CountX,
 		RenderCountX = (int)(CDevice::GetInst()->GetResolution().Width /
 			m_TileSize.x) + 3;
 		RenderCountY = (int)(CDevice::GetInst()->GetResolution().Height /
-			m_TileSize.y) * 2 + 5;
+			m_TileSize.y) * 2 + 6;
 
 		float	StartX = 0.f;
 
@@ -938,6 +938,12 @@ void CTileMapComponent::PostUpdate(float DeltaTime)
 			EndX = EndX >= m_CountX ? m_CountX - 1 : EndX;
 			EndY = EndY >= m_CountY ? m_CountY - 1 : EndY;
 		}
+
+		/*TCHAR	Text[256] = {};
+		wsprintf(Text, TEXT("StartX : %d StartY : %d EndX : %d EndY : %d\n"),
+			StartX, StartY, EndX, EndY);
+
+		OutputDebugString(Text);*/
 
 		Matrix	matView, matProj;
 		matView = Camera->GetViewMatrix();

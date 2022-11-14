@@ -17,6 +17,8 @@ CStartSceneUI::CStartSceneUI(const CStartSceneUI& Window) :
     CUIWindow(Window)
 {
     m_Button = FindWidget<CUIButton>("Button");
+    m_Title = FindWidget<CUIText>("Title");
+    m_Number = FindWidget<CUINumber>("Number");
 }
 
 CStartSceneUI::~CStartSceneUI()
@@ -26,6 +28,9 @@ CStartSceneUI::~CStartSceneUI()
 void CStartSceneUI::Start()
 {
     CUIWindow::Start();
+
+    m_Button->SetCallback<CStartSceneUI>(EButtonEventState::Click,
+        this, &CStartSceneUI::StartButtonClick);
 }
 
 bool CStartSceneUI::Init()
@@ -45,9 +50,6 @@ bool CStartSceneUI::Init()
 
     m_Button->SetSound(EButtonEventState::Hovered, "UI", "ButtonHovered", false, "Demasia.mp3");
     m_Button->SetSound(EButtonEventState::Click, "UI", "ButtonClick", false, "TeemoSmile.mp3");
-
-    m_Button->SetCallback<CStartSceneUI>(EButtonEventState::Click,
-        this, &CStartSceneUI::StartButtonClick);
 
     m_Title = CreateWidget<CUIText>("Title");
 
@@ -133,6 +135,7 @@ void CStartSceneUI::Load(FILE* File)
 
     m_Button = FindWidget<CUIButton>("Button");
     m_Title = FindWidget<CUIText>("Title");
+    m_Number = FindWidget<CUINumber>("Number");
 }
 
 void CStartSceneUI::StartButtonClick()
