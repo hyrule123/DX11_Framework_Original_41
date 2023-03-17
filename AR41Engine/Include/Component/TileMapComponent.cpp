@@ -107,6 +107,9 @@ void CTileMapComponent::SetTileMaterial(const std::string& Name)
 	else
 		m_TileMaterial = CResourceManager::GetInst()->FindMaterial(Name);
 
+	if (nullptr != m_TileMaterial || nullptr != m_TileMaterial->GetTexture(0))
+		return;
+
 	m_TileMapCBuffer->SetImageSize(Vector2((float)m_TileMaterial->GetTexture(0)->GetWidth(),
 		(float)m_TileMaterial->GetTexture(0)->GetHeight()));
 }
