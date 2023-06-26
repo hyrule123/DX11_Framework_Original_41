@@ -377,37 +377,14 @@ FodyWeavers.xsd
 ## Winmerge
 *.bak
 
-
-# Include External Libraries
-##DirectXTex
-!DirectXTex*.lib
-##fmod
-!fmod*.lib
-!fmod*.dll
-##fbxsdk
-!libfbxsdk*.dll
-!libfbxsdk*.lib
+## Include Editor Created File
+!AR41Editor/Bin/Scene/
+!AR41Editor/Bin/Animation2D/
 
 
 # Client2D, Editor Bin Folder
 [Bb]in/
 [Bb]in[Oo]bj*/
-# Exclude Original Bin Folder
-!AR41Engine/Bin/
-AR41Engine/Bin/Texture
-AR41Engine/Bin/Sound
-
-
-# Exclude Editor Results
-!AR41Editor/Bin/
-AR41Editor/Bin/*
-
-# Include Resources
-!AR41Editor/Bin/Texture/
-!AR41Editor/Bin/Sound/
-!AR41Editor/Bin/Scene/
-!AR41Editor/Bin/Animation2D/
-!AR41Editor/Bin/Mesh/
 
 # Except Engine Folder : Used to gather header files - automatically generated at build time
 Engine/
