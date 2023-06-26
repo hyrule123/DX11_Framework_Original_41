@@ -7,7 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01. Client", "01. Client", 
 	ProjectSection(SolutionItems) = preProject
 		Client2DCopy.bat = Client2DCopy.bat
 		Client3DCopy.bat = Client3DCopy.bat
-		ClientCopyExclude.txt = ClientCopyExclude.txt
+		ClientCopy2DExclude.txt = ClientCopy2DExclude.txt
+		ClientCopy3DExclude.txt = ClientCopy3DExclude.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02. Engine", "02. Engine", "{2F8C6226-146E-4C93-9A70-9BB21B390F3E}"

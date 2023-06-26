@@ -377,14 +377,20 @@ FodyWeavers.xsd
 ## Winmerge
 *.bak
 
+# Bin Folder(Except Shader Code)
+[Bb]in/
+!AR41Engine/Bin/Shader/
+
+[Bb]in[Oo]bj*/
+
+
+
 ## Include Editor Created File
 !AR41Editor/Bin/Scene/
 !AR41Editor/Bin/Animation2D/
 
 
-# Client2D, Editor Bin Folder
-[Bb]in/
-[Bb]in[Oo]bj*/
+
 
 # Except Engine Folder : Used to gather header files - automatically generated at build time
 Engine/

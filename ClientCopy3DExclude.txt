@@ -1,0 +1,6 @@
+.idb
+.pdb
+.ini
+Animation2D/
+EditorDefaultScene.cpp
+EditorDefaultScene.h
