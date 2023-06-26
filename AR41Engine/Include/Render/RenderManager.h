@@ -2,6 +2,9 @@
 
 #include "../EngineInfo.h"
 #include "RenderStateManager.h"
+#include "../Resource/Texture/RenderTarget.h"
+#include "../Resource/Shader/GraphicShader.h"
+#include "RenderInstancing.h"
 
 struct RenderLayer
 {
@@ -17,7 +20,46 @@ private:
 	std::vector<RenderLayer*>	m_RenderLayerList;
 	CRenderStateManager* m_RenderStateManager;
 	CSharedPtr<class CRenderState> m_AlphaBlend;
+	CSharedPtr<class CRenderState> m_MRTAlphaBlend;
 	CSharedPtr<class CRenderState> m_DepthDisable;
+	CSharedPtr<class CRenderState> m_DepthWriteDisable;
+	CSharedPtr<class CRenderState> m_LightAccBlend;
+
+	std::vector<CSharedPtr<CRenderTarget>>	m_vecGBuffer;
+
+	std::vector<CSharedPtr<CRenderTarget>>	m_vecDecalBuffer;
+
+	std::vector<CSharedPtr<CRenderTarget>>	m_vecLightBuffer;
+
+	CSharedPtr<CRenderTarget>		m_ScreenBuffer;
+
+	CSharedPtr<CGraphicShader>		m_ScreenShader;
+	CSharedPtr<CGraphicShader>		m_DeferredRenderShader;
+
+	CSharedPtr<CRenderTarget>		m_ShadowMapTarget;
+
+	Resolution	m_ShadowMapRS;
+	class CShadowConstantBuffer* m_ShadowCBuffer;
+
+	std::list<CSharedPtr<class CSceneComponent>>	m_NormalRenderList;
+
+
+	std::vector<CRenderInstancing*>	m_vecInstancingPool;
+	std::list<int>		m_EmptyPoolList;
+	std::unordered_map<class CMesh*, CRenderInstancing*>	m_mapInstancing;
+
+	EShaderType	m_ShaderType;
+
+public:
+	void SetShaderType(EShaderType Type);
+
+public:
+	const Resolution& GetShadowMapResolution()	const
+	{
+		return m_ShadowMapRS;
+	}
+
+	CRenderInstancing* FindInstancing(class CMesh* Mesh);
 
 public:
 	void CreateLayer(const std::string& Name, int Priority);
@@ -30,7 +72,15 @@ public:
 	bool Init();
 	void Render(float DeltaTime);
 
-
+private:
+	void Render3D(float DeltaTime);
+	void RenderShadowMap(float DeltaTime);
+	void RenderGBuffer(float DeltaTime);
+	void RenderDecal(float DeltaTime);
+	void RenderLight(float DeltaTime);
+	void RenderScreen(float DeltaTime);
+	void RenderDeferred(float DeltaTime);
+	void RenderParticle(float DeltaTime);
 
 public:
 	void SetBlendFactor(const std::string& Name, float r, float g, float b, float a);
@@ -63,6 +113,13 @@ public:
 
 private:
 	static bool SortLayer(RenderLayer* Src, RenderLayer* Dest);
+	static bool SortAlphaObject(class CSceneComponent* Src, class CSceneComponent* Dest);
+
+public:
+	void CreateRenderTarget();
+
+private:
+	RenderLayer* FindLayer(const std::string& Name);
 
 	DECLARE_SINGLE(CRenderManager)
 };

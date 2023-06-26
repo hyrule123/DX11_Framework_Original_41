@@ -1,5 +1,6 @@
 
 #include "Scene.h"
+#include "SceneManager.h"
 #include "../GameObject/GameObject.h"
 #include "../Input.h"
 #include "../Component/SpriteComponent.h"
@@ -14,6 +15,10 @@
 #include "../UI/UIImage.h"
 #include "../UI/UIWindow.h"
 #include "../PathManager.h"
+#include "../GameObject/SkySphere.h"
+#include "NavigationManager2D.h"
+#include "NavigationManager3D.h"
+#include "../Engine.h"
 
 std::unordered_map<std::string, CSceneInfo*> CScene::m_mapSceneInfoCDO;
 
@@ -53,17 +58,18 @@ CScene::CScene()	:
 
 	m_Viewport->Init();
 
-	m_NavManager = new CNavigationManager;
+	m_LightManager = new CLightManager;
 
-	m_NavManager->m_Owner = this;
+	m_LightManager->m_Owner = this;
 
-	m_NavManager->Init();
+	m_LightManager->Init();
 }
 
 CScene::~CScene()
 {
 	CInput::GetInst()->ClearCallback(this);
 
+	SAFE_DELETE(m_LightManager);
 	SAFE_DELETE(m_NavManager);
 	SAFE_DELETE(m_Viewport);
 	SAFE_DELETE(m_CollisionManager);
@@ -163,6 +169,16 @@ void CScene::CreateCDO()
 
 }
 
+void CScene::SetSkyTexture(const std::string& Name, const TCHAR* FileName, const std::string& PathName)
+{
+	m_SkySphere->SetSkyTexture(Name, FileName, PathName);
+}
+
+void CScene::ClearSky()
+{
+	m_SkySphere = nullptr;
+}
+
 void CScene::Start()
 {
 	m_Start = true;
@@ -178,10 +194,29 @@ void CScene::Start()
 	m_CameraManager->Start();
 
 	m_Viewport->Start();
+
+	m_LightManager->Start();
 }
 
 bool CScene::Init()
 {
+	m_SkySphere = new CSkySphere;
+
+	m_SkySphere->SetName("Sky");
+	m_SkySphere->SetScene(this);
+
+	m_SkySphere->Init();
+
+	if (CEngine::GetInst()->GetRender2D())
+		m_NavManager = new CNavigationManager2D;
+
+	else
+		m_NavManager = new CNavigationManager3D;
+
+	m_NavManager->m_Owner = this;
+
+	m_NavManager->Init();
+
 	return true;
 }
 
@@ -189,6 +224,8 @@ void CScene::Update(float DeltaTime)
 {
 	if (m_SceneInfo)
 		m_SceneInfo->Update(DeltaTime);
+
+	m_SkySphere->Update(DeltaTime);
 
 	auto	iter = m_ObjList.begin();
 	auto	iterEnd = m_ObjList.end();
@@ -222,6 +259,8 @@ void CScene::PostUpdate(float DeltaTime)
 	if (m_SceneInfo)
 		m_SceneInfo->PostUpdate(DeltaTime);
 
+	m_SkySphere->PostUpdate(DeltaTime);
+
 	auto	iter = m_ObjList.begin();
 	auto	iterEnd = m_ObjList.end();
 
@@ -247,6 +286,18 @@ void CScene::PostUpdate(float DeltaTime)
 	m_CameraManager->PostUpdate(DeltaTime);
 
 	m_Viewport->PostUpdate(DeltaTime);
+
+	m_LightManager->Update(DeltaTime);
+
+	CCameraComponent* Camera = m_CameraManager->GetCurrentCamera();
+
+	iter = m_ObjList.begin();
+	iterEnd = m_ObjList.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		(*iter)->FrustumCull(Camera);
+	}
 }
 
 void CScene::Collision(float DeltaTime)
@@ -274,6 +325,7 @@ void CScene::Save(const char* FullPath)
 	m_CameraManager->Save(File);
 	m_CollisionManager->Save(File);
 	m_Viewport->Save(File);
+	m_LightManager->Save(File);
 
 	int	ObjCount = (int)m_ObjList.size();
 
@@ -421,6 +473,23 @@ void CScene::Load(const char* FullPath)
 
 	CurPos = NextPos;
 
+	m_LightManager->m_Owner = this;
+	m_LightManager->Load(File);
+
+	NextPos = (int)ftell(File);
+
+	CurLoadSize = NextPos - CurPos;
+
+	if (CurLoadSize > 0)
+	{
+		LoadSize += CurLoadSize;
+
+		if (m_LoadingCallback)
+			m_LoadingCallback(LoadSize / (float)FileSize);
+	}
+
+	CurPos = NextPos;
+
 	int	ObjCount = 0;
 
 	fread(&ObjCount, 4, 1, File);
@@ -548,4 +617,59 @@ CGameObject* CScene::FindObject(const std::string& Name)
 	}
 
 	return nullptr;
+}
+
+bool CScene::Picking(PickingResult& result)
+{
+	if (CEngine::GetInst()->GetEditorMode())
+	{
+		// 오브젝트 리스트를 정렬한다.
+		std::list<CSharedPtr<class CGameObject>>	ObjList;
+
+		auto	iter = m_ObjList.begin();
+		auto	iterEnd = m_ObjList.end();
+
+		for (; iter != iterEnd; ++iter)
+		{
+			if (!(*iter)->GetActive() ||
+				!(*iter)->GetEnable())
+				continue;
+
+			else if (!(*iter)->GetFrustumCull())
+				continue;
+
+			ObjList.push_back(*iter);
+
+			//if ((*iter)->Picking(result))
+			//	return true;
+		}
+
+		ObjList.sort(CScene::SortObject);
+
+		iter = ObjList.begin();
+		iterEnd = ObjList.end();
+
+		for (; iter != iterEnd; ++iter)
+		{
+			if ((*iter)->Picking(result))
+				return true;
+		}
+
+		return false;
+	}
+
+	return m_CollisionManager->Picking(result);
+}
+
+bool CScene::SortObject(CGameObject* Src, CGameObject* Dest)
+{
+	Vector3	SrcCenter = Src->GetCenter();
+	Vector3	DestCenter = Dest->GetCenter();
+
+	CCameraComponent* Camera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();
+
+	float	SrcDist = Camera->GetWorldPos().Distance(SrcCenter) - Src->GetObjectRadius();
+	float	DestDist = Camera->GetWorldPos().Distance(DestCenter) - Dest->GetObjectRadius();
+
+	return SrcDist < DestDist;
 }

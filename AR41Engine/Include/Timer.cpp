@@ -1,4 +1,5 @@
 #include "Timer.h"
+#include "Engine.h"
 
 CTimer::CTimer() :
 	m_Second{},

@@ -53,6 +53,8 @@ protected:
     float       m_Opacity;          // 불투명도.
     class CMaterialConstantBuffer* m_CBuffer;
     CSharedPtr<CRenderState>    m_RenderState[3];
+    bool        m_Animation3D;
+    bool        m_ReceiveDecal;
 
 public:
     void SetBaseColor(const Vector4& Color);
@@ -64,15 +66,20 @@ public:
     void SetAmbientColorUnsignedChar(unsigned char r, unsigned char g, unsigned char b,
         unsigned char a);
     void SetSpecularColor(const Vector4& Color);
-    void SetSpecularColor(float r, float g, float b, float a);
-    void SetSpecularColorUnsignedChar(unsigned char r, unsigned char g, unsigned char b,
-        unsigned char a);
+    void SetSpecularColor(float r, float g, float b);
+    void SetSpecularColorUnsignedChar(unsigned char r, unsigned char g, unsigned char b);
+    void SetSpecularPower(float Power);
     void SetEmissiveColor(const Vector4& Color);
     void SetEmissiveColor(float r, float g, float b, float a);
     void SetEmissiveColorUnsignedChar(unsigned char r, unsigned char g, unsigned char b,
         unsigned char a);
     void SetOpacity(float Opacity);
     void AddOpacity(float Opacity);
+    void EnableBump();
+    void EnableSpecular();
+    void EnableEmissive();
+    void EnableAnimation3D();
+    void SetReceiveDecal(bool Receive);
 
     // === Texture 추가 ===
     void AddTexture(int Register, int ShaderBufferType, const std::string& Name,
@@ -121,9 +128,13 @@ public:
     void SetRenderState(const std::string& Name);
 
 public:
+    void CopyInstancingData(InstancingBufferInfo& Data) const;
     void SetShader(const std::string& Name);
     void SetMaterial();
     void ResetMaterial();
+    void SetShadowMaterial();
+    void SetInstancingMaterial();
+    void ResetInstancingMaterial();
     CMaterial* Clone()  const;
     virtual void Save(FILE* File);
     virtual void Load(FILE* File);

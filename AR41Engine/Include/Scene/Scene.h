@@ -6,6 +6,7 @@
 #include "SceneCollision.h"
 #include "SceneViewport.h"
 #include "NavigationManager.h"
+#include "LightManager.h"
 
 class CScene
 {
@@ -82,11 +83,18 @@ private:
 	CSceneCollision* m_CollisionManager;
 	CSceneViewport* m_Viewport;
 	CNavigationManager* m_NavManager;
+	CLightManager* m_LightManager;
 	std::list<CSharedPtr<class CGameObject>>	m_ObjList;
 	std::string	m_Name;
 	std::function<void(float)>	m_LoadingCallback;
+	CSharedPtr<class CSkySphere>	m_SkySphere;
 
 public:
+	class CSkySphere* GetSky()	const
+	{
+		return m_SkySphere;
+	}
+
 	void SetName(const std::string& Name)
 	{
 		m_Name = Name;
@@ -127,6 +135,16 @@ public:
 		return m_NavManager;
 	}
 
+	CLightManager* GetLightManager()	const
+	{
+		return m_LightManager;
+	}
+
+public:
+	void SetSkyTexture(const std::string& Name, const TCHAR* FileName,
+		const std::string& PathName = TEXTURE_PATH);
+	void ClearSky();
+
 
 public:
 	void Start();
@@ -142,6 +160,7 @@ public:
 
 public:
 	class CGameObject* FindObject(const std::string& Name);
+	bool Picking(PickingResult& result);
 
 public:
 	template <typename T>
@@ -189,5 +208,8 @@ public:
 	{
 		m_LoadingCallback = std::bind(Func, Obj, std::placeholders::_1);
 	}
+
+public:
+	static bool SortObject(CGameObject* Src, CGameObject* Dest);
 };
 

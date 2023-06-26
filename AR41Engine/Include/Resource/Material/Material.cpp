@@ -12,7 +12,9 @@ CMaterial::CMaterial()	:
 	m_AmbientColor(0.2f, 0.2f, 0.2f, 1.f),
 	m_SpecularColor(Vector4::White),
 	m_EmissiveColor(Vector4::Black),
-	m_Opacity(1.f)
+	m_Opacity(1.f),
+	m_Animation3D(false),
+	m_ReceiveDecal(true)
 {
 	SetTypeID<CMaterial>();
 
@@ -30,12 +32,14 @@ CMaterial::CMaterial()	:
 CMaterial::CMaterial(const CMaterial& Material)	:
 	CRef(Material)
 {
+	m_ReceiveDecal = Material.m_ReceiveDecal;
 	m_Shader = Material.m_Shader;
 	m_BaseColor = Material.m_BaseColor;
 	m_AmbientColor = Material.m_AmbientColor;
 	m_SpecularColor = Material.m_SpecularColor;
 	m_EmissiveColor = Material.m_EmissiveColor;
 	m_Opacity = Material.m_Opacity;
+	m_Animation3D = Material.m_Animation3D;
 
 	m_CBuffer = Material.m_CBuffer->Clone();
 
@@ -56,6 +60,12 @@ CMaterial::CMaterial(const CMaterial& Material)	:
 	}
 
 	m_Scene = nullptr;
+
+	for (int i = 0; i < 3; ++i)
+	{
+		if (Material.m_RenderState[i])
+			m_RenderState[i] = Material.m_RenderState[i];
+	}
 }
 
 CMaterial::~CMaterial()
@@ -115,21 +125,31 @@ void CMaterial::SetAmbientColorUnsignedChar(unsigned char r, unsigned char g, un
 
 void CMaterial::SetSpecularColor(const Vector4& Color)
 {
-	m_SpecularColor = Color;
+	m_SpecularColor.x = Color.x;
+	m_SpecularColor.y = Color.y;
+	m_SpecularColor.z = Color.z;
 
 	m_CBuffer->SetSpecularColor(m_SpecularColor);
 }
 
-void CMaterial::SetSpecularColor(float r, float g, float b, float a)
+void CMaterial::SetSpecularColor(float r, float g, float b)
 {
-	m_SpecularColor = Vector4(r, g, b, a);
+	m_SpecularColor = Vector4(r, g, b, m_SpecularColor.w);
 
 	m_CBuffer->SetSpecularColor(m_SpecularColor);
 }
 
-void CMaterial::SetSpecularColorUnsignedChar(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+void CMaterial::SetSpecularColorUnsignedChar(unsigned char r,
+	unsigned char g, unsigned char b)
 {
-	m_SpecularColor = Vector4(r / 255.f, g / 255.f, b / 255.f, a / 255.f);
+	m_SpecularColor = Vector4(r / 255.f, g / 255.f, b / 255.f, m_SpecularColor.w);
+
+	m_CBuffer->SetSpecularColor(m_SpecularColor);
+}
+
+void CMaterial::SetSpecularPower(float Power)
+{
+	m_SpecularColor.w = Power;
 
 	m_CBuffer->SetSpecularColor(m_SpecularColor);
 }
@@ -167,6 +187,35 @@ void CMaterial::AddOpacity(float Opacity)
 	m_Opacity += Opacity;
 
 	m_CBuffer->SetOpacity(m_Opacity);
+}
+
+void CMaterial::EnableBump()
+{
+	m_CBuffer->SetEnableBump(true);
+}
+
+void CMaterial::EnableSpecular()
+{
+	m_CBuffer->SetEnableSpecular(true);
+}
+
+void CMaterial::EnableEmissive()
+{
+	m_CBuffer->SetEnableEmissive(true);
+}
+
+void CMaterial::EnableAnimation3D()
+{
+	m_Animation3D = true;
+
+	m_CBuffer->SetAnimation3D(true);
+}
+
+void CMaterial::SetReceiveDecal(bool Receive)
+{
+	m_ReceiveDecal = Receive;
+
+	m_CBuffer->SetReceiveDecal(Receive);
 }
 
 void CMaterial::AddTexture(int Register, int ShaderBufferType, 
@@ -577,6 +626,17 @@ void CMaterial::SetRenderState(const std::string& Name)
 	m_RenderState[(int)RenderState->GetType()] = RenderState;
 }
 
+void CMaterial::CopyInstancingData(InstancingBufferInfo& Data)	const
+{
+	Data.BaseColor = m_BaseColor;
+	Data.AmbientColor = m_AmbientColor;
+	Data.SpecularColor = m_SpecularColor;
+	Data.EmissiveColor = m_EmissiveColor;
+	Data.Opacity = m_Opacity;
+	Data.Animation3D = m_Animation3D ? 1 : 0;
+	Data.ReceiveDecal = m_ReceiveDecal ? 1 : 0;
+}
+
 void CMaterial::SetShader(const std::string& Name)
 {
 	if (m_Scene)
@@ -594,6 +654,12 @@ void CMaterial::SetMaterial()
 {
 	if (m_Shader)
 		m_Shader->SetShader();
+
+	if (m_Animation3D)
+	{
+		m_ReceiveDecal = false;
+		m_CBuffer->SetReceiveDecal(false);
+	}
 
 	for (int i = 0; i < 3; ++i)
 	{
@@ -639,6 +705,46 @@ void CMaterial::ResetMaterial()
 	}
 }
 
+void CMaterial::SetShadowMaterial()
+{
+	m_CBuffer->UpdateBuffer();
+}
+
+void CMaterial::SetInstancingMaterial()
+{
+	for (int i = 0; i < 3; ++i)
+	{
+		if (m_RenderState[i])
+			m_RenderState[i]->SetState();
+	}
+
+	size_t	Size = m_vecTextureInfo.size();
+
+	for (size_t i = 0; i < Size; ++i)
+	{
+		m_vecTextureInfo[i]->Texture->SetShader(m_vecTextureInfo[i]->Register,
+			m_vecTextureInfo[i]->ShaderBufferType,
+			m_vecTextureInfo[i]->Index);
+	}
+}
+
+void CMaterial::ResetInstancingMaterial()
+{
+	for (int i = 0; i < 3; ++i)
+	{
+		if (m_RenderState[i])
+			m_RenderState[i]->ResetState();
+	}
+
+	size_t	Size = m_vecTextureInfo.size();
+
+	for (size_t i = 0; i < Size; ++i)
+	{
+		m_vecTextureInfo[i]->Texture->ResetShader(m_vecTextureInfo[i]->Register,
+			m_vecTextureInfo[i]->ShaderBufferType);
+	}
+}
+
 CMaterial* CMaterial::Clone() const
 {
 	return new CMaterial(*this);
@@ -658,6 +764,7 @@ void CMaterial::Save(FILE* File)
 	fwrite(&m_SpecularColor, sizeof(Vector4), 1, File);
 	fwrite(&m_EmissiveColor, sizeof(Vector4), 1, File);
 	fwrite(&m_Opacity, 4, 1, File);
+	fwrite(&m_Animation3D, 4, 1, File);
 
 	for (int i = 0; i < 3; ++i)
 	{
@@ -712,6 +819,7 @@ void CMaterial::Load(FILE* File)
 	fread(&m_SpecularColor, sizeof(Vector4), 1, File);
 	fread(&m_EmissiveColor, sizeof(Vector4), 1, File);
 	fread(&m_Opacity, 4, 1, File);
+	fread(&m_Animation3D, 4, 1, File);
 
 
 	m_CBuffer->SetBaseColor(m_BaseColor);
@@ -719,6 +827,7 @@ void CMaterial::Load(FILE* File)
 	m_CBuffer->SetSpecularColor(m_SpecularColor);
 	m_CBuffer->SetEmissiveColor(m_EmissiveColor);
 	m_CBuffer->SetOpacity(m_Opacity);
+	m_CBuffer->SetAnimation3D(m_Animation3D);
 
 	for (int i = 0; i < 3; ++i)
 	{

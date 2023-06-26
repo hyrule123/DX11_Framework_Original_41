@@ -44,6 +44,26 @@ public:
 		m_BufferData.Opacity = Opacity;
 	}
 
+	void SetEnableBump(bool Enable)
+	{
+		m_BufferData.AmbientColor.w = Enable ? 1.f : 0.f;
+	}
+
+	void SetEnableSpecular(bool Enable)
+	{
+		m_BufferData.BaseColor.w = Enable ? 1.f : 0.f;
+	}
+
+	void SetEnableEmissive(bool Enable)
+	{
+		m_BufferData.EmissiveColor.w = Enable ? 1.f : 0.f;
+	}
+
+	void SetAnimation3D(bool Enable)
+	{
+		m_BufferData.Animation3DEnable = Enable ? 1 : 0;
+	}
+
 	void SetImageType(EImageType Type)
 	{
 		m_BufferData.TextureType = (int)Type;
@@ -57,6 +77,11 @@ public:
 	void SetTextureHeight(float Height)
 	{
 		m_BufferData.TextureHeight = Height;
+	}
+
+	void SetReceiveDecal(bool Receive)
+	{
+		m_BufferData.ReceiveDecal = Receive ? 1 : 0;
 	}
 };
 

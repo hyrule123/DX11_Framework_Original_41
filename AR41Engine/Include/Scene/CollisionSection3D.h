@@ -13,6 +13,8 @@ private:
 private:
 	Vector3		m_Min;
 	Vector3		m_Max;
+	Vector3		m_Center;
+	float		m_Radius;
 	int			m_IndexX;
 	int			m_IndexY;
 	int			m_IndexZ;

@@ -17,8 +17,6 @@ protected:
     CSharedPtr<class CShader> m_Shader;
     Vector4                 m_Color;
     ECollider_Type          m_ColliderType;
-    Vector3                 m_Min;
-    Vector3                 m_Max;
     CollisionResult         m_Result;
     CollisionResult         m_MouseResult;
     std::list<CCollider*>   m_PrevCollisionList;    // 이전 프레임에 충돌하고 있던 물체들
@@ -32,16 +30,6 @@ protected:
     std::function<void(const CollisionResult&)> m_CollisionMouseCallback[(int)ECollision_Result::Max];
 
 public:
-    const Vector3& GetMin() const
-    {
-        return m_Min;
-    }
-
-    const Vector3& GetMax() const
-    {
-        return m_Max;
-    }
-
     ECollider_Type GetColliderType()    const
     {
         return m_ColliderType;

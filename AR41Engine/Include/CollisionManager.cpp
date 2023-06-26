@@ -921,6 +921,39 @@ bool CCollisionManager::CollisionPointToPixel(Vector2& HitPoint, const Vector2& 
 	return Collision;
 }
 
+bool CCollisionManager::CollisionRayToSphere(
+	PickingResult& result,
+	const Ray& ray,const Vector3& Center, float Radius)
+{
+	Vector3	M = ray.Pos - Center;
+
+	float b = 2.f * M.Dot(ray.Dir);
+	float c = M.Dot(M) - Radius * Radius;
+
+	float	Det = b * b - 4.f * c;
+
+	if (Det < 0.f)
+		return false;
+
+	Det = sqrtf(Det);
+
+	float	t1, t2;
+
+	t1 = (-b + Det) / 2.f;
+	t2 = (-b - Det) / 2.f;
+
+	if (t1 < 0.f && t2 < 0.f)
+		return false;
+
+	result.Distance = min(t1, t2);
+
+	if (result.Distance < 0.f)
+		result.Distance = max(t1, t2);
+	result.HitPoint = ray.Pos + ray.Dir * result.Distance;
+
+	return true;
+}
+
 Box2DInfo CCollisionManager::ConvertBox2DInfo(const Sphere2DInfo& Info)
 {
 	Box2DInfo	result;

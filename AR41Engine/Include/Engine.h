@@ -15,9 +15,29 @@ private:
 	static bool		m_EditorMode;
 	static std::function<bool(HWND, UINT, WPARAM, LPARAM)>	m_WndProcFunc;
 	CEngineSetting* m_Setting;
+	bool		m_Render2D;
+	class CGlobalConstantBuffer* m_GlobalCBuffer;
+	float		m_AccTime;
+	class CStructuredBuffer* m_RandomBuffer;
 
 public:
+	class CGlobalConstantBuffer* GetGlobalCBuffer()	const
+	{
+		return m_GlobalCBuffer;
+	}
+
+	bool GetRender2D()	const
+	{
+		return m_Render2D;
+	}
+
+	void EnableRender2D()
+	{
+		m_Render2D = true;
+	}
+
 	float GetFPS()	const;
+	float GetDeltaTime()	const;
 
 	static bool GetEditorMode()
 	{
@@ -43,6 +63,9 @@ public:
 	{
 		return m_hInst;
 	}
+
+	void SetCameraAxisX(const Vector3& Axis);
+	void SetCameraAxisY(const Vector3& Axis);
 
 public:
 	bool Init(HINSTANCE hInst, const TCHAR* Title,

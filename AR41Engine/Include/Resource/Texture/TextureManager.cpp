@@ -2,6 +2,9 @@
 #include "TextureManager.h"
 #include "Texture.h"
 #include "../../Device.h"
+#include "RenderTarget.h"
+#include "../Shader/Shader.h"
+#include "../ResourceManager.h"
 
 CTextureManager::CTextureManager()
 {
@@ -53,6 +56,22 @@ bool CTextureManager::Init()
 	SetSampler("Point", 0);
 	SetSampler("Linear", 1);
 	SetSampler("Anisotropic", 2);
+
+	m_DebugShader = CResourceManager::GetInst()->FindShader("DebugShader");
+
+	if (!LoadTexture("EngineNoise", TEXT("noise_01.png")))
+		return false;
+
+	CTexture* Texture = FindTexture("EngineNoise");
+
+	Texture->SetShader(6, (int)EShaderBufferType::All, 0);
+
+	if (!LoadTexture("LUT", TEXT("LUT.png")))
+		return false;
+
+	Texture = FindTexture("LUT");
+
+	Texture->SetShader(7, (int)EShaderBufferType::Pixel, 0);
 
 	return true;
 }
@@ -179,6 +198,44 @@ bool CTextureManager::LoadTextureArrayFullPath(const std::string& Name, const st
 	m_mapTexture.insert(std::make_pair(Name, Texture));
 
 	return true;
+}
+
+bool CTextureManager::CreateTarget(const std::string& Name, 
+	unsigned int Width, unsigned int Height, DXGI_FORMAT PixelFormat, 
+	DXGI_FORMAT DepthFormat)
+{
+	CRenderTarget* Texture = (CRenderTarget*)FindTexture(Name);
+
+	if (Texture)
+		return true;
+
+	Texture = new CRenderTarget;
+
+	if (!Texture->CreateTarget(Name, Width, Height, PixelFormat, DepthFormat))
+	{
+		SAFE_DELETE(Texture);
+		return false;
+	}
+
+	m_mapTexture.insert(std::make_pair(Name, Texture));
+
+	return true;
+}
+
+void CTextureManager::Render()
+{
+	auto	iter = m_mapTexture.begin();
+	auto	iterEnd = m_mapTexture.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		if (iter->second->GetImageType() == EImageType::RenderTarget)
+		{
+			m_DebugShader->SetShader();
+
+			iter->second->Render();
+		}
+	}
 }
 
 CTexture* CTextureManager::FindTexture(const std::string& Name)

@@ -69,6 +69,7 @@ bool CPathManager::Init()
 	AddPath(FONT_PATH, TEXT("Font/"));
 	AddPath(ANIMATION2D_PATH, TEXT("Animation2D/"));
 	AddPath(SCENE_PATH, TEXT("Scene/"));
+	AddPath(MESH_PATH, TEXT("Mesh/"));
 
 	return true;
 }

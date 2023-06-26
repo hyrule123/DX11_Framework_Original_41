@@ -62,8 +62,28 @@ protected:
 	std::vector<CSharedPtr<CObjectComponent>>   m_vecObjectComponent;
 	float       m_LifeTime;
 	bool		m_Start;
+	Vector3		m_Min;
+	Vector3		m_Max;
+	Vector3		m_Center;
+	float		m_Radius;
+	bool		m_FrustumCull;
 
 public:
+	const Vector3& GetCenter()	const
+	{
+		return m_Center;
+	}
+
+	float GetObjectRadius()	const
+	{
+		return m_Radius;
+	}
+
+	bool GetFrustumCull()	const
+	{
+		return m_FrustumCull;
+	}
+
 	void SetLifeTime(float LifeTime)
 	{
 		m_LifeTime = LifeTime;
@@ -78,6 +98,9 @@ public:
 	{
 		m_SceneComponentList.push_back(Component);
 	}
+
+	void AddChildToSocket(const std::string& SocketName,
+		CGameObject* Obj);
 
 	void DeleteSceneComponent(CSceneComponent* Component)
 	{
@@ -141,6 +164,13 @@ public:
 	virtual CGameObject* Clone()    const;
 	virtual void Save(FILE* File);
 	virtual void Load(FILE* File);
+
+
+public:
+	void FrustumCull(class CCameraComponent* Camera);
+	bool Picking(PickingResult& result);
+	static bool SortComponent(class CSceneComponent* Src,
+		class CSceneComponent* Dest);
 
 
 public:
@@ -252,12 +282,14 @@ public:
 	void AddRelativePositionZ(float z);
 
 public:
+	float GetRadius()	const;
 	const Vector3& GetWorldScale()	const;
 	const Vector3& GetWorldRot()	const;
 	const Vector3& GetWorldPos()	const;
 	const Vector3& GetWorldAxis(AXIS Axis)	const;
 	const Vector3& GetPivot()	const;
 	const Vector3& GetMeshSize()	const;
+	const Vector3& GetOffset()	const;
 	const Matrix& GetWorldMatrix()	const;
 
 public:
@@ -292,6 +324,11 @@ public:
 	void SetWorldPositionX(float x);
 	void SetWorldPositionY(float y);
 	void SetWorldPositionZ(float z);
+	void SetOffset(const Vector3& Offset);
+	void SetOffset(const Vector2& Offset);
+	void SetOffsetX(float x);
+	void SetOffsetY(float y);
+	void SetOffsetZ(float z);
 
 	void AddWorldScale(const Vector3& Scale);
 	void AddWorldScale(const Vector2& Scale);
@@ -314,5 +351,10 @@ public:
 	void AddWorldPositionX(float x);
 	void AddWorldPositionY(float y);
 	void AddWorldPositionZ(float z);
+	void AddOffset(const Vector3& Offset);
+	void AddOffset(const Vector2& Offset);
+	void AddOffsetX(float x);
+	void AddOffsetY(float y);
+	void AddOffsetZ(float z);
 };
 

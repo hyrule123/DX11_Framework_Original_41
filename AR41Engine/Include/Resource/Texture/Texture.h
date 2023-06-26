@@ -91,6 +91,7 @@ public:
 	bool LoadTextureArray(const std::string& Name, const std::vector<const TCHAR*>& vecFileName,
 		const std::string& PathName = TEXTURE_PATH);
 	bool LoadTextureArrayFullPath(const std::string& Name, const std::vector<const TCHAR*>& vecFullPath);
+	virtual void Render();
 
 private:
 	bool CreateResource(int Index);

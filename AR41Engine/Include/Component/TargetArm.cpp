@@ -1,8 +1,15 @@
 
 #include "TargetArm.h"
+#include "../Input.h"
 
 CTargetArm::CTargetArm() :
-	m_TargetDistance(0.f)
+	m_TargetDistance(300.f),
+	m_TargetDistanceAxis(AXIS::AXIS_Z),
+	m_WheelZoomInOutEnable(true),
+	m_WheelSensitivity(1.f),
+	m_WheelZoomMin(50.f),
+	m_WheelZoomMax(5000.f),
+	m_WheelTickMove(30.f)
 {
 	SetTypeID<CTargetArm>();
 
@@ -15,10 +22,20 @@ CTargetArm::CTargetArm(const CTargetArm& component) :
 	m_TargetDistance = component.m_TargetDistance;
 	m_TargetOffset = component.m_TargetOffset;
 	m_TargetDistanceAxis = component.m_TargetDistanceAxis;
+	m_WheelZoomInOutEnable = component.m_WheelZoomInOutEnable;
+	m_WheelSensitivity = component.m_WheelSensitivity;
+	m_WheelZoomMin = component.m_WheelZoomMin;
+	m_WheelZoomMax = component.m_WheelZoomMax;
+	m_WheelTickMove = component.m_WheelTickMove;
 }
 
 CTargetArm::~CTargetArm()
 {
+}
+
+void CTargetArm::SetTargetDistance(float Distance)
+{
+	m_TargetDistance = Distance;
 }
 
 void CTargetArm::Destroy()
@@ -29,6 +46,16 @@ void CTargetArm::Destroy()
 void CTargetArm::Start()
 {
 	CSceneComponent::Start();
+
+	SetRelativePosition(m_TargetOffset);
+
+	auto	iter = m_vecChild.begin();
+	auto	iterEnd = m_vecChild.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		(*iter)->SetRelativePosition(GetWorldAxis(m_TargetDistanceAxis) * -1.f * m_TargetDistance);
+	}
 }
 
 bool CTargetArm::Init()
@@ -42,13 +69,43 @@ void CTargetArm::Update(float DeltaTime)
 {
 	CSceneComponent::Update(DeltaTime);
 
+	if (m_WheelZoomInOutEnable)
+	{
+		short	Wheel = CInput::GetInst()->GetMouseWheel();
+
+		if (Wheel != 0)
+		{
+			float	Move = m_WheelSensitivity * m_WheelTickMove * Wheel * -1.f;
+
+			m_TargetDistance += Move;
+
+			if (m_TargetDistance < m_WheelZoomMin)
+				m_TargetDistance = m_WheelZoomMin;
+
+			else if (m_TargetDistance > m_WheelZoomMax)
+				m_TargetDistance = m_WheelZoomMax;
+
+
+			auto	iter = m_vecChild.begin();
+			auto	iterEnd = m_vecChild.end();
+
+			for (; iter != iterEnd; ++iter)
+			{
+				(*iter)->SetRelativePosition(Vector3(0.f, 0.f, -m_TargetDistance));
+			}
+		}
+	}
+
 	if (m_Parent)
 	{
-		Vector3	ParentPos = m_Parent->GetWorldPos();
+		//SetWorldPosition(GetRelativePos() + m_TargetOffset);
+		
+
+		/*Vector3	ParentPos = m_Parent->GetWorldPos();
 
 		Vector3 Pos = ParentPos - GetWorldAxis(m_TargetDistanceAxis) * m_TargetDistance;
 
-		SetWorldPosition(Pos + m_TargetOffset);
+		SetWorldPosition(Pos + m_TargetOffset);*/
 	}
 }
 

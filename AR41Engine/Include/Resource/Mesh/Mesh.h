@@ -28,7 +28,8 @@ struct MeshSlot
 
 	MeshSlot() :
 		VB(nullptr),
-		IB(nullptr)
+		IB(nullptr),
+		Primitive()
 	{
 	}
 };
@@ -58,8 +59,14 @@ protected:
 	Vector3 m_Min;
 	Vector3 m_Max;
 	MeshType    m_MeshType;
+	int		m_RenderCount;
 
 public:
+	int GetRenderCount()	const
+	{
+		return m_RenderCount;
+	}
+
 	MeshType GetMeshType()  const
 	{
 		return m_MeshType;
@@ -91,6 +98,10 @@ public:
 	}
 
 public:
+	void SetReceiveDecal(bool Decal);
+	void AddRenderCount(bool Add = true);
+
+public:
 	void SetMaterial(int Container, int Subset, const std::string& Name);
 	void SetMaterial(int Container, int Subset, class CMaterial* Material);
 
@@ -100,6 +111,14 @@ public:
 		void* IdxData = nullptr, int IdxSize = 0, int IdxCount = 0,
 		D3D11_USAGE IdxUsage = D3D11_USAGE_DEFAULT,
 		DXGI_FORMAT Fmt = DXGI_FORMAT_UNKNOWN);
+	virtual bool LoadMesh(const std::string& Name,
+		const TCHAR* FileName, const std::string& PathName = MESH_PATH);
+	virtual bool LoadMeshFullPath(const std::string& Name,
+		const TCHAR* FullPath);
+	virtual bool LoadMeshMultibyte(const std::string& Name,
+		const char* FileName, const std::string& PathName = MESH_PATH);
+	virtual bool LoadMeshMultibyteFullPath(const std::string& Name,
+		const char* FullPath);
 	virtual void Render();
 	virtual void Render(int SlotNumber);
 	virtual void RenderInstancing(int Count);
@@ -109,5 +128,10 @@ public:
 protected:
 	bool CreateBuffer(BufferType Type, void* Data, int Size,
 		int Count, D3D11_USAGE Usage, ID3D11Buffer** Buffer);
+	virtual bool ConvertFBX(class CFBXLoader* Loader, const char* FullPath);
+	bool SaveMeshFile(const char* FullPath);
+	bool LoadMeshFile(const char* FullPath);
+	virtual bool SaveMesh(FILE* File);
+	virtual bool LoadMesh(FILE* File);
 };
 

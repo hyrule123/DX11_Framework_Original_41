@@ -37,7 +37,7 @@ void CDefaultSetting::CreateCDO()
 
 void CDefaultSetting::LoadResource()
 {
-    /*CResourceManager::GetInst()->CreateAnimationSequence2D(
+    CResourceManager::GetInst()->CreateAnimationSequence2D(
         "PlayerRun", "PlayerSprite", TEXT("Player.png"));
 
     for (int i = 0; i < 14; ++i)
@@ -71,7 +71,7 @@ void CDefaultSetting::LoadResource()
         SAFE_DELETE_ARRAY(vecFileName[i]);
     }
 
-    vecFileName.clear();*/
+    vecFileName.clear();
 }
 
 void CDefaultSetting::SetInput()

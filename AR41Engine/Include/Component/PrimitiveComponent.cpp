@@ -5,17 +5,24 @@
 #include "../Render/RenderManager.h"
 #include "../Resource/Material/Material.h"
 
-CPrimitiveComponent::CPrimitiveComponent()
+CPrimitiveComponent::CPrimitiveComponent()	:
+	m_InstanceID(0),
+	m_Render(false),
+	m_ReceiveDecal(true)
 {
 	SetTypeID<CPrimitiveComponent>();
 
 	m_ComponentTypeName = "PrimitiveComponent";
+
+	m_SceneComponentType = SceneComponentType::Primitive;
 }
 
 CPrimitiveComponent::CPrimitiveComponent(const CPrimitiveComponent& component)	:
 	CSceneComponent(component)
 {
 	m_Mesh = component.m_Mesh;
+
+	m_Render = component.m_Render;
 
 	size_t	Size = m_vecMaterial.size();
 
@@ -29,9 +36,16 @@ CPrimitiveComponent::CPrimitiveComponent(const CPrimitiveComponent& component)	:
 
 CPrimitiveComponent::~CPrimitiveComponent()
 {
+	if (m_Mesh && m_Render)
+		m_Mesh->AddRenderCount(false);
 }
 
-void CPrimitiveComponent::SetMesh(const std::string& Name)
+void CPrimitiveComponent::SetReceiveDecal(bool Decal)
+{
+	m_ReceiveDecal = Decal;
+}
+
+bool CPrimitiveComponent::SetMesh(const std::string& Name)
 {
 	if (m_Scene)
 		m_Mesh = m_Scene->GetResource()->FindMesh(Name);
@@ -40,7 +54,11 @@ void CPrimitiveComponent::SetMesh(const std::string& Name)
 		m_Mesh = CResourceManager::GetInst()->FindMesh(Name);
 
 	if (m_Mesh)
+	{
+		SetMin(m_Mesh->GetMin());
+		SetMax(m_Mesh->GetMax());
 		SetMeshSize(m_Mesh->GetMeshSize());
+	}
 
 	m_vecMaterial.clear();
 
@@ -50,16 +68,25 @@ void CPrimitiveComponent::SetMesh(const std::string& Name)
 	{
 		CMaterial* Material = m_Mesh->GetMaterial(i);
 
+		if (!Material)
+			continue;
+
 		m_vecMaterial.push_back(Material->Clone());
 	}
+
+	return true;
 }
 
-void CPrimitiveComponent::SetMesh(CMesh* Mesh)
+bool CPrimitiveComponent::SetMesh(CMesh* Mesh)
 {
 	m_Mesh = Mesh;
 
-	if (m_Mesh)
-		SetMeshSize(m_Mesh->GetMeshSize());
+	if (!m_Mesh)
+		return false;
+
+	SetMin(m_Mesh->GetMin());
+	SetMax(m_Mesh->GetMax());
+	SetMeshSize(m_Mesh->GetMeshSize());
 
 	int SlotCount = m_Mesh->GetSlotCount();
 
@@ -67,8 +94,24 @@ void CPrimitiveComponent::SetMesh(CMesh* Mesh)
 	{
 		CMaterial* Material = m_Mesh->GetMaterial(i);
 
+		if (!Material)
+			continue;
+
 		m_vecMaterial.push_back(Material->Clone());
 	}
+
+	return true;
+}
+
+bool CPrimitiveComponent::SetMesh(const std::string& Name,
+	const TCHAR* FileName, const std::string& PathName)
+{
+	return true;
+}
+
+bool CPrimitiveComponent::SetMeshFullPath(const std::string& Name, const TCHAR* FullPath)
+{
+	return true;
 }
 
 void CPrimitiveComponent::SetMaterial(int Slot, const std::string& Name)
@@ -120,6 +163,19 @@ void CPrimitiveComponent::Start()
 {
 	CSceneComponent::Start();
 
+	m_Render = true;
+
+	if (m_Mesh)
+		m_Mesh->AddRenderCount();
+
+
+	size_t	Count = m_vecMaterial.size();
+
+	for (size_t i = 0; i < Count; ++i)
+	{
+		m_vecMaterial[i]->SetReceiveDecal(m_ReceiveDecal);
+	}
+
 	// Scene에 배치가 되고 Start가 호출되면 출력 목록으로 지정한다.
 	CRenderManager::GetInst()->AddRenderList(this);
 }
@@ -150,11 +206,26 @@ void CPrimitiveComponent::Render()
 
 	for (int i = 0; i < Size; ++i)
 	{
+		m_vecMaterial[i]->SetReceiveDecal(m_ReceiveDecal);
 		m_vecMaterial[i]->SetMaterial();
 
 		m_Mesh->Render(i);
 
 		m_vecMaterial[i]->ResetMaterial();
+	}
+}
+
+void CPrimitiveComponent::RenderShadowMap()
+{
+	CSceneComponent::RenderShadowMap();
+
+	int	Size = (int)m_vecMaterial.size();
+
+	for (int i = 0; i < Size; ++i)
+	{
+		m_vecMaterial[i]->SetShadowMaterial();
+
+		m_Mesh->Render(i);
 	}
 }
 

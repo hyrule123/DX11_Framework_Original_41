@@ -88,14 +88,34 @@ private:
 
 	Vector2	m_MousePos;			// 윈도우 창에서의 위치
 	Vector2	m_MouseWorldPos;	// 월드공간에서의 마우스 위치 2D 전용.
+	Vector2	m_MouseUIPos;
 	Vector2	m_MouseMove;
+	Vector2	m_MouseMove2D;
 	bool	m_MouseLDown;
 	bool	m_MouseLPush;
 	bool	m_MouseLUp;
 	bool	m_ShowCursor;
 	bool	m_CollisionWidget;
 
+	short	m_Wheel;
+	Ray		m_Ray;
+
 public:
+	const Vector2& GetMouseUIPos()	const
+	{
+		return m_MouseUIPos;
+	}
+
+	const Ray& GetRay()	const
+	{
+		return m_Ray;
+	}
+
+	short GetMouseWheel()	const
+	{
+		return m_Wheel;
+	}
+
 	bool GetMouseLDown()	const
 	{
 		return m_MouseLDown;
@@ -124,6 +144,17 @@ public:
 	const Vector2& GetMouseMove()	const
 	{
 		return m_MouseMove;
+	}
+
+	const Vector2& GetMouseMove2D()	const
+	{
+		return m_MouseMove2D;
+	}
+
+public:
+	void SetWheel(short Wheel)
+	{
+		m_Wheel = Wheel;
 	}
 
 public:

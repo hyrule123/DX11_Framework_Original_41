@@ -1,29 +1,18 @@
 #include "NavigationThread.h"
 #include "DataStream.h"
 #include "../Component/NavigationAgent.h"
+#include "../Component/NavigationAgent3D.h"
 #include "../Component/SceneComponent.h"
 #include "Navigation.h"
 
-CNavigationThread::CNavigationThread()	:
-	m_TileMap(nullptr),
-	m_Navigation(nullptr)
+
+
+CNavigationThread::CNavigationThread()
 {
 }
 
 CNavigationThread::~CNavigationThread()
 {
-	SAFE_DELETE(m_Navigation);
-}
-
-void CNavigationThread::SetTileMapComponent(CTileMapComponent* TileMap)
-{
-	m_TileMap = TileMap;
-
-	SAFE_DELETE(m_Navigation);
-
-	m_Navigation = new CNavigation;
-
-	m_Navigation->CreateNavigation(TileMap);
 }
 
 void CNavigationThread::AddInputData(CNavigationAgent* Agent, const Vector2& End)
@@ -50,48 +39,24 @@ void CNavigationThread::AddInputData(CNavigationAgent* Agent, const Vector2& End
 		ReStart();
 }
 
-void CNavigationThread::Run()
+void CNavigationThread::AddInputData(CNavigationAgent3D* Agent, const Vector3& End)
 {
-	if (!m_InputQueue.empty())
-	{
-		int	Header = 0, Size = 0;
-		unsigned char	Buffer[1024] = {};
+	unsigned char	Buffer[1024] = {};
 
-		m_InputQueue.pop(&Header, &Size, Buffer);
+	CDataStream	stream;
+	stream.SetBuffer(Buffer);
 
-		CDataStream	stream;
-		stream.SetBuffer(Buffer);
+	unsigned __int64	Address = (unsigned __int64)Agent;
 
-		unsigned __int64	Address = 0;
+	stream.AddData<unsigned __int64>(&Address, 8);
 
-		stream.GetData<unsigned __int64>(&Address, 8);
+	Vector3	OwnerPos = Agent->GetUpdateComponent()->GetWorldPos();
 
-		CNavigationAgent* Agent = (CNavigationAgent*)Address;
+	stream.AddData<Vector3>(&OwnerPos, 12);
+	stream.AddData<Vector3>(&End, 12);
 
-		if (!Agent)
-		{
-			if (m_InputQueue.empty())
-				Suspend();
+	m_InputQueue.push(0, stream.GetSize(), Buffer);
 
-			return;
-		}
-
-		Vector2	Start, End;
-
-		stream.GetData<Vector2>(&Start, 8);
-		stream.GetData<Vector2>(&End, 8);
-
-
-		// 길을 찾아준다.
-		std::list<Vector2>	PathList;
-		m_Navigation->FindPath(Start, End, PathList);
-
-
-		// 길찾기가 끝나면 결과를 반환해준다.
-		Agent->AddPathList(PathList);
-
-
-		//if (m_InputQueue.empty() && m_Loop)
-		//	Suspend();
-	}
+	if (IsSuspend())
+		ReStart();
 }

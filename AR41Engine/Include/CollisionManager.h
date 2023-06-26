@@ -57,6 +57,10 @@ public:
 	bool CollisionPointToPixel(Vector2& HitPoint, const Vector2& Src, const PixelInfo& Dest);
 
 
+	bool CollisionRayToSphere(PickingResult& result,
+		const Ray& ray, const Vector3& Center, float Radius);
+
+
 
 private:
 	Box2DInfo ConvertBox2DInfo(const Sphere2DInfo& Info);

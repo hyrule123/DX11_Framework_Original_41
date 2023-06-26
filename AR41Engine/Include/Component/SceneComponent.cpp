@@ -1,10 +1,18 @@
 
 #include "SceneComponent.h"
 #include "../GameObject/GameObject.h"
+#include "../Resource/Animation/SkeletonSocket.h"
+#include "../Scene/Scene.h"
+#include "../Resource/Shader/GraphicShader.h"
+
+#include "../Scene/SceneManager.h"
 
 CSceneComponent::CSceneComponent()	:
 	m_Parent(nullptr),
-	m_LayerName("Default")
+	m_Socket(nullptr),
+	m_FrustumCull(false),
+	m_LayerName("Default"),
+	m_SceneComponentType(SceneComponentType::Scene)
 {
 	SetTypeID<CSceneComponent>();
 
@@ -21,6 +29,10 @@ CSceneComponent::CSceneComponent()	:
 CSceneComponent::CSceneComponent(const CSceneComponent& component)	:
 	CComponent(component)
 {
+	m_Socket = nullptr;
+
+	m_SceneComponentType = component.m_SceneComponentType;
+
 	m_LayerName = component.m_LayerName;
 
 	m_Transform = component.m_Transform->Clone();
@@ -58,6 +70,13 @@ void CSceneComponent::AddOwner()
 	{
 		m_vecChild[i]->AddOwner();
 	}
+}
+
+void CSceneComponent::SetSocket(class CSkeletonSocket* Socket)
+{
+	m_Socket = Socket;
+
+	m_Transform->SetSocket(m_Socket);
 }
 
 void CSceneComponent::SetScene(CScene* Scene)
@@ -248,6 +267,11 @@ void CSceneComponent::Start()
 {
 	CComponent::Start();
 
+	if (nullptr == m_Scene)
+		m_Scene = CSceneManager::GetInst()->GetScene();
+
+	m_SceneName = m_Scene->GetName();
+
 	m_Transform->Start();
 
 	size_t	Size = m_vecChild.size();
@@ -262,6 +286,9 @@ bool CSceneComponent::Init()
 {
 	if (!CComponent::Init())
 		return false;
+
+	if (nullptr == m_Scene)
+		m_Scene = CSceneManager::GetInst()->GetScene();
 
 	return true;
 }
@@ -299,6 +326,14 @@ void CSceneComponent::Render()
 	CComponent::Render();
 
 	m_Transform->SetTransform();
+}
+
+void CSceneComponent::RenderShadowMap()
+{
+	m_Transform->SetShadowMapTransform();
+
+	if (m_ShadowMapShader)
+		m_ShadowMapShader->SetShader();
 }
 
 CSceneComponent* CSceneComponent::Clone() const
@@ -675,6 +710,26 @@ void CSceneComponent::AddRelativePositionZ(float z)
 	m_Transform->AddRelativePositionZ(z);
 }
 
+const Vector3& CSceneComponent::GetCenter() const
+{
+	return m_Transform->GetCenter();
+}
+
+Vector3 CSceneComponent::GetMin() const
+{
+	return m_Transform->GetMin();
+}
+
+Vector3 CSceneComponent::GetMax() const
+{
+	return m_Transform->GetMax();
+}
+
+float CSceneComponent::GetRadius() const
+{
+	return m_Transform->GetRadius();
+}
+
 const Vector3& CSceneComponent::GetWorldScale() const
 {
 	return m_Transform->GetWorldScale();
@@ -705,6 +760,11 @@ const Vector3& CSceneComponent::GetMeshSize() const
 	return m_Transform->GetMeshSize();
 }
 
+const Vector3& CSceneComponent::GetOffset() const
+{
+	return m_Transform->GetOffset();
+}
+
 const Matrix& CSceneComponent::GetWorldMatrix() const
 {
 	return m_Transform->GetWorldMatrix();
@@ -728,6 +788,16 @@ void CSceneComponent::SetPivot(float x, float y, float z)
 void CSceneComponent::SetPivot(float x, float y)
 {
 	m_Transform->SetPivot(x, y);
+}
+
+void CSceneComponent::SetMin(const Vector3& Min)
+{
+	m_Transform->SetMin(Min);
+}
+
+void CSceneComponent::SetMax(const Vector3& Max)
+{
+	m_Transform->SetMax(Max);
 }
 
 void CSceneComponent::SetMeshSize(const Vector3& MeshSize)
@@ -855,6 +925,31 @@ void CSceneComponent::SetWorldPositionZ(float z)
 	m_Transform->SetWorldPositionZ(z);
 }
 
+void CSceneComponent::SetOffset(const Vector3& Offset)
+{
+	m_Transform->SetOffset(Offset);
+}
+
+void CSceneComponent::SetOffset(const Vector2& Offset)
+{
+	m_Transform->SetOffset(Offset);
+}
+
+void CSceneComponent::SetOffsetX(float x)
+{
+	m_Transform->SetOffsetX(x);
+}
+
+void CSceneComponent::SetOffsetY(float y)
+{
+	m_Transform->SetOffsetY(y);
+}
+
+void CSceneComponent::SetOffsetZ(float z)
+{
+	m_Transform->SetOffsetZ(z);
+}
+
 void CSceneComponent::AddWorldScale(const Vector3& Scale)
 {
 	m_Transform->AddWorldScale(Scale);
@@ -958,4 +1053,29 @@ void CSceneComponent::AddWorldPositionY(float y)
 void CSceneComponent::AddWorldPositionZ(float z)
 {
 	m_Transform->AddWorldPositionZ(z);
+}
+
+void CSceneComponent::AddOffset(const Vector3& Offset)
+{
+	m_Transform->AddOffset(Offset);
+}
+
+void CSceneComponent::AddOffset(const Vector2& Offset)
+{
+	m_Transform->AddOffset(Offset);
+}
+
+void CSceneComponent::AddOffsetX(float x)
+{
+	m_Transform->AddOffsetX(x);
+}
+
+void CSceneComponent::AddOffsetY(float y)
+{
+	m_Transform->AddOffsetY(y);
+}
+
+void CSceneComponent::AddOffsetZ(float z)
+{
+	m_Transform->AddOffsetZ(z);
 }

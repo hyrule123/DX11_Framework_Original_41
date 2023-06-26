@@ -13,6 +13,7 @@ protected:
 
 protected:
     ECollider3D_Type          m_Collider3DType;
+    class CRenderState* m_WireFrame;
 
 public:
     ECollider3D_Type GetCollider3DType()    const

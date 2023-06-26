@@ -107,9 +107,6 @@ void CTileMapComponent::SetTileMaterial(const std::string& Name)
 	else
 		m_TileMaterial = CResourceManager::GetInst()->FindMaterial(Name);
 
-	if (nullptr != m_TileMaterial || nullptr != m_TileMaterial->GetTexture(0))
-		return;
-
 	m_TileMapCBuffer->SetImageSize(Vector2((float)m_TileMaterial->GetTexture(0)->GetWidth(),
 		(float)m_TileMaterial->GetTexture(0)->GetHeight()));
 }
@@ -420,8 +417,6 @@ void CTileMapComponent::CreateTile(ETileShape Shape, int CountX,
 		m_vecTileInfo[i].TypeColor = Vector4(1.f, 1.f, 1.f, 1.f);
 		m_vecTileInfo[i].Opacity = 1.f;
 	}
-
-	m_SceneName = m_Scene->GetName();
 
 	// 타일이 생성되었기 때문에 해당 타일맵의 길을 찾아줄 내비게이션 스레드를
 	// 생성해준다.

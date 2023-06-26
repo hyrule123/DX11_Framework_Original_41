@@ -16,11 +16,13 @@ CThread::~CThread()
 
 void CThread::Suspend()
 {
-    CSync   sync(&m_CRT);
+    {
+        CSync   sync(&m_CRT);
+
+        m_Suspend = true;
+    }
 
     SuspendThread(m_Thread);
-
-    m_Suspend = true;
 }
 
 void CThread::Resume()

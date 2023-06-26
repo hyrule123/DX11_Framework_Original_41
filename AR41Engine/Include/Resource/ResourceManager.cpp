@@ -5,6 +5,8 @@
 #include "../UI/UIWidget.h"
 #include "../UI/UIProgressBar.h"
 #include "Shader/UIProgressBarConstantBuffer.h"
+#include "Mesh/AnimationMesh.h"
+#include "Animation/Skeleton.h"
 
 DEFINITION_SINGLE(CResourceManager)
 
@@ -25,6 +27,7 @@ CResourceManager::~CResourceManager()
 	SAFE_DELETE(m_TextureManager);
 	SAFE_DELETE(m_ShaderManager);
 	SAFE_DELETE(m_MeshManager);
+	SAFE_DELETE(m_ParticleManager);
 }
 
 bool CResourceManager::Init()
@@ -69,6 +72,10 @@ bool CResourceManager::Init()
 
 	m_FontManager->Init();
 
+	m_ParticleManager = new CParticleManager;
+
+	m_ParticleManager->Init();
+
 	return true;
 }
 
@@ -86,6 +93,28 @@ bool CResourceManager::CreateMesh(CScene* Scene, MeshType Type,
 	return m_MeshManager->CreateMesh(Scene, Type, Name, VtxData, Size,
 		Count, VtxUsage, Primitive, IdxData, IdxSize, IdxCount, IdxUsage,
 		Fmt);
+}
+
+bool CResourceManager::LoadMesh(CScene* Scene, MeshType Type, const std::string& Name, const TCHAR* FileName, const std::string& PathName)
+{
+	return m_MeshManager->LoadMesh(Scene, Type, Name, FileName, PathName);
+}
+
+bool CResourceManager::LoadMeshFullPath(CScene* Scene, MeshType Type, const std::string& Name, const TCHAR* FullPath)
+{
+	return m_MeshManager->LoadMeshFullPath(Scene, Type, Name, FullPath);
+}
+
+bool CResourceManager::LoadMeshMultibyte(CScene* Scene, MeshType Type,
+	const std::string& Name, const char* FileName, const std::string& PathName)
+{
+	return m_MeshManager->LoadMeshMultibyte(Scene, Type, Name, FileName, PathName);
+}
+
+bool CResourceManager::LoadMeshMultibyteFullPath(CScene* Scene, 
+	MeshType Type, const std::string& Name, const char* FullPath)
+{
+	return m_MeshManager->LoadMeshMultibyteFullPath(Scene, Type, Name, FullPath);
 }
 
 CMesh* CResourceManager::FindMesh(const std::string& Name)
@@ -154,6 +183,19 @@ bool CResourceManager::LoadTextureArray(const std::string& Name, const std::vect
 bool CResourceManager::LoadTextureArrayFullPath(const std::string& Name, const std::vector<const TCHAR*>& vecFullPath)
 {
 	return m_TextureManager->LoadTextureArrayFullPath(Name, vecFullPath);
+}
+
+bool CResourceManager::CreateTarget(const std::string& Name, 
+	unsigned int Width, unsigned int Height, DXGI_FORMAT PixelFormat,
+	DXGI_FORMAT DepthFormat)
+{
+	return m_TextureManager->CreateTarget(Name, Width, Height,
+		PixelFormat, DepthFormat);
+}
+
+void CResourceManager::RenderTexture()
+{
+	m_TextureManager->Render();
 }
 
 CTexture* CResourceManager::FindTexture(const std::string& Name)
@@ -263,6 +305,121 @@ void CResourceManager::ReleaseAnimationSequence2D(const std::string& Name)
 CAnimation2DConstantBuffer* CResourceManager::GetAnim2DConstantBuffer() const
 {
 	return m_AnimationManager->GetAnim2DConstantBuffer();
+}
+
+bool CResourceManager::LoadAnimationSequence(
+	const std::string& Name, bool Loop, 
+	const FbxAnimationClip* Clip)
+{
+	return m_AnimationManager->LoadAnimationSequence(Name, Loop, Clip);
+}
+
+bool CResourceManager::LoadAnimationSequence(const std::string& Name,
+	bool Loop, int StartFrame, int EndFrame, float PlayTime,
+	const std::vector<BoneKeyFrame*>& vecFrame)
+{
+	return m_AnimationManager->LoadAnimationSequence(Name, Loop, 
+		StartFrame, EndFrame, PlayTime, vecFrame);
+}
+
+bool CResourceManager::LoadAnimationSequence(
+	const std::string& Name, const TCHAR* FileName,
+	const std::string& PathName)
+{
+	return m_AnimationManager->LoadAnimationSequence(Name, 
+		FileName, PathName);
+}
+
+bool CResourceManager::LoadAnimationSequenceFullPath(
+	const std::string& Name, const TCHAR* FullPath)
+{
+	return m_AnimationManager->LoadAnimationSequenceFullPath(Name, 
+		FullPath);
+}
+
+bool CResourceManager::LoadAnimationSequenceMultibyte(
+	const std::string& Name, const char* FileName, 
+	const std::string& PathName)
+{
+	return m_AnimationManager->LoadAnimationSequenceMultibyte(Name, 
+		FileName, PathName);
+}
+
+bool CResourceManager::LoadAnimationSequenceMultibyteFullPath(
+	const std::string& Name, const char* FullPath)
+{
+	return m_AnimationManager->LoadAnimationSequenceMultibyteFullPath(Name, 
+		FullPath);
+}
+
+CAnimationSequence* CResourceManager::FindAnimationSequence(
+	const std::string& Name)
+{
+	return m_AnimationManager->FindAnimationSequence(Name);
+}
+
+void CResourceManager::ReleaseAnimationSequence(
+	const std::string& Name)
+{
+	m_AnimationManager->ReleaseAnimationSequence(Name);
+}
+
+bool CResourceManager::LoadSkeleton(CScene* Scene, const std::string& Name,
+	const TCHAR* FileName, const std::string& PathName)
+{
+	return m_AnimationManager->LoadSkeleton(Scene, Name, FileName, PathName);
+}
+
+bool CResourceManager::LoadSkeletonFullPath(
+	CScene* Scene, const std::string& Name, const TCHAR* FullPath)
+{
+	return m_AnimationManager->LoadSkeletonFullPath(Scene, Name, FullPath);
+}
+
+bool CResourceManager::LoadSkeletonMultibyte(
+	CScene* Scene, const std::string& Name,
+	const char* FileName, const std::string& PathName)
+{
+	return m_AnimationManager->LoadSkeletonMultibyte(Scene, Name, FileName, PathName);
+}
+
+bool CResourceManager::LoadSkeletonMultibyteFullPath(
+	CScene* Scene, const std::string& Name, const char* FullPath)
+{
+	return m_AnimationManager->LoadSkeletonMultibyteFullPath(Scene, Name, FullPath);
+}
+
+void CResourceManager::AddSocket(const std::string& SkeletonName, const std::string& BoneName, const std::string& SocketName, const Vector3& Offset, const Vector3& OffsetRot)
+{
+	m_AnimationManager->AddSocket(SkeletonName, BoneName, SocketName, Offset, OffsetRot);
+}
+
+bool CResourceManager::SetMeshSkeleton(const std::string& MeshName,
+	const std::string& SkeletonName)
+{
+	CAnimationMesh* Mesh = (CAnimationMesh*)FindMesh(MeshName);
+
+	if (!Mesh)
+		return false;
+
+	CSkeleton* Skeleton = FindSkeleton(SkeletonName);
+
+	if (!Skeleton)
+		return false;
+
+	Mesh->SetSkeleton(Skeleton);
+
+	return true;
+}
+
+CSkeleton* CResourceManager::FindSkeleton(const std::string& Name)
+{
+	return m_AnimationManager->FindSkeleton(Name);
+}
+
+void CResourceManager::ReleaseSkeleton(const std::string& Name)
+{
+	m_AnimationManager->ReleaseSkeleton(Name);
 }
 
 bool CResourceManager::CreateSoundChannel(const std::string& Name)
@@ -416,4 +573,19 @@ void CResourceManager::ReleaseFont(const std::string& Name)
 void CResourceManager::ReleaseFontCollection(const std::string& Name)
 {
 	m_FontManager->ReleaseFontCollection(Name);
+}
+
+bool CResourceManager::CreateParticle(const std::string& Name)
+{
+	return m_ParticleManager->CreateParticle(Name);
+}
+
+CParticle* CResourceManager::FindParticle(const std::string& Name)
+{
+	return m_ParticleManager->FindParticle(Name);
+}
+
+void CResourceManager::ReleaseParticle(const std::string& Name)
+{
+	m_ParticleManager->ReleaseParticle(Name);
 }

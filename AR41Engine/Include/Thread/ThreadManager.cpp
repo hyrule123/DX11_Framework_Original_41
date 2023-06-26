@@ -1,7 +1,9 @@
 #include "ThreadManager.h"
-#include "../Component/TileMapComponent.h"
+#include "../Component/SceneComponent.h"
 #include "../Scene/Scene.h"
-#include "NavigationThread.h"
+#include "Navigation2DThread.h"
+#include "Navigation3DThread.h"
+#include "../Scene/NavigationMesh.h"
 
 DEFINITION_SINGLE(CThreadManager)
 
@@ -111,9 +113,10 @@ bool CThreadManager::Start(const std::string& Name)
 	return true;
 }
 
-void CThreadManager::CreateNavigationThread(CTileMapComponent* TileMap)
+void CThreadManager::CreateNavigationThread(CSceneComponent* NavComponent, 
+	bool Is2D)
 {
-	CScene* Scene = TileMap->GetScene();
+	CScene* Scene = NavComponent->GetScene();
 
 	unsigned __int64	Address = (unsigned __int64)Scene;
 
@@ -123,7 +126,7 @@ void CThreadManager::CreateNavigationThread(CTileMapComponent* TileMap)
 
 	std::string	Name = Scene->GetName();
 	Name += "_";
-	Name += TileMap->GetName();
+	Name += NavComponent->GetName();
 	Name += "_";
 	Name += SceneAddress;
 
@@ -137,22 +140,28 @@ void CThreadManager::CreateNavigationThread(CTileMapComponent* TileMap)
 
 		sprintf_s(ThreadName, "%s_%d", Name.c_str(), (int)i);
 
-		CNavigationThread* Thread = Create<CNavigationThread>(ThreadName);
+		CNavigationThread* Thread = nullptr;
+		
+		if (Is2D)
+			Thread = Create<CNavigation2DThread>(ThreadName);
 
-		Scene->GetNavigationManager()->AddNavigationThread(Thread);
+		else
+			Thread = Create<CNavigation3DThread>(ThreadName);
 
-		Thread->SetTileMapComponent(TileMap);
+		Thread->SetNavigationComponent(NavComponent);
 		Thread->SetLoop(true);
 
 		Thread->Start();
 
 		Thread->Suspend();
+
+		Scene->GetNavigationManager()->AddNavigationThread(Thread);
 	}
 }
 
-void CThreadManager::DeleteNavigationThread(CTileMapComponent* TileMap)
+void CThreadManager::DeleteNavigationThread(CSceneComponent* NavComponent)
 {
-	CScene* Scene = TileMap->GetScene();
+	CScene* Scene = NavComponent->GetScene();
 
 	if (!Scene)
 		return;
@@ -163,9 +172,9 @@ void CThreadManager::DeleteNavigationThread(CTileMapComponent* TileMap)
 
 	sprintf_s(SceneAddress, "%llu", Address);
 
-	std::string	Name = TileMap->GetSceneName();
+	std::string	Name = NavComponent->GetSceneName();
 	Name += "_";
-	Name += TileMap->GetName();
+	Name += NavComponent->GetName();
 	Name += "_";
 	Name += SceneAddress;
 
@@ -180,6 +189,89 @@ void CThreadManager::DeleteNavigationThread(CTileMapComponent* TileMap)
 		sprintf_s(ThreadName, "%s_%d", Name.c_str(), (int)i);
 
 		CThread* Thread = FindThread(ThreadName);
+
+		if (!Thread)
+			continue;
+
+		Thread->ReStart();
+
+		Delete(ThreadName);
+	}
+}
+
+void CThreadManager::CreateNavigationThread(CNavigationMesh* NavMesh)
+{
+	CScene* Scene = NavMesh->GetScene();
+
+	unsigned __int64	Address = (unsigned __int64)Scene;
+
+	char	SceneAddress[32] = {};
+
+	sprintf_s(SceneAddress, "%llu", Address);
+
+	std::string	Name = NavMesh->GetSceneName();
+	Name += "_";
+	Name += NavMesh->GetComponentName();
+	Name += "_";
+	Name += SceneAddress;
+
+	SYSTEM_INFO	SysInfo = {};
+
+	GetSystemInfo(&SysInfo);
+
+	for (DWORD i = 0; i < SysInfo.dwNumberOfProcessors * 2; ++i)
+	{
+		char	ThreadName[256] = {};
+
+		sprintf_s(ThreadName, "%s_%d", Name.c_str(), (int)i);
+
+		CNavigation3DThread* Thread = nullptr;
+		Thread = Create<CNavigation3DThread>(ThreadName);
+
+		Thread->SetNavigationMesh(NavMesh);
+		Thread->SetLoop(true);
+
+		Thread->Start();
+
+		Thread->Suspend();
+
+		Scene->GetNavigationManager()->AddNavigationThread(Thread);
+	}
+}
+
+void CThreadManager::DeleteNavigationThread(CNavigationMesh* NavMesh)
+{
+	CScene* Scene = NavMesh->GetScene();
+
+	if (!Scene)
+		return;
+
+	unsigned __int64	Address = (unsigned __int64)Scene;
+
+	char	SceneAddress[32] = {};
+
+	sprintf_s(SceneAddress, "%llu", Address);
+
+	std::string	Name = NavMesh->GetSceneName();
+	Name += "_";
+	Name += NavMesh->GetComponentName();
+	Name += "_";
+	Name += SceneAddress;
+
+	SYSTEM_INFO	SysInfo = {};
+
+	GetSystemInfo(&SysInfo);
+
+	for (DWORD i = 0; i < SysInfo.dwNumberOfProcessors * 2; ++i)
+	{
+		char	ThreadName[256] = {};
+
+		sprintf_s(ThreadName, "%s_%d", Name.c_str(), (int)i);
+
+		CThread* Thread = FindThread(ThreadName);
+
+		if (!Thread)
+			continue;
 
 		Thread->ReStart();
 

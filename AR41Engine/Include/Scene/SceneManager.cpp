@@ -13,7 +13,6 @@ CSceneManager::CSceneManager()	:
 	m_Scene(nullptr),
 	m_NextScene(nullptr)
 {
-	CScene::CreateCDO();
 }
 
 CSceneManager::~CSceneManager()
@@ -85,6 +84,10 @@ CSceneManager::~CSceneManager()
 bool CSceneManager::Init()
 {
 	m_Scene = new CScene;
+
+	CScene::CreateCDO();
+
+	m_Scene->Init();
 
 	return true;
 }

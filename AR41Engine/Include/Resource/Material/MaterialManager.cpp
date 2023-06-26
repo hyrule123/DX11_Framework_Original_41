@@ -53,6 +53,103 @@ bool CMaterialManager::Init()
 	Material->SetShader("TileMapBackShader");
 	Material->SetRenderState("DepthLessEqual");
 
+
+
+	Material = CreateMaterial<CMaterial>("Sky");
+
+	Material->SetShader("SkyShader");
+
+	Material->AddTexture(10, (int)EShaderBufferType::Pixel, "SkyTexture",
+		TEXT("Sky.dds"));
+
+	Material->SetRenderState("DepthLessEqual");
+	Material->SetRenderState("FrontFaceCull");
+
+
+	Material = CreateMaterial<CMaterial>("DefaultTerrain");
+
+	Material->SetShader("TerrainShader");
+
+	Material->AddTexture(0, (int)EShaderBufferType::Pixel, "DefaultTerrainTexture",
+		TEXT("LandScape/ROCK_01+MOSS.bmp"));
+	Material->AddTexture(1, (int)EShaderBufferType::Pixel, "DefaultTerrainNormalTexture",
+		TEXT("LandScape/ROCK_01+MOSS_NRM.png"));
+	Material->AddTexture(2, (int)EShaderBufferType::Pixel, "DefaultTerrainSpecularTexture",
+		TEXT("LandScape/ROCK_01+MOSS_SPEC.png"));
+
+
+	std::vector<const TCHAR*>	vecFileName;
+
+	vecFileName.push_back(TEXT("LandScape/BD_Terrain_Cave_01.dds"));
+	vecFileName.push_back(TEXT("LandScape/BD_Terrain_Cliff05.dds"));
+	vecFileName.push_back(TEXT("LandScape/Terrain_Pebbles_01.dds"));
+	vecFileName.push_back(TEXT("LandScape/Terrain_Cliff_15_Large.dds"));
+
+	Material->AddTextureArray(10, (int)EShaderBufferType::Pixel,
+		"DefaultSplatDif", vecFileName);
+
+	vecFileName.clear();
+	vecFileName.push_back(TEXT("LandScape/BD_Terrain_Cave_01_NRM.bmp"));
+	vecFileName.push_back(TEXT("LandScape/BD_Terrain_Cliff05_NRM.bmp"));
+	vecFileName.push_back(TEXT("LandScape/Terrain_Pebbles_01_NRM.bmp"));
+	vecFileName.push_back(TEXT("LandScape/Terrain_Cliff_15_Large_NRM.bmp"));
+
+	Material->AddTextureArray(11, (int)EShaderBufferType::Pixel,
+		"DefaultSplatNormal", vecFileName);
+
+	vecFileName.clear();
+	vecFileName.push_back(TEXT("LandScape/BD_Terrain_Cave_01_SPEC.bmp"));
+	vecFileName.push_back(TEXT("LandScape/BD_Terrain_Cliff05_SPEC.bmp"));
+	vecFileName.push_back(TEXT("LandScape/Terrain_Pebbles_01_SPEC.bmp"));
+	vecFileName.push_back(TEXT("LandScape/Terrain_Cliff_15_Large_SPEC.bmp"));
+
+	Material->AddTextureArray(12, (int)EShaderBufferType::Pixel,
+		"DefaultSplatSpc", vecFileName);
+
+	vecFileName.clear();
+	vecFileName.push_back(TEXT("LandScape/RoadAlpha1.bmp"));
+	vecFileName.push_back(TEXT("LandScape/WaterStonAlpha.bmp"));
+	vecFileName.push_back(TEXT("LandScape/SandBaseAlpha.bmp"));
+	vecFileName.push_back(TEXT("LandScape/WaterBaseAlpha.bmp"));
+
+	Material->AddTextureArray(13, (int)EShaderBufferType::Pixel,
+		"DefaultSplatAlpha", vecFileName);
+
+	Material->EnableBump();
+	Material->EnableSpecular();
+	Material->SetSpecularPower(3.2f);
+
+
+
+	Material = CreateMaterial<CMaterial>("Billboard");
+
+	Material->SetShader("BillboardShader");
+
+	Material->AddTexture(0, (int)EShaderBufferType::Pixel, "DefaultTexture",
+		TEXT("teemo.png"));
+
+
+	Material = CreateMaterial<CMaterial>("DebugDecal");
+
+	Material->SetShader("DecalDebugShader");
+	Material->SetBaseColor(1.f, 1.f, 0.f, 1.f);
+
+
+	Material = CreateMaterial<CMaterial>("DefaultDecal");
+
+	Material->SetShader("DecalShader");
+	Material->AddTexture(0, (int)EShaderBufferType::Pixel,
+		"DefauleDecal", TEXT("Decal/free-blood-texture_COLOR.png"));
+	Material->AddTexture(1, (int)EShaderBufferType::Pixel,
+		"DefauleDecalNormal", TEXT("Decal/free-blood-texture_NRM.png"));
+	Material->AddTexture(2, (int)EShaderBufferType::Pixel,
+		"DefauleDecalSpecular", TEXT("Decal/free-blood-texture_SPEC.png"));
+
+	Material->EnableBump();
+	Material->EnableSpecular();
+
+	//Material->SetRenderState("AlphaBlend");
+
 	return true;
 }
 

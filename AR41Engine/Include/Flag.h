@@ -43,7 +43,8 @@ enum class ComponentType : unsigned char
 
 enum class SceneComponentType : unsigned char
 {
-	Sprite
+	Scene,
+	Primitive
 };
 
 enum class EShaderBufferType : unsigned char
@@ -69,7 +70,8 @@ enum class EImageType : unsigned char
 {
 	Atlas,
 	Frame,
-	Array
+	Array,
+	RenderTarget
 };
 
 enum class ESamplerType : unsigned char
@@ -206,4 +208,24 @@ enum class ETileOption
 	None,
 	Wall,
 	End
+};
+
+enum class ELightType
+{
+	Direction,
+	Point,
+	Spot
+};
+
+enum class ENavNodeType
+{
+	None,
+	Open,
+	Close
+};
+
+enum class EShaderType
+{
+	Default,
+	CelShader
 };

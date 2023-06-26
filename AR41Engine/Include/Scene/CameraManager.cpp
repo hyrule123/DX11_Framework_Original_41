@@ -30,7 +30,7 @@ bool CCameraManager::Init()
 
 	m_CurrentCamera->Init();
 
-	m_CurrentCamera->SetCameraType(ECameraType::Camera2D);
+	m_CurrentCamera->SetCameraType(ECameraType::Camera3D);
 
 	m_UICamera = new CCameraComponent;
 

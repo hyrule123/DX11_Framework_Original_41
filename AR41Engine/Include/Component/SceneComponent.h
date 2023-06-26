@@ -15,14 +15,39 @@ protected:
 	virtual ~CSceneComponent();
 
 protected:
+	std::string m_SceneName;
 	CTransform* m_Transform;
     CSceneComponent* m_Parent;
+	class CSkeletonSocket* m_Socket;
+	SceneComponentType	m_SceneComponentType;
     std::vector<CSharedPtr<CSceneComponent>>    m_vecChild;
 	std::string     m_LayerName;
 	std::string		m_ParentName;
 	std::vector<std::string>	m_vecChildName;
+	bool			m_FrustumCull;
+	CSharedPtr<class CGraphicShader>	m_ShadowMapShader;
 
 public:
+	bool GetFrustumCull()	const
+	{
+		return m_FrustumCull;
+	}
+
+	void SetFrustumCull(bool Cull)
+	{
+		m_FrustumCull = Cull;
+	}
+
+	const std::string& GetSceneName()   const
+	{
+		return m_SceneName;
+	}
+
+	SceneComponentType GetSceneComponentType()	const
+	{
+		return m_SceneComponentType;
+	}
+
     CTransform* GetTransform()    const
     {
         return m_Transform;
@@ -45,6 +70,7 @@ public:
 	}
 
 	void AddOwner();
+	virtual void SetSocket(class CSkeletonSocket* Socket);
 
 public:
     virtual void SetScene(class CScene* Scene);
@@ -66,6 +92,7 @@ public:
     virtual void Update(float DeltaTime);
     virtual void PostUpdate(float DeltaTime);
     virtual void Render();
+	virtual void RenderShadowMap();
     virtual CSceneComponent* Clone()    const;
 	virtual void Save(FILE* File);
 	virtual void Load(FILE* File);
@@ -138,12 +165,17 @@ public:
 	void AddRelativePositionZ(float z);
 
 public:
+	const Vector3& GetCenter()	const;
+	Vector3 GetMin()	const;
+	Vector3 GetMax()	const;
+	float GetRadius()	const;
 	const Vector3& GetWorldScale()	const;
 	const Vector3& GetWorldRot()	const;
 	const Vector3& GetWorldPos()	const;
 	const Vector3& GetWorldAxis(AXIS Axis)	const;
 	const Vector3& GetPivot()	const;
 	const Vector3& GetMeshSize()	const;
+	const Vector3& GetOffset()	const;
 	const Matrix& GetWorldMatrix()	const;
 
 public:
@@ -151,6 +183,8 @@ public:
 	void SetPivot(const Vector2& Pivot);
 	void SetPivot(float x, float y, float z);
 	void SetPivot(float x, float y);
+	void SetMin(const Vector3& Min);
+	void SetMax(const Vector3& Max);
 	void SetMeshSize(const Vector3& MeshSize);
 	void SetMeshSize(const Vector2& MeshSize);
 	void SetMeshSize(float x, float y, float z);
@@ -178,6 +212,11 @@ public:
 	void SetWorldPositionX(float x);
 	void SetWorldPositionY(float y);
 	void SetWorldPositionZ(float z);
+	void SetOffset(const Vector3& Offset);
+	void SetOffset(const Vector2& Offset);
+	void SetOffsetX(float x);
+	void SetOffsetY(float y);
+	void SetOffsetZ(float z);
 
 	void AddWorldScale(const Vector3& Scale);
 	void AddWorldScale(const Vector2& Scale);
@@ -200,5 +239,10 @@ public:
 	void AddWorldPositionX(float x);
 	void AddWorldPositionY(float y);
 	void AddWorldPositionZ(float z);
+	void AddOffset(const Vector3& Offset);
+	void AddOffset(const Vector2& Offset);
+	void AddOffsetX(float x);
+	void AddOffsetY(float y);
+	void AddOffsetZ(float z);
 };
 

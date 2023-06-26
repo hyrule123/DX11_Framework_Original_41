@@ -6,10 +6,13 @@
 #include "../Resource/Texture/Texture.h"
 #include "../Resource/Material/Material.h"
 #include "../Resource/Animation/AnimationSequence2D.h"
+#include "../Resource/Animation/AnimationSequence.h"
+#include "../Resource/Animation/Skeleton.h"
 #include "../Resource/ResourceManager.h"
 #include "../Resource/Sound/Sound.h"
 #include "../Resource/Font/Font.h"
 #include "../Resource/Font/FontCollection.h"
+#include "../Resource/Particle/Particle.h"
 
 class CSceneResource
 {
@@ -28,9 +31,12 @@ private:
 	std::unordered_map<std::string, CSharedPtr<CTexture>>	m_mapTexture;
 	std::unordered_map<std::string, CSharedPtr<CMaterial>>	m_mapMaterial;
 	std::unordered_map<std::string, CSharedPtr<CAnimationSequence2D>>	m_mapAnimationSequence2D;
+	std::unordered_map<std::string, CSharedPtr<CAnimationSequence>>	m_mapAnimationSequence;
+	std::unordered_map<std::string, CSharedPtr<CSkeleton>>	m_mapSkeleton;
 	std::unordered_map<std::string, CSharedPtr<CSound>>	m_mapSound;
 	std::unordered_map<std::string, CSharedPtr<CFont>>	m_mapFont;
 	std::unordered_map<std::string, CSharedPtr<CFontCollection>>	m_mapFontCollection;
+	std::unordered_map<std::string, CSharedPtr<CParticle>>	m_mapParticle;
 
 public:
 	bool Init();
@@ -43,6 +49,14 @@ public:	// ===================== Mesh =========================
 		void* IdxData = nullptr, int IdxSize = 0, int IdxCount = 0,
 		D3D11_USAGE IdxUsage = D3D11_USAGE_DEFAULT,
 		DXGI_FORMAT Fmt = DXGI_FORMAT_UNKNOWN);
+	bool LoadMesh(MeshType Type, const std::string& Name,
+		const TCHAR* FileName, const std::string& PathName = MESH_PATH);
+	bool LoadMeshFullPath(MeshType Type, const std::string& Name,
+		const TCHAR* FullPath);
+	bool LoadMeshMultibyte(MeshType Type, const std::string& Name,
+		const char* FileName, const std::string& PathName = MESH_PATH);
+	bool LoadMeshMultibyteFullPath(MeshType Type, const std::string& Name,
+		const char* FullPath);
 
 	class CMesh* FindMesh(const std::string& Name);
 
@@ -63,6 +77,13 @@ public:	// ===================== Texture =========================
 	bool LoadTextureArray(const std::string& Name, const std::vector<const TCHAR*>& vecFileName,
 		const std::string& PathName = TEXTURE_PATH);
 	bool LoadTextureArrayFullPath(const std::string& Name, const std::vector<const TCHAR*>& vecFullPath);
+
+	bool CreateTarget(const std::string& Name, unsigned int Width,
+		unsigned int Height, DXGI_FORMAT PixelFormat,
+		DXGI_FORMAT DepthFormat = DXGI_FORMAT_UNKNOWN);
+	void RenderTexture();
+
+
 	class CTexture* FindTexture(const std::string& Name);
 
 
@@ -109,6 +130,43 @@ public:	// ===================== Animation =========================
 	CAnimationSequence2D* FindAnimationSequence2D(const std::string& Name);
 
 
+
+	// Animation3D
+	bool LoadAnimationSequence(const std::string& Name, bool Loop,
+		const FbxAnimationClip* Clip);
+	bool LoadAnimationSequence(const std::string& Name, bool Loop,
+		int StartFrame, int EndFrame, float PlayTime,
+		const std::vector<BoneKeyFrame*>& vecFrame);
+	bool LoadAnimationSequence(const std::string& Name, 
+		const TCHAR* FileName, const std::string& PathName = ANIMATION_PATH);
+	bool LoadAnimationSequenceFullPath(const std::string& Name, 
+		const TCHAR* FullPath);
+	bool LoadAnimationSequenceMultibyte(const std::string& Name, 
+		const char* FileName, const std::string& PathName = ANIMATION_PATH);
+	bool LoadAnimationSequenceMultibyteFullPath(const std::string& Name, 
+		const char* FullPath);
+
+	CAnimationSequence* FindAnimationSequence(const std::string& Name);
+
+
+	bool LoadSkeleton(const std::string& Name, 
+		const TCHAR* FileName, const std::string& PathName = ANIMATION_PATH);
+	bool LoadSkeletonFullPath(const std::string& Name, 
+		const TCHAR* FullPath);
+	bool LoadSkeletonMultibyte(const std::string& Name, 
+		const char* FileName, const std::string& PathName = ANIMATION_PATH);
+	bool LoadSkeletonMultibyteFullPath(const std::string& Name, 
+		const char* FullPath);
+	void AddSocket(const std::string& SkeletonName,
+		const std::string& BoneName, const std::string& SocketName,
+		const Vector3& Offset, const Vector3& OffsetRot);
+
+	bool SetMeshSkeleton(const std::string& MeshName,
+		const std::string& SkeletonName);
+
+	CSkeleton* FindSkeleton(const std::string& Name);
+
+
 public:	// ============================ Sound ================================
 	bool CreateSoundChannel(const std::string& Name);
 	bool LoadSound(const std::string& GroupName, const std::string& Name,
@@ -151,5 +209,12 @@ public:	// ============================ Font ================================
 
 	CFont* FindFont(const std::string& Name);
 	CFontCollection* FindFontCollection(const std::string& Name);
+
+
+
+
+public:
+	bool CreateParticle(const std::string& Name);
+	CParticle* FindParticle(const std::string& Name);
 };
 

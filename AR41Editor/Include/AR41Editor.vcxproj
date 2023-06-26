@@ -79,14 +79,14 @@
     <OutDir>../Bin/</OutDir>
     <IntDir>../BinObjDebug/</IntDir>
     <TargetName>$(ProjectName)_Debug</TargetName>
-    <IncludePath>../../Engine/Include/;$(IncludePath)</IncludePath>
+    <IncludePath>../../Engine/Include/;../../Engine/Include/Resource/Mesh/;../../Engine/Include/Resource/Mesh/FBXSDK/;$(IncludePath)</IncludePath>
     <LibraryPath>../Bin/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>../Bin/</OutDir>
     <IntDir>../BinObj/</IntDir>
-    <IncludePath>../../Engine/Include/;$(IncludePath)</IncludePath>
+    <IncludePath>../../Engine/Include/;../../Engine/Include/Resource/Mesh/;../../Engine/Include/Resource/Mesh/FBXSDK/;$(IncludePath)</IncludePath>
     <LibraryPath>../Bin/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -94,14 +94,14 @@
     <OutDir>../Bin/</OutDir>
     <IntDir>../BinObjDebug/</IntDir>
     <TargetName>$(ProjectName)_Debug</TargetName>
-    <IncludePath>../../Engine/Include/;$(IncludePath)</IncludePath>
+    <IncludePath>../../Engine/Include/;../../Engine/Include/Resource/Mesh/;../../Engine/Include/Resource/Mesh/FBXSDK/;$(IncludePath)</IncludePath>
     <LibraryPath>../Bin/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>../Bin/</OutDir>
     <IntDir>../BinObj/</IntDir>
-    <IncludePath>../../Engine/Include/;$(IncludePath)</IncludePath>
+    <IncludePath>../../Engine/Include/;../../Engine/Include/Resource/Mesh/;../../Engine/Include/Resource/Mesh/FBXSDK/;$(IncludePath)</IncludePath>
     <LibraryPath>../Bin/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -149,8 +149,9 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -170,8 +171,9 @@
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

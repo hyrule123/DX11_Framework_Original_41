@@ -1,4 +1,13 @@
 #include "GameObject.h"
+#include "../Component/AnimationMeshComponent.h"
+#include "../Component/CameraComponent.h"
+#include "../Resource/Animation/Skeleton.h"
+#include "../Resource/Animation/SkeletonSocket.h"
+#include "../Scene/Scene.h"
+#include "../Scene/SceneManager.h"
+#include "../Scene/CameraManager.h"
+#include "../Input.h"
+#include "../CollisionManager.h"
 
 std::unordered_map<std::string, CGameObject*> CGameObject::m_mapObjectCDO;
 
@@ -6,7 +15,9 @@ CGameObject::CGameObject()  :
 	m_Scene(nullptr),
 	m_LifeTime(-1.f),
 	m_ComponentSerialNumber(0),
-	m_Start(false)
+	m_Start(false),
+	m_FrustumCull(false),
+	m_Radius(0.f)
 {
 	SetTypeID<CGameObject>();
 
@@ -88,6 +99,35 @@ void CGameObject::Destroy()
 	{
 		m_vecObjectComponent[i]->Destroy();
 	}
+}
+
+void CGameObject::AddChildToSocket(const std::string& SocketName,
+	CGameObject* Obj)
+{
+	CAnimationMeshComponent* Mesh = nullptr;
+
+	// 애니메이션메쉬 컴포넌트가 있는지 판단한다.
+	auto	iter = m_SceneComponentList.begin();
+	auto	iterEnd = m_SceneComponentList.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		if ((*iter)->CheckTypeID<CAnimationMeshComponent>())
+		{
+			Mesh = (CAnimationMeshComponent*)*iter;
+			break;
+		}
+	}
+
+	if (!Mesh)
+		return;
+
+	CSkeletonSocket* Socket = Mesh->GetSkeleton()->GetSocket(SocketName);
+
+	if (!Socket)
+		return;
+
+	Obj->GetRootComponent()->SetSocket(Socket);
 }
 
 void CGameObject::GetAllComponentHierarchyName(std::vector<HierarchyName>& vecName)
@@ -185,6 +225,38 @@ void CGameObject::PostUpdate(float DeltaTime)
 
 	if (m_RootComponent)
 		m_RootComponent->PostUpdate(DeltaTime);
+
+	auto	iter = m_SceneComponentList.begin();
+	auto	iterEnd = m_SceneComponentList.end();
+
+	m_Min = Vector3(FLT_MAX, FLT_MAX, FLT_MAX);
+	m_Max = Vector3(FLT_MIN, FLT_MIN, FLT_MIN);
+
+	for (; iter != iterEnd; ++iter)
+	{
+		Vector3	Min = (*iter)->GetMeshSize() * (*iter)->GetWorldScale();
+
+		if (m_Min.x > (*iter)->GetMin().x)
+			m_Min.x = (*iter)->GetMin().x;
+
+		if (m_Min.y > (*iter)->GetMin().y)
+			m_Min.y = (*iter)->GetMin().y;
+
+		if (m_Min.z > (*iter)->GetMin().z)
+			m_Min.z = (*iter)->GetMin().z;
+
+		if (m_Max.x < (*iter)->GetMax().x)
+			m_Max.x = (*iter)->GetMax().x;
+
+		if (m_Max.y < (*iter)->GetMax().y)
+			m_Max.y = (*iter)->GetMax().y;
+
+		if (m_Max.z < (*iter)->GetMax().z)
+			m_Max.z = (*iter)->GetMax().z;
+	}
+
+	m_Center = (m_Min + m_Max) * 0.5f;
+	m_Radius = (m_Max - m_Min).Length() * 0.5f;
 }
 
 CGameObject* CGameObject::Clone() const
@@ -300,6 +372,77 @@ void CGameObject::Load(FILE* File)
 			}
 		}
 	}
+}
+
+void CGameObject::FrustumCull(CCameraComponent* Camera)
+{
+	bool	Cull = false;
+
+	auto	iter = m_SceneComponentList.begin();
+	auto	iterEnd = m_SceneComponentList.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		if (Camera->FrustumInSphere((*iter)->GetWorldPos(),
+			(*iter)->GetRadius()))
+			Cull = true;
+	}
+
+	m_FrustumCull = Cull;
+}
+
+bool CGameObject::Picking(PickingResult& result)
+{
+	Ray	ray = CInput::GetInst()->GetRay();
+
+	// 월드공간으로 변환한다.
+	CCameraComponent* Camera = m_Scene->GetCameraManager()->GetCurrentCamera();
+
+	Matrix	matView = Camera->GetViewMatrix();
+
+	matView.Inverse();
+
+	ray.Pos = ray.Pos.TransformCoord(matView);
+	ray.Dir = ray.Dir.TransformNormal(matView);
+	ray.Dir.Normalize();
+
+	std::list<CSceneComponent*> SceneComponentList =
+		m_SceneComponentList;
+
+	SceneComponentList.sort(CGameObject::SortComponent);
+
+	auto	iter = SceneComponentList.begin();
+	auto	iterEnd = SceneComponentList.end();
+
+	for (; iter != iterEnd; ++iter)
+	{
+		Vector3	Center = (*iter)->GetCenter();
+		float	Radius = (*iter)->GetRadius();
+
+		if (CCollisionManager::GetInst()->CollisionRayToSphere(
+			result, ray, Center, Radius))
+		{
+			result.PickObject = this;
+			result.PickComponent = *iter;
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool CGameObject::SortComponent(CSceneComponent* Src,
+	CSceneComponent* Dest)
+{
+	Vector3	SrcCenter = Src->GetCenter();
+	Vector3	DestCenter = Dest->GetCenter();
+
+	CCameraComponent* Camera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();
+
+	float	SrcDist = Camera->GetWorldPos().Distance(SrcCenter) - Src->GetRadius();
+	float	DestDist = Camera->GetWorldPos().Distance(DestCenter) - Dest->GetRadius();
+
+	return SrcDist < DestDist;
 }
 
 void CGameObject::SetInheritScale(bool Inherit)
@@ -596,6 +739,11 @@ void CGameObject::AddRelativePositionZ(float z)
 	m_RootComponent->AddRelativePositionZ(z);
 }
 
+float CGameObject::GetRadius() const
+{
+	return m_RootComponent->GetRadius();
+}
+
 const Vector3& CGameObject::GetWorldScale() const
 {
 	return m_RootComponent->GetWorldScale();
@@ -624,6 +772,11 @@ const Vector3& CGameObject::GetPivot() const
 const Vector3& CGameObject::GetMeshSize() const
 {
 	return m_RootComponent->GetMeshSize();
+}
+
+const Vector3& CGameObject::GetOffset() const
+{
+	return m_RootComponent->GetOffset();
 }
 
 const Matrix& CGameObject::GetWorldMatrix() const
@@ -776,6 +929,31 @@ void CGameObject::SetWorldPositionZ(float z)
 	m_RootComponent->SetWorldPositionZ(z);
 }
 
+void CGameObject::SetOffset(const Vector3& Offset)
+{
+	m_RootComponent->SetOffset(Offset);
+}
+
+void CGameObject::SetOffset(const Vector2& Offset)
+{
+	m_RootComponent->SetOffset(Offset);
+}
+
+void CGameObject::SetOffsetX(float x)
+{
+	m_RootComponent->SetOffsetX(x);
+}
+
+void CGameObject::SetOffsetY(float y)
+{
+	m_RootComponent->SetOffsetY(y);
+}
+
+void CGameObject::SetOffsetZ(float z)
+{
+	m_RootComponent->SetOffsetZ(z);
+}
+
 void CGameObject::AddWorldScale(const Vector3& Scale)
 {
 	m_RootComponent->AddWorldScale(Scale);
@@ -879,4 +1057,29 @@ void CGameObject::AddWorldPositionY(float y)
 void CGameObject::AddWorldPositionZ(float z)
 {
 	m_RootComponent->AddWorldPositionZ(z);
+}
+
+void CGameObject::AddOffset(const Vector3& Offset)
+{
+	m_RootComponent->AddOffset(Offset);
+}
+
+void CGameObject::AddOffset(const Vector2& Offset)
+{
+	m_RootComponent->AddOffset(Offset);
+}
+
+void CGameObject::AddOffsetX(float x)
+{
+	m_RootComponent->AddOffsetX(x);
+}
+
+void CGameObject::AddOffsetY(float y)
+{
+	m_RootComponent->AddOffsetY(y);
+}
+
+void CGameObject::AddOffsetZ(float z)
+{
+	m_RootComponent->AddOffsetZ(z);
 }

@@ -260,65 +260,46 @@ void CStructuredBuffer::ResetShader()
 
 void CStructuredBuffer::SetShader(int Register, int StructuredBufferShaderType)
 {
-	if (m_Dynamic)
-	{
-		if (StructuredBufferShaderType & (int)EShaderBufferType::Vertex)
-			CDevice::GetInst()->GetContext()->VSSetShaderResources(Register, 1, &m_SRV);
+	if (StructuredBufferShaderType & (int)EShaderBufferType::Vertex)
+		CDevice::GetInst()->GetContext()->VSSetShaderResources(Register, 1, &m_SRV);
 
-		if (StructuredBufferShaderType & (int)EShaderBufferType::Pixel)
-			CDevice::GetInst()->GetContext()->PSSetShaderResources(Register, 1, &m_SRV);
+	if (StructuredBufferShaderType & (int)EShaderBufferType::Pixel)
+		CDevice::GetInst()->GetContext()->PSSetShaderResources(Register, 1, &m_SRV);
 
-		if (StructuredBufferShaderType & (int)EShaderBufferType::Hull)
-			CDevice::GetInst()->GetContext()->HSSetShaderResources(Register, 1, &m_SRV);
+	if (StructuredBufferShaderType & (int)EShaderBufferType::Hull)
+		CDevice::GetInst()->GetContext()->HSSetShaderResources(Register, 1, &m_SRV);
 
-		if (StructuredBufferShaderType & (int)EShaderBufferType::Domain)
-			CDevice::GetInst()->GetContext()->DSSetShaderResources(Register, 1, &m_SRV);
+	if (StructuredBufferShaderType & (int)EShaderBufferType::Domain)
+		CDevice::GetInst()->GetContext()->DSSetShaderResources(Register, 1, &m_SRV);
 
-		if (StructuredBufferShaderType & (int)EShaderBufferType::Geometry)
-			CDevice::GetInst()->GetContext()->GSSetShaderResources(Register, 1, &m_SRV);
+	if (StructuredBufferShaderType & (int)EShaderBufferType::Geometry)
+		CDevice::GetInst()->GetContext()->GSSetShaderResources(Register, 1, &m_SRV);
 
-		if (StructuredBufferShaderType & (int)EShaderBufferType::Compute)
-			CDevice::GetInst()->GetContext()->CSSetShaderResources(Register, 1, &m_SRV);
-	}
-
-	else
-	{
-		unsigned int Count = -1;
-		CDevice::GetInst()->GetContext()->CSSetUnorderedAccessViews(Register, 1, &m_UAV, &Count);
-	}
+	if (StructuredBufferShaderType & (int)EShaderBufferType::Compute)
+		CDevice::GetInst()->GetContext()->CSSetShaderResources(Register, 1, &m_SRV);
 }
 
 void CStructuredBuffer::ResetShader(int Register, int StructuredBufferShaderType)
 {
-	if (m_Dynamic)
-	{
-		ID3D11ShaderResourceView* SRV = nullptr;
+	ID3D11ShaderResourceView* SRV = nullptr;
 
-		if (StructuredBufferShaderType & (int)EShaderBufferType::Vertex)
-			CDevice::GetInst()->GetContext()->VSSetShaderResources(Register, 1, &SRV);
+	if (StructuredBufferShaderType & (int)EShaderBufferType::Vertex)
+		CDevice::GetInst()->GetContext()->VSSetShaderResources(Register, 1, &SRV);
 
-		if (StructuredBufferShaderType & (int)EShaderBufferType::Pixel)
-			CDevice::GetInst()->GetContext()->PSSetShaderResources(Register, 1, &SRV);
+	if (StructuredBufferShaderType & (int)EShaderBufferType::Pixel)
+		CDevice::GetInst()->GetContext()->PSSetShaderResources(Register, 1, &SRV);
 
-		if (StructuredBufferShaderType & (int)EShaderBufferType::Hull)
-			CDevice::GetInst()->GetContext()->HSSetShaderResources(Register, 1, &SRV);
+	if (StructuredBufferShaderType & (int)EShaderBufferType::Hull)
+		CDevice::GetInst()->GetContext()->HSSetShaderResources(Register, 1, &SRV);
 
-		if (StructuredBufferShaderType & (int)EShaderBufferType::Domain)
-			CDevice::GetInst()->GetContext()->DSSetShaderResources(Register, 1, &SRV);
+	if (StructuredBufferShaderType & (int)EShaderBufferType::Domain)
+		CDevice::GetInst()->GetContext()->DSSetShaderResources(Register, 1, &SRV);
 
-		if (StructuredBufferShaderType & (int)EShaderBufferType::Geometry)
-			CDevice::GetInst()->GetContext()->GSSetShaderResources(Register, 1, &SRV);
+	if (StructuredBufferShaderType & (int)EShaderBufferType::Geometry)
+		CDevice::GetInst()->GetContext()->GSSetShaderResources(Register, 1, &SRV);
 
-		if (StructuredBufferShaderType & (int)EShaderBufferType::Compute)
-			CDevice::GetInst()->GetContext()->CSSetShaderResources(Register, 1, &SRV);
-	}
-
-	else
-	{
-		unsigned int Count = -1;
-		ID3D11UnorderedAccessView* UAV = nullptr;
-		CDevice::GetInst()->GetContext()->CSSetUnorderedAccessViews(Register, 1, &UAV, &Count);
-	}
+	if (StructuredBufferShaderType & (int)EShaderBufferType::Compute)
+		CDevice::GetInst()->GetContext()->CSSetShaderResources(Register, 1, &SRV);
 }
 
 void CStructuredBuffer::CopyData(void* Data)

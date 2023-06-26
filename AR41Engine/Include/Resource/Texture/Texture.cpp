@@ -401,6 +401,10 @@ bool CTexture::LoadTextureArrayFullPath(const std::string& Name, const std::vect
 	return true;
 }
 
+void CTexture::Render()
+{
+}
+
 bool CTexture::CreateResource(int Index)
 {
 	if (FAILED(DirectX::CreateShaderResourceView(CDevice::GetInst()->GetDevice(),

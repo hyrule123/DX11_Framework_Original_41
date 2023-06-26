@@ -9,6 +9,11 @@
 #include "Editor/EditorGUIManager.h"
 #include "CollisionManager.h"
 #include "Thread/ThreadManager.h"
+#include "Resource/Shader/GlobalConstantBuffer.h"
+#include "Scene/Scene.h"
+#include "Scene/CameraManager.h"
+#include "Component/CameraComponent.h"
+#include "Resource/Shader/StructuredBuffer.h"
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
@@ -27,14 +32,27 @@ CEngine::CEngine()	:
 	m_hInst(0),
 	m_hWnd(0),
 	m_WindowRS{},
-	m_ClearColor{}
+	m_ClearColor{},
+	m_Render2D(false),
+	m_GlobalCBuffer(nullptr),
+	m_RandomBuffer(nullptr),
+	m_AccTime(0.f)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(61771);
+	//_CrtSetBreakAlloc(3088823);
+
+	srand((unsigned int)time(0));
+	rand();
 }
 
 CEngine::~CEngine()
 {
+	if (m_RandomBuffer)
+		m_RandomBuffer->ResetShader(51, (int)EShaderBufferType::All);
+
+	SAFE_DELETE(m_RandomBuffer);
+	SAFE_DELETE(m_GlobalCBuffer);
+
 	CSceneManager::DestroyInst();
 
 	CEditorGUIManager::DestroyInst();
@@ -60,6 +78,21 @@ CEngine::~CEngine()
 float CEngine::GetFPS() const
 {
 	return m_Timer->GetFPS();
+}
+
+float CEngine::GetDeltaTime() const
+{
+	return m_Timer->GetDeltaTime();
+}
+
+void CEngine::SetCameraAxisX(const Vector3& Axis)
+{
+	m_GlobalCBuffer->SetCameraAxisX(Axis);
+}
+
+void CEngine::SetCameraAxisY(const Vector3& Axis)
+{
+	m_GlobalCBuffer->SetCameraAxisY(Axis);
 }
 
 bool CEngine::Init(HINSTANCE hInst, const TCHAR* Title,
@@ -88,7 +121,6 @@ bool CEngine::Init(HINSTANCE hInst, const TCHAR* Title,
 	if (!CPathManager::GetInst()->Init())
 		return false;
 
-
 	// 렌더링 관리자 초기화
 	if (!CRenderManager::GetInst()->Init())
 		return false;
@@ -96,6 +128,9 @@ bool CEngine::Init(HINSTANCE hInst, const TCHAR* Title,
 	// Resource 관리자 초기화
 	if (!CResourceManager::GetInst()->Init())
 		return false;
+
+	CRenderManager::GetInst()->CreateRenderTarget();
+
 
 	// 충돌 관리자 초기화
 	if (!CCollisionManager::GetInst()->Init())
@@ -122,9 +157,51 @@ bool CEngine::Init(HINSTANCE hInst, const TCHAR* Title,
 	if (!CSceneManager::GetInst()->Init())
 		return false;
 
+	OutputDebugStringA("CSceneManager Init Complete\n");
+
 	m_Timer = new CTimer;
 
 	m_Timer->Init();
+
+	m_GlobalCBuffer = new CGlobalConstantBuffer;
+
+	m_GlobalCBuffer->Init();
+
+
+	CTexture* Texture = CResourceManager::GetInst()->FindTexture("EngineNoise");
+
+	m_GlobalCBuffer->SetNoiseResolution((float)Texture->GetWidth(),
+		(float)Texture->GetHeight());
+
+	OutputDebugStringA("m_GlobalCBuffer Init Complete\n");
+
+	std::vector<int>	vecRand;
+	vecRand.resize(1024 * 1024);
+
+	for (int i = 0; i < 1024 * 1024; ++i)
+	{
+		short	Num1 = (short)rand();
+		short	Num2 = (short)rand();
+
+		int	Random = Num1;
+		Random <<= 16;
+
+		Random |= Num2;
+
+		vecRand[i] = Random;
+	}
+
+	m_RandomBuffer = new CStructuredBuffer;
+
+	m_RandomBuffer->Init("Random", sizeof(int), 1024 * 1024, 51, true,
+		(int)EShaderBufferType::All);
+
+	m_RandomBuffer->UpdateBuffer(&vecRand[0], 1024 * 1024);
+
+	m_RandomBuffer->SetShader(51, (int)EShaderBufferType::All);
+
+
+	CRenderManager::GetInst()->SetShaderType(EShaderType::CelShader);
 
 
 
@@ -181,6 +258,16 @@ void CEngine::Logic()
 
 	g_DeltaTime = DeltaTime;
 
+	m_AccTime += DeltaTime;
+
+	Resolution	RS = CDevice::GetInst()->GetResolution();
+	Resolution	ShadowMapRS = CRenderManager::GetInst()->GetShadowMapResolution();
+
+	m_GlobalCBuffer->SetDeltaTime(DeltaTime);
+	m_GlobalCBuffer->SetAccTime(m_AccTime);
+	m_GlobalCBuffer->SetResolution((float)RS.Width, (float)RS.Height);
+	m_GlobalCBuffer->SetShadowMapResolution((float)ShadowMapRS.Width, (float)ShadowMapRS.Height);
+
 	CInput::GetInst()->Update(DeltaTime);
 
 	if (m_EditorMode)
@@ -234,6 +321,17 @@ bool CEngine::Collision(float DeltaTime)
 
 void CEngine::Render(float DeltaTime)
 {
+	// 카메라의 축을 전달한다.
+	CCameraComponent* Camera = CSceneManager::GetInst()->GetScene()->GetCameraManager()->GetCurrentCamera();
+
+	if (Camera)
+	{
+		m_GlobalCBuffer->SetCameraAxisX(Camera->GetWorldAxis(AXIS_X));
+		m_GlobalCBuffer->SetCameraAxisY(Camera->GetWorldAxis(AXIS_Y));
+	}
+
+	m_GlobalCBuffer->UpdateBuffer();
+
 	CDevice::GetInst()->ClearRenderTarget(m_ClearColor);
 	CDevice::GetInst()->ClearDepthStencil(1.f, 0);
 
@@ -248,6 +346,8 @@ void CEngine::Render(float DeltaTime)
 
 	// 그려진 백버퍼를 화면에 시연한다.
 	CDevice::GetInst()->Flip();
+
+	CInput::GetInst()->SetWheel(0);
 }
 
 void CEngine::Register(const TCHAR* ClassName, int IconID, int SmallIconID, int MenuID)
@@ -366,6 +466,14 @@ LRESULT CEngine::WndProc(HWND hWnd, UINT message, WPARAM wParam,
 
 	switch (message)
 	{
+	case WM_MOUSEWHEEL:
+	{
+		// wParam의 상위 16비트를 얻어온다.
+		// 이렇게 얻어오면 휠 방향에 따라 120, -120이 들어온다.
+		short	Wheel = HIWORD(wParam);
+		CInput::GetInst()->SetWheel(Wheel / 120);
+	}
+		break;
 	case WM_DESTROY:
 		// 윈도우가 종료될때 들어오는 메세지이다.
 		m_Loop = false;

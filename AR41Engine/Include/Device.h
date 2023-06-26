@@ -14,6 +14,7 @@ private:
 
 	HWND	m_hWnd;
 	Resolution	m_RS;
+	int		m_SampleCount;
 
 private:
 	ID2D1RenderTarget* m_2DTarget;
@@ -21,6 +22,11 @@ private:
 	ID2D1Factory* m_2DFactory;
 
 public:
+	int GetSampleCount()	const
+	{
+		return m_SampleCount;
+	}
+
 	ID2D1RenderTarget* Get2DTarget()	const
 	{
 		return m_2DTarget;

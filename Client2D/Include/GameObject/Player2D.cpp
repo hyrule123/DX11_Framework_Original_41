@@ -60,6 +60,17 @@ void CPlayer2D::Start()
 
 	CInput::GetInst()->AddBindFunction<CPlayer2D>("Fire", Input_Type::Down,
 		this, &CPlayer2D::Fire, m_Scene);
+
+	CAnimation2D* Anim = m_Sprite->SetAnimation<CAnimation2D>("PlayerAnim");
+
+	Anim->AddAnimation("Run", "PlayerRun");
+	Anim->SetLoop("Run", true);
+
+	Anim->AddAnimation("Idle", "PlayerIdle");
+	Anim->SetLoop("Idle", true);
+
+	Anim->SetCurrentAnimation("Idle");
+
 }
 
 bool CPlayer2D::Init()
@@ -114,16 +125,6 @@ bool CPlayer2D::Init()
 	m_SpriteChild->SetRelativeScale(50.f, 50.f);
 	m_SpriteChild->SetRelativePosition(100.f, 0.f);
 	m_SpriteChild->SetInheritRotZ(true);
-
-	/*CAnimation2D* Anim = m_Sprite->SetAnimation<CAnimation2D>("PlayerAnim");
-
-	Anim->AddAnimation("Run", "PlayerRun");
-	Anim->SetLoop("Run", true);
-
-	Anim->AddAnimation("Idle", "PlayerIdle");
-	Anim->SetLoop("Idle", true);
-
-	Anim->SetCurrentAnimation("Idle");*/
 
 	return true;
 }

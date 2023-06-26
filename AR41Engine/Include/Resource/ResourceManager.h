@@ -6,6 +6,7 @@
 #include "Animation/AnimationManager.h"
 #include "Sound/SoundManager.h"
 #include "Font/FontManager.h"
+#include "Particle/ParticleManager.h"
 
 class CResourceManager
 {
@@ -17,6 +18,7 @@ private:
 	CAnimationManager* m_AnimationManager;
 	CSoundManager* m_SoundManager;
 	CFontManager* m_FontManager;
+	CParticleManager* m_ParticleManager;
 
 public:
 	bool Init();
@@ -30,6 +32,14 @@ public:	// ===================== Mesh =========================
 		void* IdxData = nullptr, int IdxSize = 0, int IdxCount = 0,
 		D3D11_USAGE IdxUsage = D3D11_USAGE_DEFAULT,
 		DXGI_FORMAT Fmt = DXGI_FORMAT_UNKNOWN);
+	bool LoadMesh(class CScene* Scene, MeshType Type, const std::string& Name,
+		const TCHAR* FileName, const std::string& PathName = MESH_PATH);
+	bool LoadMeshFullPath(class CScene* Scene, MeshType Type, const std::string& Name,
+		const TCHAR* FullPath);
+	bool LoadMeshMultibyte(class CScene* Scene, MeshType Type, const std::string& Name,
+		const char* FileName, const std::string& PathName = MESH_PATH);
+	bool LoadMeshMultibyteFullPath(class CScene* Scene, MeshType Type, const std::string& Name,
+		const char* FullPath);
 
 	class CMesh* FindMesh(const std::string& Name);
 	void ReleaseMesh(const std::string& Name);
@@ -63,6 +73,12 @@ public:	// ===================== Texture =========================
 	bool LoadTextureArray(const std::string& Name, const std::vector<const TCHAR*>& vecFileName,
 		const std::string& PathName = TEXTURE_PATH);
 	bool LoadTextureArrayFullPath(const std::string& Name, const std::vector<const TCHAR*>& vecFullPath);
+
+	bool CreateTarget(const std::string& Name, unsigned int Width,
+		unsigned int Height, DXGI_FORMAT PixelFormat,
+		DXGI_FORMAT DepthFormat = DXGI_FORMAT_UNKNOWN);
+	void RenderTexture();
+
 	class CTexture* FindTexture(const std::string& Name);
 	void ReleaseTexture(const std::string& Name);
 
@@ -103,6 +119,44 @@ public:	// ===================== Animation =========================
 	CAnimationSequence2D* FindAnimationSequence2D(const std::string& Name);
 	void ReleaseAnimationSequence2D(const std::string& Name);
 	class CAnimation2DConstantBuffer* GetAnim2DConstantBuffer()	const;
+
+
+	// Animation3D
+	bool LoadAnimationSequence(const std::string& Name, bool Loop,
+		const FbxAnimationClip* Clip);
+	bool LoadAnimationSequence(const std::string& Name, bool Loop,
+		int StartFrame, int EndFrame, float PlayTime,
+		const std::vector<BoneKeyFrame*>& vecFrame);
+	bool LoadAnimationSequence(const std::string& Name, 
+		const TCHAR* FileName, const std::string& PathName = ANIMATION_PATH);
+	bool LoadAnimationSequenceFullPath(const std::string& Name, 
+		const TCHAR* FullPath);
+	bool LoadAnimationSequenceMultibyte(const std::string& Name, 
+		const char* FileName, const std::string& PathName = ANIMATION_PATH);
+	bool LoadAnimationSequenceMultibyteFullPath(const std::string& Name, 
+		const char* FullPath);
+
+	CAnimationSequence* FindAnimationSequence(const std::string& Name);
+	void ReleaseAnimationSequence(const std::string& Name);
+
+
+	bool LoadSkeleton(class CScene* Scene, const std::string& Name, 
+		const TCHAR* FileName, const std::string& PathName = ANIMATION_PATH);
+	bool LoadSkeletonFullPath(class CScene* Scene, const std::string& Name,
+		const TCHAR* FullPath);
+	bool LoadSkeletonMultibyte(class CScene* Scene, const std::string& Name,
+		const char* FileName, const std::string& PathName = ANIMATION_PATH);
+	bool LoadSkeletonMultibyteFullPath(class CScene* Scene, const std::string& Name,
+		const char* FullPath);
+	void AddSocket(const std::string& SkeletonName,
+		const std::string& BoneName, const std::string& SocketName,
+		const Vector3& Offset, const Vector3& OffsetRot);
+
+	bool SetMeshSkeleton(const std::string& MeshName,
+		const std::string& SkeletonName);
+
+	CSkeleton* FindSkeleton(const std::string& Name);
+	void ReleaseSkeleton(const std::string& Name);
 
 
 
@@ -152,6 +206,13 @@ public:	// ============================ Font ================================
 	void ReleaseFont(const std::string& Name);
 	void ReleaseFontCollection(const std::string& Name);
 
+
+
+
+public:
+	bool CreateParticle(const std::string& Name);
+	CParticle* FindParticle(const std::string& Name);
+	void ReleaseParticle(const std::string& Name);
 
 
 	DECLARE_SINGLE(CResourceManager)

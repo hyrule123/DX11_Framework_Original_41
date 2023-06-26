@@ -30,6 +30,8 @@ public:
 	void SetProjMatrix(const Matrix& matProj)
 	{
 		m_BufferData.matProj = matProj;
+		m_BufferData.Proj11 = matProj._11;
+		m_BufferData.Proj22 = matProj._22;
 	}
 
 	void SetPivot(const Vector3& Pivot)
