@@ -157,7 +157,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>call $(SolutionDir)EditorCopy.bat</Command>
+      <Command>cd $(SolutionDir)
+call EditorCopy.bat</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -179,7 +180,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>call $(SolutionDir)EditorCopy.bat</Command>
+      <Command>cd $(SolutionDir)
+call EditorCopy.bat</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
