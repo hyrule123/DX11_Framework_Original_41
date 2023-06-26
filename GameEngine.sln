@@ -1,9 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.32126.315
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01. Client", "01. Client", "{DEA53187-2BE3-4983-9EB8-4393A325406E}"
+	ProjectSection(SolutionItems) = preProject
+		ClientCopy.bat = ClientCopy.bat
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02. Engine", "02. Engine", "{2F8C6226-146E-4C93-9A70-9BB21B390F3E}"
 	ProjectSection(SolutionItems) = preProject
@@ -11,13 +14,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02. Engine", "02. Engine", 
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03. Editor", "03. Editor", "{5F057200-B133-494C-8136-3F5F25D522E5}"
-	ProjectSection(SolutionItems) = preProject
-		EditorCopy.bat = EditorCopy.bat
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client2D", "Client2D\Include\Client2D.vcxproj", "{97AA5E15-8023-4C0E-AA89-68766AF0F15B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{26BC9DA5-192F-4B8E-A96C-72AB3CCE74C3} = {26BC9DA5-192F-4B8E-A96C-72AB3CCE74C3}
+		{5E603626-8885-400C-9B28-A0AAD94BA626} = {5E603626-8885-400C-9B28-A0AAD94BA626}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AR41Engine", "AR41Engine\Include\AR41Engine.vcxproj", "{26BC9DA5-192F-4B8E-A96C-72AB3CCE74C3}"
